@@ -9,7 +9,7 @@ import { Link } from '@inertiajs/react';
 const Header = ({ user }) => {
     const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
     return (
-        <nav className="bg-zinc-900 border-b border-gray-600">
+        <nav className="bg-zinc-900 border-b border-gray-600 fixed top-0 z-50 w-full">
             {/* <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"> */}
             <div className="flex justify-between p-5 h-14">
                 <div className="flex">
@@ -90,13 +90,13 @@ const Header = ({ user }) => {
 
                 <div className="pt-4 pb-1 border-t border-gray-200">
                     <div className="px-4">
-                        <div className="font-medium text-base text-gray-800">{user.name}</div>
-                        <div className="font-medium text-sm text-gray-500">{user.email}</div>
+                        <div className="font-medium text-base text-gray-100">{user.name}</div>
+                        <div className="font-medium text-sm text-gray-300">{user.email}</div>
                     </div>
 
-                    <div className="mt-3 space-y-1">
-                        <ResponsiveNavLink href={route('profile.edit')}>Perfil</ResponsiveNavLink>
-                        <ResponsiveNavLink method="post" href={route('logout')} as="button">
+                    <div className="mt-3 space-y">
+                        <ResponsiveNavLink className='text-gray-100' href={route('profile.edit')}>Perfil</ResponsiveNavLink>
+                        <ResponsiveNavLink className='text-gray-100' method="post" href={route('logout')} as="button">
                             Sair
                         </ResponsiveNavLink>
                     </div>
