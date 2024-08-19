@@ -1,7 +1,7 @@
 import InputError from '@/Components/Utils/InputError';
 import InputLabel from '@/Components/Utils/InputLabel';
-import PrimaryButton from '@/Components/PrimaryButton';
-import TextInput from '@/Components/TextInput';
+import PrimaryButton from '@/Components/Utils/PrimaryButton';
+import TextInput from '@/Components/Utils/TextInput';
 import { Link, useForm, usePage } from '@inertiajs/react';
 import { Transition } from '@headlessui/react';
 
@@ -29,7 +29,7 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
                 </p>
             </header>
 
-            <form onSubmit={submit} className="mt-6 space-y-6">
+            <form onSubmit={submit} className=" space-y-6">
                 <div>
                     <InputLabel htmlFor="name" value="Name" />
 

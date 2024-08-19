@@ -1,8 +1,8 @@
 import { useRef } from 'react';
 import InputError from '@/Components/Utils/InputError';
 import InputLabel from '@/Components/Utils/InputLabel';
-import PrimaryButton from '@/Components/PrimaryButton';
-import TextInput from '@/Components/TextInput';
+import PrimaryButton from '@/Components/Utils/PrimaryButton';
+import TextInput from '@/Components/Utils/TextInput';
 import { useForm } from '@inertiajs/react';
 import { Transition } from '@headlessui/react';
 
@@ -46,7 +46,7 @@ export default function UpdatePasswordForm({ className = '' }) {
                 </p>
             </header>
 
-            <form onSubmit={updatePassword} className="mt-6 space-y-6">
+            <form onSubmit={updatePassword} className=" space-y-6">
                 <div>
                     <InputLabel htmlFor="current_password" value="Current Password" />
 
