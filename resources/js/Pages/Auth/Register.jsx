@@ -5,6 +5,8 @@ import InputLabel from '@/Components/Utils/InputLabel';
 import PrimaryButton from '@/Components/Utils/PrimaryButton';
 import TextInput from '@/Components/Utils/TextInput';
 import { Head, Link, useForm } from '@inertiajs/react';
+import PhoneInput from 'react-phone-input-2'
+import 'react-phone-input-2/lib/style.css'
 
 export default function Register() {
     const { data, setData, post, processing, errors, reset } = useForm({
@@ -32,7 +34,23 @@ export default function Register() {
 
             <form onSubmit={submit}>
                 <div>
-                    <InputLabel htmlFor="name" value="Name" />
+                    <InputLabel htmlFor="enterprise" value="Empresa" />
+
+                    <TextInput
+                        id="enterprise"
+                        name="enterprise"
+                        value={data.enterprise}
+                        className="mt-1 block w-full"
+                        autoComplete="enterprise"
+                        isFocused={true}
+                        onChange={(e) => setData('enterprise', e.target.value)}
+                        required
+                    />
+                    <InputError message={errors.enterprise} className="mt-2" />
+                </div>
+
+                <div className="mt-4">
+                    <InputLabel htmlFor="name" value="Nome" />
 
                     <TextInput
                         id="name"
@@ -46,6 +64,41 @@ export default function Register() {
                     />
 
                     <InputError message={errors.name} className="mt-2" />
+                </div>
+
+                <div className="mt-4">
+                    <InputLabel htmlFor="crm" value="Crm" />
+                    <TextInput
+                        id="crm"
+                        name="crm"
+                        value={data.crm}
+                        className="mt-1 block w-full"
+                        autoComplete="crm"
+                        isFocused={true}
+                        onChange={(e) => setData('crm', e.target.value)}
+                        required
+                    />
+
+                    <InputError message={errors.crm} className="mt-2" />
+                </div>
+
+                <div className="mt-4">
+                    <InputLabel htmlFor="phone" value="Telefone" />
+                    
+                    <PhoneInput
+                        id="phone"
+                        name="phone"
+                        type="tel"
+                        value={data.phone}
+                        autoComplete="tel"
+                        country={'br'}
+                        onChange={(phone) => setData('phone', phone)}  // Atualiza o estado do telefone
+                        inputProps={{
+                            required: true,
+                            isFocused: true,
+                            className: "border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm mt-1 block w-full"
+                        }}
+                    />
                 </div>
 
                 <div className="mt-4">
@@ -66,7 +119,7 @@ export default function Register() {
                 </div>
 
                 <div className="mt-4">
-                    <InputLabel htmlFor="password" value="Password" />
+                    <InputLabel htmlFor="password" value="Senha" />
 
                     <TextInput
                         id="password"
@@ -83,7 +136,7 @@ export default function Register() {
                 </div>
 
                 <div className="mt-4">
-                    <InputLabel htmlFor="password_confirmation" value="Confirm Password" />
+                    <InputLabel htmlFor="password_confirmation" value="Confirme a senha" />
 
                     <TextInput
                         id="password_confirmation"
@@ -104,11 +157,11 @@ export default function Register() {
                         href={route('login')}
                         className="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                     >
-                        Already registered?
+                        Já possui cadastro?
                     </Link>
 
                     <PrimaryButton className="ms-4" disabled={processing}>
-                        Register
+                        Registrar
                     </PrimaryButton>
                 </div>
             </form>
