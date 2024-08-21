@@ -29,13 +29,29 @@ Route::get('/teste', function () {
     return Inertia::render('Teste');
 });
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/inicio', function () {
+    return Inertia::render('Inicio');
+})->middleware(['auth', 'verified'])->name('inicio');
 
 Route::get('/analise', function () {
     return Inertia::render('Analise');
 })->middleware(['auth', 'verified'])->name('analise');
+
+Route::get('/questionario', function () {
+    return Inertia::render('Questionario');
+})->middleware(['auth', 'verified'])->name('questionario');
+
+Route::get('/suporte', function () {
+    return Inertia::render('Suporte');
+})->middleware(['auth', 'verified'])->name('suporte');
+
+Route::get('/profissionais', function () {
+    return Inertia::render('Profissionais');
+})->middleware(['auth', 'verified'])->name('profissionais');
+
+Route::get('/cadastro_perguntas', function () {
+    return Inertia::render('CadastroPerguntas');
+})->middleware(['auth', 'verified'])->name('cadastro_perguntas');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
