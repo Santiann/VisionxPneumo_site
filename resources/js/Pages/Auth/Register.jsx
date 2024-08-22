@@ -14,6 +14,9 @@ export default function Register() {
         email: '',
         password: '',
         password_confirmation: '',
+        enterprise: '',
+        crm: '',
+        phone: ''
     });
 
     useEffect(() => {
@@ -22,9 +25,79 @@ export default function Register() {
         };
     }, []);
 
+    // Função para validar o CRM após o usuário preencher o campo
+    const validateCrm = async () => {
+        const json = formataJson();
+
+        if (json) {
+            try {
+                const response = await fetch('http://localhost:8080/verifyCrm', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: json,
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const result = await response.json();
+
+                if (result.status === 'sucesso' && result.dados.length > 0) {
+                    console.log(result);
+
+                    const medico = result.dados[0];
+                    setData('name', medico.NM_MEDICO);
+                } else {
+                    console.log(result);
+                    console.error('CRM não encontrado ou inválido.');
+                }
+            } catch (error) {
+                console.error('Erro ao validar o CRM:', error);
+            }
+        }
+    };
+
+    function formataJson() {
+        let estado = '';
+        let crm = '';
+
+        if (!data.crm.includes('-')) {
+            return null;
+        }
+
+        const [crmParte, estadoParte] = data.crm.split('-');
+        estado = estadoParte.trim();
+        crm = crmParte.replace(/\D/g, '').trim();
+
+        if (crm.length >= 4 && estado.length === 2) {
+            console.log('CRM:', crm);
+            console.log('Estado (UF):', estado);
+
+            return JSON.stringify({
+                medico: {
+                    nome: '',
+                    ufMedico: estado,
+                    crmMedico: crm,
+                    municipioMedico: '',
+                    tipoInscricaoMedico: '',
+                    situacaoMedico: 'A',
+                    detalheSituacaoMedico: '',
+                    especialidadeMedico: '',
+                    areaAtuacaoMedico: ''
+                },
+                page: 1,
+                pageSize: 10
+            });
+        }
+
+        return null;
+    }
+
     const submit = (e) => {
         e.preventDefault();
-
         post(route('register'));
     };
 
@@ -50,23 +123,6 @@ export default function Register() {
                 </div>
 
                 <div className="mt-4">
-                    <InputLabel htmlFor="name" value="Nome" />
-
-                    <TextInput
-                        id="name"
-                        name="name"
-                        value={data.name}
-                        className="mt-1 block w-full"
-                        autoComplete="name"
-                        isFocused={true}
-                        onChange={(e) => setData('name', e.target.value)}
-                        required
-                    />
-
-                    <InputError message={errors.name} className="mt-2" />
-                </div>
-
-                <div className="mt-4">
                     <InputLabel htmlFor="crm" value="Crm" />
                     <TextInput
                         id="crm"
@@ -75,7 +131,9 @@ export default function Register() {
                         className="mt-1 block w-full"
                         autoComplete="crm"
                         isFocused={true}
+                        onBlur={validateCrm}  // Valida o CRM ao sair do campo
                         onChange={(e) => setData('crm', e.target.value)}
+                        maxLength={10}
                         required
                     />
 
@@ -83,8 +141,24 @@ export default function Register() {
                 </div>
 
                 <div className="mt-4">
+                    <InputLabel htmlFor="name" value="Nome" />
+
+                    <TextInput
+                        id="name"
+                        name="name"
+                        value={data.name}
+                        className="mt-1 block w-full"
+                        autoComplete="name"
+                        onChange={(e) => setData('name', e.target.value)}
+                        required
+                    />
+
+                    <InputError message={errors.name} className="mt-2" />
+                </div>
+
+                <div className="mt-4">
                     <InputLabel htmlFor="phone" value="Telefone" />
-                    
+
                     <PhoneInput
                         id="phone"
                         name="phone"
@@ -95,7 +169,6 @@ export default function Register() {
                         onChange={(phone) => setData('phone', phone)}  // Atualiza o estado do telefone
                         inputProps={{
                             required: true,
-                            isFocused: true,
                             className: "border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm mt-1 block w-full"
                         }}
                     />
