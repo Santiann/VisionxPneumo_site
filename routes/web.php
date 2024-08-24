@@ -4,7 +4,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
-
+use App\Http\Controllers\PdfController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -28,6 +28,7 @@ Route::get('/', function () {
 Route::get('/teste', function () {
     return Inertia::render('Teste');
 });
+Route::get('pdf', [PdfController::class, 'index']);
 
 Route::get('/inicio', function () {
     return Inertia::render('Inicio');
