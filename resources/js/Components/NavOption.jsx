@@ -9,9 +9,10 @@ import NavLink from '@/Components/Utils/NavLink';
 
 
 const NavOption = ({nome, icon, size, link}) => {
+   const active = route().current(link)
     return (
         <li>
-            <NavLink href={route(link)} active={route().current(link)}> 
+            <NavLink href={route(link)} className={active ? ' bg-[#427297] border-spacing-1' : ''} > 
                  <img src={icon} alt={'Icone ' + {nome}} className='w-8 h-8 transition duration-75'/>
                 <span className={"ms-2 pt-1 text-gray-100 " + size}>{nome}</span>
             </NavLink>

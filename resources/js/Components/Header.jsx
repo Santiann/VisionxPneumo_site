@@ -86,6 +86,18 @@ const Header = ({ user }) => {
                     <ResponsiveNavLink href={route('inicio')} active={route().current('inicio')}>
                         Início
                     </ResponsiveNavLink>
+                    <ResponsiveNavLink href={route('analise')} active={route().current('analise')}>
+                        Análise de Raio-X
+                    </ResponsiveNavLink>
+                    <ResponsiveNavLink href={route('questionario')} active={route().current('questionario')}>
+                        Suporte
+                    </ResponsiveNavLink>
+                    <ResponsiveNavLink href={route('suporte')} active={route().current('suporte')}>
+                        Profissionais de Saúde
+                    </ResponsiveNavLink>
+                    <ResponsiveNavLink href={route('cadastro_perguntas')} active={route().current('cadastro_perguntas')}>
+                        Cadastro de Perguntas
+                    </ResponsiveNavLink>
                 </div>
 
                 <div className="pt-4 pb-1 border-t border-gray-200">
