@@ -1,6 +1,7 @@
 import React from 'react'
 import AuthenticatedLayout from '@/Pages/AuthenticatedLayout';
 import { Head } from '@inertiajs/react';
+import raiox from '../../img/raiox.jpeg'
 
 const Analise = ({ auth }) => {
     return (
@@ -10,15 +11,21 @@ const Analise = ({ auth }) => {
         >
             <Head title="Análise de Raio-X" />
 
-            <div className='grid grid-cols-12 h-full w-100 2xl:px-8 xl:px-2 bg-gray-500'>
-                <div className=' w-100 h-100 col-span-10 flex flex-col'>
+            <div className='h-full w-100 flex flex-col bg-zinc-800 max-w-7xl m-auto xl:flex-row rounded border border-gray-500'>
+                <div className='h-full flex flex-col xl:flex-[3] flex-1'>
                     <div>
-                        <h1 className='text-white p-6 text-xl'>Análise de Raio-X</h1>
+                        <h1 className='text-gray-100 p-6 font-semibold text-2xl'>Sinais de Pneumonia Encontrados</h1>
                     </div>
-                    <div>
-                    </div>
+                    <img src={raiox} className='h-full w-auto object-cover rounded' alt="" />
                 </div>
-                <div className='col-span-2'>
+                <div className='w-100 h-100 flex-1'>
+                        <div className='p-6'>
+                            <h1 className='text-gray-100 font-medium text-xl p-2'>Filtros</h1>
+                            <div className='h-1 bg-gray-500 w-full'></div>
+                            <div className='p-6 flex justify-center'>
+                                <button className='bg-zinc-900 rounded border-gray-400 border text-white p-2'>Zoom</button>
+                            </div>
+                        </div>
                 </div>
             </div>
 
