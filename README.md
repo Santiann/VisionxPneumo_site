@@ -37,7 +37,7 @@ extension=zip
     DB_USERNAME=seu_usuario
     DB_PASSWORD=sua_senha
     
-```
+    ```
 * Se algo der errado, tente excluir a linha do DB_HOST
 
 7. Rode o projeto
