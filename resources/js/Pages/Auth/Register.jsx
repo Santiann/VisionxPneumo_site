@@ -31,36 +31,37 @@ export default function Register() {
     const validateCrm = async () => {
         const json = formataJson();
 
-        if (json) {
-            try {
-                const response = await fetch('http://localhost:8080/verifyCrm', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: json,
-                });
+        if (!json) {
+            setCrmError(true);
+        }
+    
+        try {
+            const response = await fetch('http://localhost:8080/verifyCrm', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: json,
+            });
 
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-
-                const result = await response.json();
-
-                if (result.status === 'sucesso' && result.dados.length > 0) {
-                    const medico = result.dados[0];
-                    setData('name', medico.NM_MEDICO);
-                    setCrmError(false); // CRM válido, remove o erro
-                } else {
-                    setCrmError(true); // CRM inválido, exibe o erro
-                    console.error('CRM não encontrado ou inválido.');
-                }
-            } catch (error) {
-                setCrmError(true); // Em caso de erro na requisição, exibe o erro
-                console.error('Erro ao validar o CRM:', error);
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
             }
-        } else {
-            setCrmError(true); // Se o JSON estiver inválido, exibe o erro
+
+            const result = await response.json();
+
+            if (result.status === 'sucesso' && result.dados.length > 0) {
+                const medico = result.dados[0];
+                setData('name', medico.NM_MEDICO);
+                setCrmError(false);
+            } else {
+                setCrmError(true);
+                console.error('CRM não encontrado ou inválido.');
+            }
+
+        } catch (error) {
+            setCrmError(true); 
+            console.error('Erro ao validar o CRM:', error);
         }
     };
 
@@ -120,6 +121,7 @@ export default function Register() {
                         onChange={(e) => setData('enterprise', e.target.value)}
                         required
                     />
+
                     <InputError message={errors.enterprise} className="mt-2" />
                 </div>
 
@@ -132,10 +134,10 @@ export default function Register() {
                         className={`mt-1 block w-full ${crmError ? 'border-red-500' : 'border-gray-300'}`}
                         autoComplete="crm"
                         isFocused={true}
-                        onBlur={validateCrm}  // Valida o CRM ao sair do campo
+                        onBlur={validateCrm}
                         onChange={(e) => {
                             setData('crm', e.target.value);
-                            setCrmError(false); // Reseta o erro ao alterar o campo
+                            setCrmError(false); 
                         }}
                         maxLength={10}
                         required
@@ -172,7 +174,7 @@ export default function Register() {
                         value={data.phone}
                         autoComplete="tel"
                         country={'br'}
-                        onChange={(phone) => setData('phone', phone)}  // Atualiza o estado do telefone
+                        onChange={(phone) => setData('phone', phone)}
                         inputProps={{
                             required: true,
                             className: "border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm mt-1 block w-full"
