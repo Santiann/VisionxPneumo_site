@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import GuestLayout from '@/Pages/GuestLayout';
 import InputError from '@/Components/Utils/InputError';
 import InputLabel from '@/Components/Utils/InputLabel';
@@ -7,6 +7,7 @@ import TextInput from '@/Components/Utils/TextInput';
 import { Head, Link, useForm } from '@inertiajs/react';
 import PhoneInput from 'react-phone-input-2'
 import 'react-phone-input-2/lib/style.css'
+
 
 export default function Register() {
     const { data, setData, post, processing, errors, reset } = useForm({
@@ -19,13 +20,14 @@ export default function Register() {
         phone: ''
     });
 
+    const [crmError, setCrmError] = useState(false);
+
     useEffect(() => {
         return () => {
             reset('password', 'password_confirmation');
         };
     }, []);
 
-    // Função para validar o CRM após o usuário preencher o campo
     const validateCrm = async () => {
         const json = formataJson();
 
@@ -46,17 +48,19 @@ export default function Register() {
                 const result = await response.json();
 
                 if (result.status === 'sucesso' && result.dados.length > 0) {
-                    console.log(result);
-
                     const medico = result.dados[0];
                     setData('name', medico.NM_MEDICO);
+                    setCrmError(false); // CRM válido, remove o erro
                 } else {
-                    console.log(result);
+                    setCrmError(true); // CRM inválido, exibe o erro
                     console.error('CRM não encontrado ou inválido.');
                 }
             } catch (error) {
+                setCrmError(true); // Em caso de erro na requisição, exibe o erro
                 console.error('Erro ao validar o CRM:', error);
             }
+        } else {
+            setCrmError(true); // Se o JSON estiver inválido, exibe o erro
         }
     };
 
@@ -73,10 +77,7 @@ export default function Register() {
         crm = crmParte.replace(/\D/g, '').trim();
 
         if (crm.length >= 4 && estado.length === 2) {
-            console.log('CRM:', crm);
-            console.log('Estado (UF):', estado);
-
-            return JSON.stringify({
+            return JSON.stringify([{
                 medico: {
                     nome: '',
                     ufMedico: estado,
@@ -90,7 +91,7 @@ export default function Register() {
                 },
                 page: 1,
                 pageSize: 10
-            });
+            }]);
         }
 
         return null;
@@ -128,16 +129,21 @@ export default function Register() {
                         id="crm"
                         name="crm"
                         value={data.crm}
-                        className="mt-1 block w-full"
+                        className={`mt-1 block w-full ${crmError ? 'border-red-500' : 'border-gray-300'}`}
                         autoComplete="crm"
                         isFocused={true}
                         onBlur={validateCrm}  // Valida o CRM ao sair do campo
-                        onChange={(e) => setData('crm', e.target.value)}
+                        onChange={(e) => {
+                            setData('crm', e.target.value);
+                            setCrmError(false); // Reseta o erro ao alterar o campo
+                        }}
                         maxLength={10}
                         required
+                        placeholder="0000-UF"
                     />
-
-                    <InputError message={errors.crm} className="mt-2" />
+                    {crmError && (
+                        <InputError message="CRM não encontrado ou inválido." className="mt-2" />
+                    )}
                 </div>
 
                 <div className="mt-4">
