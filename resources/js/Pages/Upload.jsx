@@ -1,10 +1,19 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 
-const Upload = ({setUploaded, setImage}) => {
+const Upload = ({setUploaded, setImage, setImageBinary}) => {
 
     const uploadImagem = (e) => {
         e.preventDefault();
         const file = e.target.files[0];
+        const reader = new FileReader();
+        
+        reader.onloadend = () => {
+            const binaryStr = reader.result.split(',')[1];
+            setImageBinary(binaryStr)
+        };
+          
+        reader.readAsDataURL(file);
+     
         setImage(URL.createObjectURL(file))
         setUploaded(true)
     }

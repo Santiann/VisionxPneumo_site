@@ -54,6 +54,7 @@ Route::get('/cadastro_perguntas', function () {
     return Inertia::render('CadastroPerguntas');
 })->middleware(['auth', 'verified'])->name('cadastro_perguntas');
 
+
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
