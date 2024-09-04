@@ -1,0 +1,139 @@
+@page {
+    margin: 100px 25px;
+}
+
+html {
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+}
+
+body {
+    border: 1px solid #000000;
+    border-top: 0;
+    border-bottom: 0;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    min-height: 100vh;
+    box-sizing: border-box;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 10px;
+}
+
+td {
+    padding: 20px;
+    text-align: center;
+}
+
+.full-width {
+    width: 100%;
+    text-align: left;
+}
+
+.half-width {
+    width: 50%;
+}
+
+.half-width-info {
+    width: 50%;
+    color: #727272;
+    font-weight: bold;
+}
+
+.half-width-company {
+    width: 50%;
+    font-weight: bold;
+}
+
+.full-width-title {
+    width: 100%;
+    text-align: left;
+    font-size: 24px;
+}
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+ol .li-strong {
+    font-weight: bold;
+}
+
+
+.sub-title {
+    font-weight: bold;
+    font-size: 20px;
+    margin: 7px 0px;
+    text-align: left;
+}
+
+.legend span {
+    display: inline-block;
+    width: 15px;
+    height: 15px;
+    margin-right: 5px;
+    vertical-align: middle;
+}
+
+header {
+    position: fixed;
+    border: 1px solid #000000; 
+    border-bottom: 0;
+    top: -80px;
+    left: 0;
+    right: 0;
+    height: 80px;
+    text-align: center;
+    line-height: 20px;
+}
+
+footer {
+    position: fixed;
+    border: 1px solid #000000;
+    bottom: -50px;
+    left: 0;
+    right: 0;
+    height: 50px;
+    text-align: center;
+    line-height: 20px;
+    padding: 10px;
+}
+
+.blue {
+    background-color: #488aff;
+}
+
+.green {
+    background-color: #38a169;
+}
+
+.orange {
+    background-color: #e53e3e;
+}
+
+.li-border {
+    text-align: left;
+    border: 1px solid #d6d6d6;
+}
+
+.text-box {
+    width: 94%;
+    min-height: 100px;
+    max-height: 1500px;
+    border: 1px solid #727272;
+    padding: 10px;
+    padding-top: 0;
+    box-sizing: border-box;
+    overflow: hidden;
+    word-wrap: break-word;
+    height: auto;
+    display: flex;
+    align-items: flex-start;
+    text-align: justify;
+}

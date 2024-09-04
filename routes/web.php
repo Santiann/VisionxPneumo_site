@@ -28,7 +28,7 @@ Route::get('/', function () {
 Route::get('/teste', function () {
     return Inertia::render('Teste');
 });
-Route::get('pdf', [PdfController::class, 'index']);
+Route::get('/pdf', [PdfController::class, 'generatePdf']);
 
 Route::get('/inicio', function () {
     return Inertia::render('Inicio');
