@@ -5,6 +5,7 @@ import imgAnalise from '../../img/img_analise.png'
 import Range from '@/Components/Range';
 import Image from '@/Components/Image';
 import Upload from './Upload';
+import TipoImagem from '@/Components/TipoImagem';
 
 const ResultadoUpload = ({image}) => {
     const [constraste, setContraste] = useState(100);
@@ -38,9 +39,9 @@ const ResultadoUpload = ({image}) => {
                     <h1 className='text-gray-100 font-medium text-xl p-2 mt-3'>Alterar Imagem</h1>
                     <div className='h-1 bg-gray-500 w-full'></div>
                     <div className='p-6 flex justify-center content-center xl:flex-col gap-2 flex-wrap'>
-                        <button id='original' className='bg-zinc-900 py-2  w-40 text-gray-200 border-gray-400 border rounded-sm text-center hover:bg-zinc-800' onClick={() => setScr(raiox)}>Original</button>
-                        <button id='mapa_calor' className='bg-zinc-900 py-2  w-40 text-gray-200 border-gray-400 border rounded-sm text-center hover:bg-zinc-800' onClick={() => setScr(mapaCalor)}>Mapa de Calor</button>
-                        <button id='analise' className='bg-zinc-900 py-2  w-40 text-gray-200 border-gray-400 border rounded-sm text-center hover:bg-zinc-800' onClick={() => setScr(image)}>Pontos de Análise</button>
+                        <TipoImagem tipo={raiox} scr={scr} setScr={setScr} nome={'Original'}/>
+                        <TipoImagem tipo={mapaCalor} scr={scr} setScr={setScr} nome={'Mapa de Calor'}/>
+                        <TipoImagem tipo={image} scr={scr} setScr={setScr} nome={'Pontos de Análise'}/>              
                     </div>
                     <h1 className='text-gray-100 font-medium text-xl p-2'>Legendas</h1>
                     <div className='h-1 bg-gray-500 w-full'></div>
