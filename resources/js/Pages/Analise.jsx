@@ -9,6 +9,7 @@ const Analise = ({ auth }) => {
     const [isUploaded, setUploaded] = useState(false)
     const [image, setImage] = useState(null)
     const [imageBinary, setImageBinary] = useState(null);
+    const [result, setResult] = useState(null)
 
     useEffect(() => {
         console.log('useEffect triggered');
@@ -24,6 +25,8 @@ const Analise = ({ auth }) => {
             .then((response) => response.json())
             .then((data) => {
                 console.log("Sucesso", data)
+                setResult(data)
+                setUploaded(true)
             })
             .catch((erro) => {
                 console.log("Erro", erro)
@@ -37,7 +40,9 @@ const Analise = ({ auth }) => {
             header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">Análise de Raio-X</h2>}
         >
             <Head title="Análise de Raio-X" />
-        {isUploaded ?  <ResultadoUpload image={image} /> : <Upload setUploaded={setUploaded} setImage={setImage} setImageBinary={setImageBinary} />}
+         {isUploaded ?  
+         <ResultadoUpload image={image} result={result} /> : 
+         <Upload setUploaded={setUploaded} setImage={setImage} setImageBinary={setImageBinary} />}
 
            
 

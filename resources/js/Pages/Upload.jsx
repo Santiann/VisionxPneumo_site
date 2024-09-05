@@ -1,7 +1,7 @@
 import React, { useState, useCallback  } from 'react'
 import { useDropzone } from 'react-dropzone';
 
-const Upload = ({setUploaded, setImage, setImageBinary}) => {
+const Upload = ({setImage, setImageBinary}) => {
 
     const processFile = (file) => {
         const reader = new FileReader();
@@ -13,7 +13,6 @@ const Upload = ({setUploaded, setImage, setImageBinary}) => {
           
         reader.readAsDataURL(file);  
         setImage(URL.createObjectURL(file))
-        setUploaded(true)
     }
 
     const uploadImagem = (e) => {

@@ -6,12 +6,31 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Log;
+
 
 
 class UploadImageController extends Controller{
 
     public function uploadImage(Request $request): JsonResponse
     {
+                
+        $jsonFilePath = base_path('url.json');
+        
+                
+        if (!file_exists($jsonFilePath)) {
+            return response()->json(['error' => 'Arquivo JSON não encontrado.'], 500);
+        }
+             
+        $jsonContent = file_get_contents($jsonFilePath);
+        $jsonData = json_decode($jsonContent, true);
+    
+        if (!isset($jsonData['ngrok_url'])) {
+            return response()->json(['error' => 'URL de upload não encontrada no arquivo JSON.'], 500);
+        }
+        
+        $uploadUrl = $jsonData['ngrok_url'] . '/upload';
+
         $bodyContent = json_decode($request->getContent(), true);
 
         try {
@@ -19,7 +38,7 @@ class UploadImageController extends Controller{
                 'verify' => false,
             ])->withHeaders([
                 'Content-Type' => 'application/json',
-            ])->post('https://8e71-34-141-192-8.ngrok-free.app/upload', $bodyContent);
+            ])->post($uploadUrl, $bodyContent);
 
             if ($response->successful()) {
                 return response()->json($response->json());
