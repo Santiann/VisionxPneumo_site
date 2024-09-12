@@ -9,15 +9,15 @@ const fetchProfissionais = async () => {
 };
 
 const createProfissional = async (data) => {
-    // Replace with actual API call
+    await axios.post('/profissionais', data);
 };
 
 const updateProfissional = async (id, data) => {
-    // Replace with actual API call
+    await axios.put(`/profissionais/${id}`, data);
 };
 
 const deleteProfissional = async (id) => {
-    // Replace with actual API call
+    await axios.delete(`/profissionais/${id}`);
 };
 
 const Profissionais = ({ auth }) => {
@@ -78,29 +78,11 @@ const Profissionais = ({ auth }) => {
                     <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
                         <input
                             type="text"
-                            name="enterprise"
-                            value={form.enterprise}
-                            onChange={handleChange}
-                            placeholder="Enterprise"
-                            className="border p-2"
-                            required
-                        />
-                        <input
-                            type="text"
                             name="name"
                             value={form.name}
                             onChange={handleChange}
-                            placeholder="Name"
-                            className="border p-2"
-                            required
-                        />
-                        <input
-                            type="text"
-                            name="crm"
-                            value={form.crm}
-                            onChange={handleChange}
-                            placeholder="CRM"
-                            className="border p-2"
+                            placeholder="Nome"
+                            className="border p-2 sm:rounded"
                             required
                         />
                         <input
@@ -108,8 +90,8 @@ const Profissionais = ({ auth }) => {
                             name="phone"
                             value={form.phone}
                             onChange={handleChange}
-                            placeholder="Phone"
-                            className="border p-2"
+                            placeholder="Telefone"
+                            className="border p-2 sm:rounded"
                             required
                         />
                         <input
@@ -118,7 +100,7 @@ const Profissionais = ({ auth }) => {
                             value={form.email}
                             onChange={handleChange}
                             placeholder="Email"
-                            className="border p-2"
+                            className="border p-2 sm:rounded"
                             required
                         />
                         <input
@@ -126,8 +108,8 @@ const Profissionais = ({ auth }) => {
                             name="password"
                             value={form.password}
                             onChange={handleChange}
-                            placeholder="Password"
-                            className="border p-2"
+                            placeholder="Senha"
+                            className="border p-2 sm:rounded"
                             required
                         />
                     </div>
@@ -135,17 +117,15 @@ const Profissionais = ({ auth }) => {
                         type="submit"
                         className="mt-4 bg-blue-500 text-white px-4 py-2 rounded"
                     >
-                        {currentProfissional ? 'Update' : 'Add'} Profissional
+                        {currentProfissional ? 'Alterar' : 'Adicionar'}
                     </button>
                 </form>
 
                 <table className="min-w-full divide-y divide-gray-200">
                     <thead className="bg-gray-50">
                         <tr>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Enterprise</th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">CRM</th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Phone</th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nome</th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Telefone</th>
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                         </tr>
@@ -153,9 +133,7 @@ const Profissionais = ({ auth }) => {
                     <tbody className="bg-white divide-y divide-gray-200">
                         {profissionais.map(profissional => (
                             <tr key={profissional.id}>
-                                <td className="px-6 py-4 whitespace-nowrap">{profissional.enterprise}</td>
                                 <td className="px-6 py-4 whitespace-nowrap">{profissional.name}</td>
-                                <td className="px-6 py-4 whitespace-nowrap">{profissional.crm}</td>
                                 <td className="px-6 py-4 whitespace-nowrap">{profissional.phone}</td>
                                 <td className="px-6 py-4 whitespace-nowrap">{profissional.email}</td>
                                 <td className="px-6 py-4 whitespace-nowrap">
