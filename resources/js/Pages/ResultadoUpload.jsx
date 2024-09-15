@@ -20,7 +20,7 @@ const ResultadoUpload = ({image, result}) => {
         <div className='min-h-full w-100 flex flex-col bg-zinc-800 max-w-7xl m-auto xl:flex-row rounded border border-gray-500'>
             <div className=' flex flex-col xl:flex-[3] flex-1'>
                 <div>
-                    <h1 className='text-gray-100 p-6 font-semibold text-2xl'>{result.classification_img}</h1>
+                    <h1 className='text-gray-100 p-6 font-semibold text-2xl'>{result.classification_img ? 'Sinais de pnemonia encontrados' : 'Não foram encontrados sianis de pneumonia'}</h1>
                 </div>
                 <div className={`h-full relative overflow-hidden ${zoom ? 'cursor-zoom-in' : ''}`} >
                     <Image scr={scr} zoom={zoom} constraste={constraste} brilho={brilho} invert={invert} />

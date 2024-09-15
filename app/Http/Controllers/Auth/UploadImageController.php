@@ -43,7 +43,7 @@ class UploadImageController extends Controller{
             if ($response->successful()) {
                 return response()->json($response->json());
             } else {
-                return response()->json(['error' => 'Erro ao fazr o upload da imagem Raio-x'], $response->status());
+                return response()->json(['error' => 'Erro ao fazer o upload da imagem Raio-x'], $response->status());
             }
         } catch (\Exception $e) {
             return response()->json(['error' => 'Erro ao se comunicar com a API Ngrok', $e->getMessage()], 500);

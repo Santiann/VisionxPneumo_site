@@ -3,6 +3,8 @@ import AuthenticatedLayout from '@/Pages/AuthenticatedLayout';
 import { Head } from '@inertiajs/react';
 import ResultadoUpload from './ResultadoUpload';
 import Upload from './Upload';
+import AlertError from '@/Components/Utils/AlertError';
+import Loading from '@/Components/Utils/Loading';
 
 const Analise = ({ auth }) => { 
 
@@ -10,10 +12,12 @@ const Analise = ({ auth }) => {
     const [image, setImage] = useState(null)
     const [imageBinary, setImageBinary] = useState(null);
     const [result, setResult] = useState(null)
+    const [erro, setErro] = useState(null)
+    const [loading, setLoading] = useState(false)
 
     useEffect(() => {
-        console.log('useEffect triggered');
         if (imageBinary) {
+            setLoading(true);
             fetch('http://localhost:8000/uploadImage', {
                 method: 'POST',
                 body: JSON.stringify( {
@@ -22,14 +26,22 @@ const Analise = ({ auth }) => {
                 }),
                 headers:{ 'Content-Type': 'application/json'}
             })
-            .then((response) => response.json())
+            .then((response) => {
+                if (!response.ok) {
+                    return response.json().then(err => {throw new Error(err.error || 'Erro Desconhecido')})
+                }
+                return response.json()
+            })
             .then((data) => {
                 console.log("Sucesso", data)
                 setResult(data)
                 setUploaded(true)
+                setLoading(false);
             })
             .catch((erro) => {
-                console.log("Erro", erro)
+                console.log(erro.message)
+                setErro(erro)   
+                setLoading(false);          
             })
         }
     }, [imageBinary]);
@@ -39,12 +51,14 @@ const Analise = ({ auth }) => {
             user={auth.user}
             header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">Análise de Raio-X</h2>}
         >
-            <Head title="Análise de Raio-X" />
+        {erro ? <AlertError message={erro.message}/> : ''}
+        
+         <Head title="Análise de Raio-X" />
          {isUploaded ?  
          <ResultadoUpload image={image} result={result} /> : 
          <Upload setUploaded={setUploaded} setImage={setImage} setImageBinary={setImageBinary} />}
 
-           
+        {loading ?  <Loading /> : ''} 
 
         </AuthenticatedLayout>
     )
