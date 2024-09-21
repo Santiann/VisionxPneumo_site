@@ -18,6 +18,7 @@ const Analise = ({ auth }) => {
     useEffect(() => {
         if (imageBinary) {
             setLoading(true);
+            setErro(null);
             fetch('http://localhost:8000/uploadImage', {
                 method: 'POST',
                 body: JSON.stringify( {
@@ -33,15 +34,12 @@ const Analise = ({ auth }) => {
                 return response.json()
             })
             .then((data) => {
-                console.log("Sucesso", data)
                 setResult(data)
                 setUploaded(true)
-                setLoading(false);
             })
             .catch((erro) => {
-                console.log(erro.message)
-                setErro(erro)   
-                setLoading(false);          
+                setErro(erro)     
+                setLoading(false);    
             })
         }
     }, [imageBinary]);
@@ -49,11 +47,12 @@ const Analise = ({ auth }) => {
     return (
         <AuthenticatedLayout
             user={auth.user}
-            header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">Análise de Raio-X</h2>}
-        >
+            header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">Análise de Raio-X</h2>}>
+
+         <Head title="Análise de Raio-X" />
+        
         {erro ? <AlertError message={erro.message}/> : ''}
         
-         <Head title="Análise de Raio-X" />
          {isUploaded ?  
          <ResultadoUpload image={image} result={result} /> : 
          <Upload setUploaded={setUploaded} setImage={setImage} setImageBinary={setImageBinary} />}
