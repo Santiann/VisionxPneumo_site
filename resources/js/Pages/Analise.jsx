@@ -36,6 +36,7 @@ const Analise = ({ auth }) => {
             .then((data) => {
                 setResult(data)
                 setUploaded(true)
+                setLoading(false) 
             })
             .catch((erro) => {
                 setErro(erro)     

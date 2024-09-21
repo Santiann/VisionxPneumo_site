@@ -21,6 +21,7 @@
     },
     "dependencies": {
         "react-dropzone": "^14.2.3",
+        "react-input-mask": "^2.0.4",
         "react-phone-input-2": "^2.15.1"
     }
 }

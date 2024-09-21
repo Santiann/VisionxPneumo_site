@@ -5,22 +5,28 @@ import raiox from '../../img/raiox.jpeg'
 import Range from '@/Components/Range';
 import Image from '@/Components/Image';
 import TipoImagem from '@/Components/TipoImagem';
+import Modal from '@/Components/Utils/Modal';
+import PacienteForm from '@/Components/PacienteForm';
 
 const ResultadoUpload = ({image, result}) => {
     const [constraste, setContraste] = useState(100);
     const [brilho, setBrilho] = useState(100);
     const [invert, setInvert] = useState(0);
     const [zoom, setZoom] = useState(false);
+    const [modal, setModal] = useState(false)
     
     const mapaCalor = 'data:image/png;base64,' + result.result_img_h;
     const imgAnalise = 'data:image/png;base64,' + result.result_img_identify
     const [scr, setScr] = useState(imgAnalise)
 
+    const resultadoMensagem = result.classification_img ? 'Sinais de Pnemonia encontrados' : 'Não foram encontrados sinais de Pneumonia';
+
     return (
         <div className='min-h-full w-100 flex flex-col bg-zinc-800 max-w-7xl m-auto xl:flex-row rounded border border-gray-500'>
             <div className=' flex flex-col xl:flex-[3] flex-1'>
-                <div>
-                    <h1 className='text-gray-100 p-6 font-semibold text-2xl'>{result.classification_img ? 'Sinais de pnemonia encontrados' : 'Não foram encontrados sianis de pneumonia'}</h1>
+                <div className='flex flex-row justify-between items-center'>
+                    <h1 className='text-gray-100 p-6 font-semibold text-2xl'>{resultadoMensagem}</h1>
+                    <button onClick={() => setModal(true)} className='bg-red-500 hover:bg-red-600 outline outline-2 outline-red-500 hover:outline-red-600 outline-offset-2 rounded py-2 px-3 m-4 transition font-black text-center'>Exportar Resultados</button>
                 </div>
                 <div className={`h-full relative overflow-hidden ${zoom ? 'cursor-zoom-in' : ''}`} >
                     <Image scr={scr} zoom={zoom} constraste={constraste} brilho={brilho} invert={invert} />
@@ -68,6 +74,12 @@ const ResultadoUpload = ({image, result}) => {
                     </div>
                 </div>
             </div>
+
+            <Modal show={modal} onClose={() => setModal(false)}>
+                <PacienteForm />
+            </Modal>
+            
+
         </div>
     )
 }
