@@ -5,6 +5,8 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\PdfController;
+use App\Http\Controllers\ProfissionalController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -50,6 +52,16 @@ Route::get('/profissionais', function () {
     return Inertia::render('Profissionais');
 })->middleware(['auth', 'verified'])->name('profissionais');
 
+
+Route::middleware(['auth', 'verified'])->group(function () {
+    //Adiciona novos profissionais na tabela users
+    Route::post('/profissionais', [ProfissionalController::class, 'store'])->name('profissionais.store');
+    // Edita o profissional
+    Route::put('/profissionais/{id}', [ProfissionalController::class, 'update'])->name('profissionais.update');
+    // Deleta o profissional
+    Route::delete('/profissionais/{id}', [ProfissionalController::class, 'destroy'])->name('profissionais.destroy');
+});
+
 Route::get('/cadastro_perguntas', function () {
     return Inertia::render('CadastroPerguntas');
 })->middleware(['auth', 'verified'])->name('cadastro_perguntas');
@@ -61,4 +73,4 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
