@@ -49,7 +49,6 @@ const Profissionais = ({ auth }) => {
         }
         setForm({ enterprise: '', name: '', crm: '', phone: '', email: '', password: '' });
         setCurrentProfissional(null);
-        // Reload profissionais list after operation
         const data = await fetchProfissionais();
         setProfissionais(data);
     };
@@ -61,7 +60,6 @@ const Profissionais = ({ auth }) => {
 
     const handleDelete = async (id) => {
         await deleteProfissional(id);
-        // Reload profissionais list after operation
         const data = await fetchProfissionais();
         setProfissionais(data);
     };
@@ -127,7 +125,7 @@ const Profissionais = ({ auth }) => {
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nome</th>
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Telefone</th>
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ações</th>
                         </tr>
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200">

@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Profissional;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rules;
 
 class ProfissionalController extends Controller
 {
@@ -12,11 +15,26 @@ class ProfissionalController extends Controller
         $request->validate([
             'name' => 'required',
             'phone' => 'required',
-            'email' => 'required|email',
-            'password' => 'required|min:6',
+            'email'       => 'required|string|lowercase|email|max:255|unique:' . User::class,
+            'password'    => ['required', Rules\Password::defaults()],
         ]);
 
-        // Profissional::create($request->all());
+        try {
+            $user = User::create([
+                'name'        => $request->name,
+                'phone'       => $request->phone,
+                'email'       => $request->email,
+                'password'    => Hash::make($request->password),
+            ]);
+
+            $profissional = Profissional::create([
+                'user_id' => $user->id,
+            ]);
+
+            return redirect()->route('profissionais.index')->with('success', 'Funcionário criado com sucesso.');
+        } catch (\Exception $e) {
+            return redirect()->back()->withErrors(['error' => 'Erro ao criar funcionário: ' . $e->getMessage()]);
+        }
 
         return redirect()->route('profissionais.index');
     }

@@ -14,12 +14,6 @@ return new class extends Migration
         Schema::create('profissionais', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->string('enterprise');
-            $table->string('name');
-            $table->string('crm');
-            $table->string('phone');
-            $table->string('email')->unique();
-            $table->string('specialty')->nullable();
             $table->timestamps();
         });
     }
