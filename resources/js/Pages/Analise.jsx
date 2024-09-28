@@ -10,7 +10,7 @@ import imgAnalise from '../../img/img_analise.png'
 
 const Analise = ({ auth }) => { 
 
-    const debug = true;
+    const debug = false;
     
     const resultDebug = {
         classification_img: true,
