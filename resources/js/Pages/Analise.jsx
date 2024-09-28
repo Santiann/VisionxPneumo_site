@@ -5,8 +5,18 @@ import ResultadoUpload from './ResultadoUpload';
 import Upload from './Upload';
 import AlertError from '@/Components/Utils/AlertError';
 import Loading from '@/Components/Utils/Loading';
+import mapaCalor from '../../img/mapa_calor.png'
+import imgAnalise from '../../img/img_analise.png'
 
 const Analise = ({ auth }) => { 
+
+    const debug = true;
+    
+    const resultDebug = {
+        classification_img: true,
+        result_img_h : mapaCalor,
+        result_img_identify : imgAnalise
+    }
 
     const [isUploaded, setUploaded] = useState(false)
     const [image, setImage] = useState(null)
@@ -19,6 +29,15 @@ const Analise = ({ auth }) => {
         if (imageBinary) {
             setLoading(true);
             setErro(null);
+
+            if (debug) {
+                console.log(resultDebug)
+                setUploaded(true)
+                setResult(resultDebug)
+                setLoading(false);
+                return
+            }  
+
             fetch('http://localhost:8000/uploadImage', {
                 method: 'POST',
                 body: JSON.stringify( {
@@ -43,6 +62,8 @@ const Analise = ({ auth }) => {
                 setLoading(false);    
             })
         }
+
+        
     }, [imageBinary]);
 
     return (
@@ -55,7 +76,7 @@ const Analise = ({ auth }) => {
         {erro ? <AlertError message={erro.message}/> : ''}
         
          {isUploaded ?  
-         <ResultadoUpload image={image} result={result} /> : 
+         <ResultadoUpload image={image} result={result} debug={debug}/> : 
          <Upload setUploaded={setUploaded} setImage={setImage} setImageBinary={setImageBinary} />}
 
         {loading ?  <Loading /> : ''} 

@@ -1,22 +1,29 @@
 import React, { useRef, useState } from 'react'
-import raiox from '../../img/raiox.jpeg'
-// import mapaCalor from '../../img/mapa_calor.png'
-// import imgAnalise from '../../img/img_analise.png'
 import Range from '@/Components/Range';
 import Image from '@/Components/Image';
 import TipoImagem from '@/Components/TipoImagem';
 import Modal from '@/Components/Utils/Modal';
 import PacienteForm from '@/Components/PacienteForm';
+import mapaCalor from '../../img/mapa_calor.png'
 
-const ResultadoUpload = ({image, result}) => {
+const ResultadoUpload = ({image, result, debug}) => {
     const [constraste, setContraste] = useState(100);
     const [brilho, setBrilho] = useState(100);
     const [invert, setInvert] = useState(0);
     const [zoom, setZoom] = useState(false);
     const [modal, setModal] = useState(false)
+
+    let mapaCalor
+    let imgAnalise
     
-    const mapaCalor = 'data:image/png;base64,' + result.result_img_h;
-    const imgAnalise = 'data:image/png;base64,' + result.result_img_identify
+    if (debug) {
+        mapaCalor = result.result_img_h;
+        imgAnalise = result.result_img_identify
+    } else {
+        mapaCalor = 'data:image/png;base64,' + result.result_img_h;
+        imgAnalise = 'data:image/png;base64,' + result.result_img_identify
+    }
+    
     const [scr, setScr] = useState(imgAnalise)
 
     const resultadoMensagem = result.classification_img ? 'Sinais de Pnemonia encontrados' : 'Não foram encontrados sinais de Pneumonia';
@@ -26,7 +33,7 @@ const ResultadoUpload = ({image, result}) => {
             <div className=' flex flex-col xl:flex-[3] flex-1'>
                 <div className='flex flex-row justify-between items-center'>
                     <h1 className='text-gray-100 p-6 font-semibold text-2xl'>{resultadoMensagem}</h1>
-                    <button onClick={() => setModal(true)} className='bg-red-500 hover:bg-red-600 outline outline-2 outline-red-500 hover:outline-red-600 outline-offset-2 rounded py-2 px-3 m-4 transition font-black text-center'>Exportar Resultados</button>
+                    <button onClick={() => setModal(true)} className='bg-red-500 hover:bg-red-600 outline outline-2 outline-red-500 hover:outline-red-600 outline-offset-2 rounded-sm py-1 px-2 m-5 transition font-medium text-gray-100 text-center'>Exportar Resultados</button>
                 </div>
                 <div className={`h-full relative overflow-hidden ${zoom ? 'cursor-zoom-in' : ''}`} >
                     <Image scr={scr} zoom={zoom} constraste={constraste} brilho={brilho} invert={invert} />
@@ -55,7 +62,9 @@ const ResultadoUpload = ({image, result}) => {
                     <div className='h-1 bg-gray-500 w-full'></div>
                     <div className='flex m-3 flex-col justify-center content-center gap-2'>
                         <div className='flex content-center gap-2'>
-                            <div className='w-8 h-8 bg-zinc-900 self-center border-gray-400 border rounded-sm '></div>
+                            <div className='w-8 h-8 bg-zinc-900 self-center border-gray-400 border rounded-sm flex items-center justify-center'>
+                                <div className=' w-6 h-6 rounded-full bg-[#4F4892] border border-yellow-200'></div>
+                            </div>
                             <p className='text-gray-100 self-center'>Sinais de Pneumonia</p>
                         </div>
                         <div className='flex content-center gap-2'>
