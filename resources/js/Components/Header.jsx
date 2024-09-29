@@ -1,7 +1,6 @@
 import Logo from '@/Components/Logo'
 import React, { useState } from 'react'
 import Dropdown from '@/Components/Utils/Dropdown';
-import NavLink from '@/Components/Utils/NavLink';
 import ResponsiveNavLink from '@/Components/Utils/ResponsiveNavLink';
 import perfil from '../../img/perfil.png'
 import { Link } from '@inertiajs/react';
@@ -9,8 +8,7 @@ import { Link } from '@inertiajs/react';
 const Header = ({ user }) => {
     const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
     return (
-        <nav className="bg-zinc-900 border-b border-gray-600 fixed top-0 z-50 w-full">
-            {/* <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"> */}
+        <nav className="bg-[#2b3945] border-b border-[#4a5568] fixed top-0 z-50 w-full">
             <div className="flex justify-between p-5 h-14">
                 <div className="flex">
                     <div className="flex items-center">
@@ -18,12 +16,6 @@ const Header = ({ user }) => {
                             <Logo className="text-gray-100 text-2xl font-bold" />
                         </Link>
                     </div>
-
-                    {/* <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                            <NavLink className='text-gray-100' href={route('dashboard')} active={route().current('dashboard')}>
-                                Dashboard
-                            </NavLink>
-                        </div> */}
                 </div>
 
                 <div className="hidden sm:flex sm:items-center sm:ms-6">
