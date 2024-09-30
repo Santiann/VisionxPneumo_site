@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react'
+import { Inertia } from '@inertiajs/inertia';
 import AuthenticatedLayout from '@/Pages/AuthenticatedLayout';
 import { Head } from '@inertiajs/react';
 import ResultadoUpload from './ResultadoUpload';
@@ -26,45 +27,76 @@ const Analise = ({ auth }) => {
     const [loading, setLoading] = useState(false)
 
     useEffect(() => {
-        if (imageBinary) {
+        const uploadImage = async () => {
+            if (!imageBinary) return;
+    
             setLoading(true);
             setErro(null);
-
-            if (debug) {
-                console.log(resultDebug)
-                setUploaded(true)
-                setResult(resultDebug)
-                setLoading(false);
-                return
-            }  
-
-            fetch('http://localhost:8000/uploadImage', {
-                method: 'POST',
-                body: JSON.stringify( {
-                    "adjust_image_quality": 1,
-                    "img": imageBinary,
-                }),
-                headers:{ 'Content-Type': 'application/json'}
-            })
-            .then((response) => {
-                if (!response.ok) {
-                    return response.json().then(err => {throw new Error(err.error || 'Erro Desconhecido')})
+    
+            try {
+                if (debug) {
+                    console.log(resultDebug);
+                    setResult(resultDebug);
+                    cadastrarBancoTemp(resultDebug);
+                    setUploaded(true);
+                    return;
                 }
-                return response.json()
-            })
-            .then((data) => {
-                setResult(data)
-                setUploaded(true)
-                setLoading(false) 
-            })
-            .catch((erro) => {
-                setErro(erro)     
-                setLoading(false);    
-            })
-        }
-
-        
+    
+                const response = await fetch('http://localhost:8000/uploadImage', {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        adjust_image_quality: 1,
+                        img: imageBinary,
+                    }),
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+    
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error || 'Erro Desconhecido');
+                }
+    
+                const data = await response.json();
+                setResult(data);
+                cadastrarBancoTemp(data);
+                setUploaded(true);
+            } catch (error) {
+                setErro(error);
+            } finally {
+                setLoading(false);
+                setImageBinary(null);
+            }
+        };
+    
+        uploadImage();
     }, [imageBinary]);
+
+
+     function cadastrarBancoTemp(dados){
+        const formData = new FormData();
+        formData.append('image_original', imageBinary)
+        formData.append('image_heat', dados.result_img_h)
+        formData.append('image_analysis', dados.result_img_identify)
+        formData.append('is_pneumonia', dados.classification_img)
+        formData.append('accuracy', 'sem dados')
+
+        Inertia.post('/temp-img', formData, {
+            onStart: () => {
+                console.log('Iniciando o envio da requisição...');
+            },
+            onSuccess: () => {
+                console.log('Dados salvos'); 
+            },
+            onError: (errors) => {
+                console.error('Erro ao salvar:', errors);
+            },
+            onFinish: () => {
+                console.log('Requisição finalizada');
+            },
+        });
+    }
 
     return (
         <AuthenticatedLayout

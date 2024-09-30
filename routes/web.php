@@ -5,6 +5,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\PdfController;
+use App\Http\Controllers\TempImgController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -53,6 +54,8 @@ Route::get('/profissionais', function () {
 Route::get('/cadastro_perguntas', function () {
     return Inertia::render('CadastroPerguntas');
 })->middleware(['auth', 'verified'])->name('cadastro_perguntas');
+
+Route::post('/temp-img', [TempImgController::class, 'store'])->name('temp-img.store');
 
 
 Route::middleware('auth')->group(function () {
