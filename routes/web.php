@@ -6,6 +6,11 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\PdfController;
 use App\Http\Controllers\ProfissionalController;
+use App\Http\Controllers\SuporteController;
+use App\Http\Controllers\QuestionarioController;
+use App\Http\Controllers\AnaliseController;
+use App\Http\Controllers\InicioController;
+use App\Http\Controllers\PerguntaController;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,45 +32,31 @@ Route::get('/', function () {
     ]);
 });
 
-Route::get('/teste', function () {
-    return Inertia::render('Teste');
-});
-Route::get('pdf', [PdfController::class, 'index']);
-
-Route::get('/inicio', function () {
-    return Inertia::render('Inicio');
-})->middleware(['auth', 'verified'])->name('inicio');
-
-Route::get('/analise', function () {
-    return Inertia::render('Analise');
-})->middleware(['auth', 'verified'])->name('analise');
-
-Route::get('/questionario', function () {
-    return Inertia::render('Questionario');
-})->middleware(['auth', 'verified'])->name('questionario');
-
-Route::get('/suporte', function () {
-    return Inertia::render('Suporte');
-})->middleware(['auth', 'verified'])->name('suporte');
-
-Route::get('/profissionais', function () {
-    return Inertia::render('Profissionais');
-})->middleware(['auth', 'verified'])->name('profissionais');
-
-
 Route::middleware(['auth', 'verified'])->group(function () {
-    //Adiciona novos profissionais na tabela users
+    // Rotas para pdf
+    Route::get('/pdf', [PdfController::class, 'index'])->name('inicio.index');;
+
+    // Rotas para inicio
+    Route::get('/inicio', [InicioController::class, 'index'])->name('inicio.index');
+
+    // Rotas para analise
+    Route::get('/analise', [AnaliseController::class, 'index'])->name('analise.index');
+
+    // Rotas para questionário
+    Route::get('/questionario', [QuestionarioController::class, 'index'])->name('questionario.index');
+
+    // Rotas para suporte
+    Route::get('/suporte', [SuporteController::class, 'index'])->name('suporte.index');
+
+    // Rotas para perguntas
+    Route::get('/pergunta', [PerguntaController::class, 'index'])->name('pergunta.index');
+
+    // Rotas para profissionais
+    Route::get('/profissionais', [ProfissionalController::class, 'index'])->name('profissionais.index');
     Route::post('/profissionais', [ProfissionalController::class, 'store'])->name('profissionais.store');
-    // Edita o profissional
     Route::put('/profissionais/{id}', [ProfissionalController::class, 'update'])->name('profissionais.update');
-    // Deleta o profissional
     Route::delete('/profissionais/{id}', [ProfissionalController::class, 'destroy'])->name('profissionais.destroy');
 });
-
-Route::get('/cadastro_perguntas', function () {
-    return Inertia::render('CadastroPerguntas');
-})->middleware(['auth', 'verified'])->name('cadastro_perguntas');
-
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

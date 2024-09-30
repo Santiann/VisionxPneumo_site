@@ -46,12 +46,12 @@ const Sidebar = () => {
         <aside className="fixed top-14 left-0 z-40 h-screen w-52 pt-3 bg-[#212c36] border-r border-[#4da3d6]" aria-label="Sidebar">
             <div className="h-full px-3 pb-4 overflow-y-auto">
                 <ul className="space-y-2 font-medium text-[#edf2f7]">
-                    <NavOption nome="Início" icon={HomeIcon} size="text-base" link={'inicio'} />
-                    <NavOption nome="Análise de Raio-X" icon={LungIcon} size="text-base" link={'analise'} />
-                    <NavOption nome="Questionário" icon={questionnaireIcon} size="text-base" link={'questionario'} />
-                    <NavOption nome="Suporte" icon={supportIcon} size="text-base" link={'suporte'} />
-                    <NavOption nome="Funcionários" icon={employeeIcon} size="text-base" link={'profissionais'} />
-                    <NavOption nome="Perguntas" icon={questionIcon} size="text-base" link={'cadastro_perguntas'} />
+                    <NavOption nome="Início" icon={HomeIcon} size="text-base" link={'inicio.index'} />
+                    <NavOption nome="Análise de Raio-X" icon={LungIcon} size="text-base" link={'analise.index'} />
+                    <NavOption nome="Questionário" icon={questionnaireIcon} size="text-base" link={'questionario.index'} />
+                    <NavOption nome="Suporte" icon={supportIcon} size="text-base" link={'suporte.index'} />
+                    <NavOption nome="Funcionários" icon={employeeIcon} size="text-base" link={'profissionais.index'} />
+                    <NavOption nome="Perguntas" icon={questionIcon} size="text-base" link={'pergunta.index'} />
                 </ul>
             </div>
         </aside>

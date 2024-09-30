@@ -75,19 +75,19 @@ const Header = ({ user }) => {
 
             <div className={(showingNavigationDropdown ? 'block' : 'hidden') + ' sm:hidden'}>
                 <div className="pt-2 pb-3 space-y-1">
-                    <ResponsiveNavLink href={route('inicio')} active={route().current('inicio')}>
+                    <ResponsiveNavLink href={route('inicio.index')} active={route().current('inicio.index')}>
                         Início
                     </ResponsiveNavLink>
-                    <ResponsiveNavLink href={route('analise')} active={route().current('analise')}>
+                    <ResponsiveNavLink href={route('analise.index')} active={route().current('analise.index')}>
                         Análise de Raio-X
                     </ResponsiveNavLink>
-                    <ResponsiveNavLink href={route('questionario')} active={route().current('questionario')}>
+                    <ResponsiveNavLink href={route('questionario.index')} active={route().current('questionario.index')}>
                         Suporte
                     </ResponsiveNavLink>
-                    <ResponsiveNavLink href={route('suporte')} active={route().current('suporte')}>
+                    <ResponsiveNavLink href={route('suporte.index')} active={route().current('suporte.index')}>
                         Profissionais de Saúde
                     </ResponsiveNavLink>
-                    <ResponsiveNavLink href={route('cadastro_perguntas')} active={route().current('cadastro_perguntas')}>
+                    <ResponsiveNavLink href={route('pergunta.index')} active={route().current('pergunta.index')}>
                         Cadastro de Perguntas
                     </ResponsiveNavLink>
                 </div>

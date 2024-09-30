@@ -1,12 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import AuthenticatedLayout from '@/Pages/AuthenticatedLayout';
 import { Head } from '@inertiajs/react';
-
-// Mock API functions for demonstration purposes
-const fetchProfissionais = async () => {
-    // Replace with actual API call
-    return [];
-};
+import axios from 'axios';
 
 const createProfissional = async (data) => {
     await axios.post('/profissionais', data);
@@ -20,18 +15,9 @@ const deleteProfissional = async (id) => {
     await axios.delete(`/profissionais/${id}`);
 };
 
-const Profissionais = ({ auth }) => {
-    const [profissionais, setProfissionais] = useState([]);
+const Profissionais = ({ auth, profissionais }) => {
     const [currentProfissional, setCurrentProfissional] = useState(null);
     const [form, setForm] = useState({ enterprise: '', name: '', crm: '', phone: '', email: '', password: '' });
-
-    useEffect(() => {
-        const loadProfissionais = async () => {
-            const data = await fetchProfissionais();
-            setProfissionais(data);
-        };
-        loadProfissionais();
-    }, []);
 
     const handleChange = (e) => {
         setForm({
@@ -49,8 +35,6 @@ const Profissionais = ({ auth }) => {
         }
         setForm({ enterprise: '', name: '', crm: '', phone: '', email: '', password: '' });
         setCurrentProfissional(null);
-        const data = await fetchProfissionais();
-        setProfissionais(data);
     };
 
     const handleEdit = (profissional) => {
@@ -60,8 +44,6 @@ const Profissionais = ({ auth }) => {
 
     const handleDelete = async (id) => {
         await deleteProfissional(id);
-        const data = await fetchProfissionais();
-        setProfissionais(data);
     };
 
     return (
@@ -113,14 +95,14 @@ const Profissionais = ({ auth }) => {
                     </div>
                     <button
                         type="submit"
-                        className="mt-4 bg-blue-500 text-white px-4 py-2 rounded"
+                        className="mt-4 bg-[#212c36] text-white px-4 py-2 rounded"
                     >
-                        {currentProfissional ? 'Alterar' : 'Adicionar'}
+                        Adicionar
                     </button>
                 </form>
 
                 <table className="min-w-full divide-y divide-gray-200">
-                    <thead className="bg-gray-50">
+                    <thead className="bg-gray-200">
                         <tr>
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nome</th>
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Telefone</th>
@@ -139,13 +121,13 @@ const Profissionais = ({ auth }) => {
                                         onClick={() => handleEdit(profissional)}
                                         className="text-blue-500 hover:text-blue-700 mr-2"
                                     >
-                                        Edit
+                                        Editar
                                     </button>
                                     <button
                                         onClick={() => handleDelete(profissional.id)}
                                         className="text-red-500 hover:text-red-700"
                                     >
-                                        Delete
+                                        Deletar
                                     </button>
                                 </td>
                             </tr>
