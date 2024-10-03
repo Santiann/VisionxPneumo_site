@@ -1,7 +1,6 @@
 import Logo from '@/Components/Logo'
 import React, { useState } from 'react'
 import Dropdown from '@/Components/Utils/Dropdown';
-import NavLink from '@/Components/Utils/NavLink';
 import ResponsiveNavLink from '@/Components/Utils/ResponsiveNavLink';
 import perfil from '../../img/perfil.png'
 import { Link } from '@inertiajs/react';
@@ -9,8 +8,7 @@ import { Link } from '@inertiajs/react';
 const Header = ({ user }) => {
     const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
     return (
-        <nav className="bg-zinc-900 border-b border-gray-600 fixed top-0 z-50 w-full">
-            {/* <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"> */}
+        <nav className="bg-[#2b3945] border-b border-[#4a5568] fixed top-0 z-50 w-full">
             <div className="flex justify-between p-5 h-14">
                 <div className="flex">
                     <div className="flex items-center">
@@ -18,12 +16,6 @@ const Header = ({ user }) => {
                             <Logo className="text-gray-100 text-2xl font-bold" />
                         </Link>
                     </div>
-
-                    {/* <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                            <NavLink className='text-gray-100' href={route('dashboard')} active={route().current('dashboard')}>
-                                Dashboard
-                            </NavLink>
-                        </div> */}
                 </div>
 
                 <div className="hidden sm:flex sm:items-center sm:ms-6">
@@ -83,19 +75,19 @@ const Header = ({ user }) => {
 
             <div className={(showingNavigationDropdown ? 'block' : 'hidden') + ' sm:hidden'}>
                 <div className="pt-2 pb-3 space-y-1">
-                    <ResponsiveNavLink href={route('inicio')} active={route().current('inicio')}>
+                    <ResponsiveNavLink href={route('inicio.index')} active={route().current('inicio.index')}>
                         Início
                     </ResponsiveNavLink>
-                    <ResponsiveNavLink href={route('analise')} active={route().current('analise')}>
+                    <ResponsiveNavLink href={route('analise.index')} active={route().current('analise.index')}>
                         Análise de Raio-X
                     </ResponsiveNavLink>
-                    <ResponsiveNavLink href={route('questionario')} active={route().current('questionario')}>
+                    <ResponsiveNavLink href={route('questionario.index')} active={route().current('questionario.index')}>
                         Suporte
                     </ResponsiveNavLink>
-                    <ResponsiveNavLink href={route('suporte')} active={route().current('suporte')}>
+                    <ResponsiveNavLink href={route('suporte.index')} active={route().current('suporte.index')}>
                         Profissionais de Saúde
                     </ResponsiveNavLink>
-                    <ResponsiveNavLink href={route('cadastro_perguntas')} active={route().current('cadastro_perguntas')}>
+                    <ResponsiveNavLink href={route('pergunta.index')} active={route().current('pergunta.index')}>
                         Cadastro de Perguntas
                     </ResponsiveNavLink>
                 </div>
