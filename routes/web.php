@@ -5,6 +5,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\PdfController;
+use App\Http\Controllers\TempImgController;
 use App\Http\Controllers\ProfissionalController;
 use App\Http\Controllers\SuporteController;
 use App\Http\Controllers\QuestionarioController;
@@ -55,6 +56,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // Rotas para perguntas
     Route::get('/pergunta', [PerguntaController::class, 'index'])->name('pergunta.index');
+
+    // Rotas para o banco temporário
+    Route::post('/temp-img', [TempImgController::class, 'store'])->name('temp-img.store');
 
     // Rotas para profissionais
     Route::get('/profissionais', [ProfissionalController::class, 'index'])->name('profissionais.index');
