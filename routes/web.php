@@ -33,8 +33,13 @@ Route::get('/', function () {
 });
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    // Rotas para pdf
-    Route::get('/pdf', [PdfController::class, 'index'])->name('inicio.index');;
+    
+  // Rotas para pdf
+    Route::get('/teste', function () {
+      return Inertia::render('Teste');
+    });
+  
+    Route::get('/pdf', [PdfController::class, 'generatePdf']);
 
     // Rotas para inicio
     Route::get('/inicio', [InicioController::class, 'index'])->name('inicio.index');
