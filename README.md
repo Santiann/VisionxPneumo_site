@@ -43,3 +43,20 @@ extension=zip
 7. Rode o projeto
 `php artisan serve` para rodar o back
 `npm run dev` para rodar o front
+
+
+*****
+
+Tuorial para configurar banco sqlite temporário:
+
+1. Adicione no arquivo .env o caminho completo que se encontra o temp_database.sqlite do projeto
+ DB_SQLITE_DATABASE=  "seu caminho onde se encontra o projeto"/VisionxPneumo_site/database/temp_database.sqlite
+
+2. Descomente as seguintes linhas do arquivo php.ini:
+     * extension=pdo_sqlite
+     * extension=sqlite3
+
+3. Execute o comando `php artisan migrate --path=database/migrations/sqlite --database=sqlite` para rodar as migrações do sqlite
+
+    
+   
