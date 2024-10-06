@@ -24,6 +24,10 @@ table {
     margin-bottom: 10px;
 }
 
+img{
+    border-radius: 2px;
+}
+
 td {
     padding: 20px;
     text-align: center;
@@ -52,7 +56,8 @@ td {
 .full-width-title {
     width: 100%;
     text-align: left;
-    font-size: 24px;
+    font-size: 1.5rem;
+    padding: 10px;
 }
 
 ul {
@@ -64,7 +69,6 @@ ul {
 ol .li-strong {
     font-weight: bold;
 }
-
 
 .sub-title {
     font-weight: bold;
@@ -78,7 +82,9 @@ ol .li-strong {
     width: 15px;
     height: 15px;
     margin-right: 5px;
+    margin-top: 1px;
     vertical-align: middle;
+    border-radius: 3px;
 }
 
 header {
@@ -120,6 +126,7 @@ footer {
 .li-border {
     text-align: left;
     border: 1px solid #d6d6d6;
+    padding: 5px;
 }
 
 .text-box {

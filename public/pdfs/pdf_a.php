@@ -12,9 +12,9 @@
     <header>
         <table>
             <tr>
-                <td class="half-width-info">Gerador: ... <!-- nome do medico --> </td>
-                <td class="half-width-info">CRM: ... <!-- CRM do medico --> </td>
-                <td class="half-width-info">Local: ... <!-- nome do hospital --> </td>
+                <td class="half-width-info">Gerador: ...  </td>
+                <td class="half-width-info">CRM: ... </td>
+                <td class="half-width-info">Local: ... </td>
             </tr>
         </table> 
     </header>
@@ -30,10 +30,8 @@
 
     <table>
         <tr>
-            <!-- adicionar a: Imagem Original -->
-            <td class="half-width"><img src="<?php echo $imgSrcOriginal; ?>" alt="Imagem Original" style="object-fit: cover; width: 200px; height: 200px;"></td>
-            <!-- adicionar a: Imagem Mapa de Calor -->
-            <td class="half-width"><img src="<?php echo $imgSrcCalor; ?>" alt="Imagem Mapa de Calor" style="object-fit: cover; width: 200px; height: 200px;"></td>
+            <td class="half-width"><img src="<?php echo $imgSrcOriginal; ?>" alt="Imagem Original" style="object-fit: cover; width: 250px; height: 250px;"></td>
+            <td class="half-width"><img src="<?php echo $imgSrcCalor; ?>" alt="Imagem Mapa de Calor" style="object-fit: cover; width: 250px; height: 250px;"></td>
             <td class="legend">
                 <p><span class="blue"></span> Baixa densidade</p>
                 <p><span class="green"></span> Média densidade</p>
@@ -46,20 +44,19 @@
 
     <table>
         <tr>
-            <!-- adicionar a: Imagem Sinais -->
-            <td class="half-width"><img src="<?php echo $imgSrcSinais; ?>" alt="Imagem Sinais" style="object-fit: cover; width: 250px;"></td>
+            <td class="half-width"><img src="<?php echo $imgSrcSinais; ?>" alt="Imagem Sinais" style="object-fit: cover; width: 300px;"></td>
             <td class="half-width">
                 <ul>
                     <li class="sub-title">Sinais de pneumonia</li>
-                    <li class="li-border">Lobo superior direito: ...<!-- adicionar dado referente --></li>
-                    <li class="li-border">Lobo médio direito: ...<!-- adicionar dado referente --></li>
-                    <li class="li-border">Lobo inferior direito: ...<!-- adicionar dado referente --></li>
-                    <li class="li-border">Lobo superior esquerdo: ...<!-- adicionar dado referente --></li>
-                    <li class="li-border">Lobo inferior esquero: ...<!-- adicionar dado referente --></li>
+                    <li class="li-border">Lobo superior direito: ...</li>
+                    <li class="li-border">Lobo médio direito: ...</li>
+                    <li class="li-border">Lobo inferior direito: ...</li>
+                    <li class="li-border">Lobo superior esquerdo: ...</li>
+                    <li class="li-border">Lobo inferior esquero: ...</li>
                     <br>
                 </ul>
                 <hr>
-                <p style="text-align: left;">Total de sinais encontrados: ...<!-- adicionar dado referente --></p>
+                <p style="text-align: left;">Total de sinais encontrados: ...</p>
             </td>
         </tr>
     </table>
@@ -69,8 +66,8 @@
             <td class="full-width" style="page-break-inside: avoid;">
                 <ul>
                     <li class="sub-title">Resultado</li>
-                    <li style="font-size: 24px"> ...<!-- adicionar dado referente, ex:  Alta Probabilidade de Pneumonia --></li>
-                    <li>Acurácia da análise aproximada: ...<!-- valor da acuracia --></li>
+                    <li style="font-size: 24px"><?php echo $resultPneumonia; ?></li>
+                    <li>Acurácia da análise aproximada: ...</li>
                 </ul>
             </td>
         </tr>
