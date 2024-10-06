@@ -11,7 +11,8 @@ import imgAnalise from '../../img/img_analise.png'
 
 const Analise = ({ auth }) => { 
 
-    const debug = false;
+    const debug = true;
+    const url = 'http://localhost:8000';
     
     const resultDebug = {
         classification_img: true,
@@ -60,7 +61,7 @@ const Analise = ({ auth }) => {
     
                 const data = await response.json();
                 setResult(data);
-                cadastrarBancoTemp(data);
+                await cadastrarBancoTemp(data);
                 setUploaded(true);
             } catch (error) {
                 setErro(error);
@@ -74,28 +75,32 @@ const Analise = ({ auth }) => {
     }, [imageBinary]);
 
 
-     function cadastrarBancoTemp(dados){
+     async function cadastrarBancoTemp(dados){
         const formData = new FormData();
         formData.append('image_original', imageBinary)
         formData.append('image_heat', dados.result_img_h)
         formData.append('image_analysis', dados.result_img_identify)
-        formData.append('is_pneumonia', dados.classification_img)
+        formData.append('is_pneumonia', dados.classification_img ? 1 : 0);
         formData.append('accuracy', 'sem dados')
+        try{
 
-        Inertia.post('/temp-img', formData, {
-            onStart: () => {
-                console.log('Iniciando o envio da requisição...');
-            },
-            onSuccess: () => {
-                console.log('Dados salvos'); 
-            },
-            onError: (errors) => {
-                console.error('Erro ao salvar:', errors);
-            },
-            onFinish: () => {
-                console.log('Requisição finalizada');
-            },
-        });
+            const response = await fetch(`${url}/tempImg`, {
+                method: 'POST',
+                body: formData,
+                headers: {                   
+                    'Accept': 'application/json',
+                },
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                console.log(errorData);
+                throw new Error('Não foi possível guardar as informações');
+            }           
+
+        } catch(error){
+            setErro(error);
+        }
     }
 
     return (

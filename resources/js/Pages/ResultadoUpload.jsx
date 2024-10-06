@@ -13,15 +13,15 @@ const ResultadoUpload = ({image, result, debug}) => {
     const [zoom, setZoom] = useState(false);
     const [modal, setModal] = useState(false)
 
-    let mapaCalor
-    let imgAnalise
+    let mapaCalor;
+    let imgAnalise;
     
     if (debug) {
         mapaCalor = result.result_img_h;
-        imgAnalise = result.result_img_identify
+        imgAnalise = result.result_img_identify;
     } else {
         mapaCalor = 'data:image/png;base64,' + result.result_img_h;
-        imgAnalise = 'data:image/png;base64,' + result.result_img_identify
+        imgAnalise = 'data:image/png;base64,' + result.result_img_identify;
     }
     
     const [scr, setScr] = useState(imgAnalise)
@@ -29,7 +29,7 @@ const ResultadoUpload = ({image, result, debug}) => {
     const resultadoMensagem = result.classification_img ? 'Sinais de Pnemonia encontrados' : 'Não foram encontrados sinais de Pneumonia';
 
     return (
-        <div className='min-h-full w-100 flex flex-col bg-zinc-800 max-w-7xl m-auto xl:flex-row rounded border border-gray-500'>
+        <div className='min-h-full w-100 flex flex-col bg-[#212c36] max-w-7xl m-auto xl:flex-row rounded border border-gray-500'>
             <div className=' flex flex-col xl:flex-[3] flex-1'>
                 <div className='flex flex-row justify-between items-center'>
                     <h1 className='text-gray-100 p-6 font-semibold text-2xl'>{resultadoMensagem}</h1>
@@ -44,7 +44,7 @@ const ResultadoUpload = ({image, result, debug}) => {
                     <h1 className='text-gray-100 font-medium text-xl p-2'>Filtros</h1>
                     <div className='h-1 bg-gray-500 w-full'></div>
                     <div className='p-5 flex justify-center'>
-                        <button className={` rounded border-gray-400 border text-white p-2 ${zoom ? 'bg-primary' : 'bg-zinc-900'} `} onClick={() => setZoom(!zoom)}>Zoom</button>
+                        <button className={` rounded border-gray-400 border text-white p-2 ${zoom ? 'bg-primary' : 'bg-[#212c36]'} `} onClick={() => setZoom(!zoom)}>Zoom</button>
                     </div>
                     <div className='m-3'>
                         <Range name={'Contraste'} value={constraste} setValue={setContraste} max={200} />
@@ -87,7 +87,6 @@ const ResultadoUpload = ({image, result, debug}) => {
             <Modal show={modal} onClose={() => setModal(false)}>
                 <PacienteForm />
             </Modal>
-            
 
         </div>
     )

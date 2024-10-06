@@ -58,7 +58,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/pergunta', [PerguntaController::class, 'index'])->name('pergunta.index');
 
     // Rotas para o banco temporário
-    Route::post('/temp-img', [TempImgController::class, 'store'])->name('temp-img.store');
+    Route::post('/tempImg', [TempImgController::class, 'store'])->name('tempImg.store');
 
     // Rotas para profissionais
     Route::get('/profissionais', [ProfissionalController::class, 'index'])->name('profissionais.index');

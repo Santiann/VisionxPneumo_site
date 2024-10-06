@@ -14,10 +14,10 @@ class TempImgController extends Controller
             'image_original' => 'required|string',
             'image_heat' => 'required|string',
             'image_analysis' => 'required|string',
-            'is_pneumonia' => 'required|boolean',
+            'is_pneumonia' => 'required|in:0,1',
             'accuracy' => 'required|string',
         ]);
-
+        
         DB::connection('sqlite')->table('temp_data_img')->insert([
             'image_original' => $request->input('image_original'),
             'image_heat' => $request->input('image_heat'),
@@ -26,6 +26,6 @@ class TempImgController extends Controller
             'accuracy' => $request->input('accuracy'),
         ]);
 
-        return redirect()->back()->with('message', 'Data stored successfully in SQLite');
+        return response()->json(['message' => 'Data stored successfully in SQLite']);
     }
 }
