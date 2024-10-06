@@ -28,4 +28,21 @@ class TempImgController extends Controller
 
         return response()->json(['message' => 'Data stored successfully in SQLite']);
     }
+
+    public function getTempData(){
+        $tempData = DB::connection('sqlite')->table('temp_data_img')->first();
+
+       // DB::connection('sqlite')->table('temp_data_img')->delete();
+
+        if ($tempData) {
+            return response()->json(['data' => $tempData], 200);
+        } else {
+            return response()->json(['message' => 'Nenhum dado encontrado'], 404);
+        }
+    }
+
+    public function deleteTempData(){
+        DB::connection('sqlite')->table('temp_data_img')->delete();
+        return response()->json(['message' => 'Nenhum dado encontrado'], 200);
+    }
 }
