@@ -6,7 +6,15 @@
     <title>PDF-02</title>
 </head>
 <body>
-
+<header>
+        <table>
+            <tr>
+                <td class="half-width-info">Gerador: <?php echo $userName; ?>  </td>
+                <td class="half-width-info">CRM: <?php echo $userCRM; ?> </td>
+                <td class="half-width-info">Local: <?php echo $userEnterprise; ?> </td>
+            </tr>
+        </table> 
+    </header>
     <table>
         <tr>
             <td class="full-width-title">Dados do paciente</td>
@@ -18,14 +26,14 @@
 
     <table>
         <tr>
-            <td class="half-width"><strong>Nome:</strong><br> ... </td>
-            <td class="half-width"><strong>Sexo:</strong><br> ... </td>
-            <td class="half-width"><strong>Idade:</strong><br> ... </td>
+            <td class="half-width"><strong>Nome:</strong><br> <?php echo $patientName; ?> </td>
+            <td class="half-width"><strong>Sexo:</strong><br> <?php echo $patientGender; ?> </td>
+            <td class="half-width"><strong>Idade:</strong><br> <?php echo $patientAge; ?> </td>
         </tr>
         <tr>
-            <td class="half-width"><strong>Telefone:</strong><br> ... /td>
-            <td class="half-width"><strong>CPF:</strong><br> ... </td>
-            <td class="half-width"><strong>Data de nascimento:</strong><br> ... </td>
+            <td class="half-width"><strong>Telefone:</strong><br> <?php echo $patientPhone; ?>
+            <td class="half-width"><strong>CPF:</strong><br> <?php echo $patientCpf; ?> </td>
+            <td class="half-width"><strong>Data de nascimento:</strong><br> <?php echo $patientBirthDate; ?> </td>
         </tr>
     </table> 
 
@@ -54,13 +62,23 @@
                     <li>Total de sinais encontrados: ... </li>
                     <br>
                     <li class="sub-title">Resultado</li>
-                    <li style="font-size: 24px">... </li>
+                    <li style="font-size: 24px"><?php echo $resultPneumonia; ?> </li>
                     <li>Acurácia da análise aproximada: ...</li>
                     <br>
                 </ul>
             </td>
         </tr>
     </table>
+
+    <footer>
+        <table>
+            <tr>
+                <td class="half-width"><?php echo date('d/m/Y'); ?></td>
+                <td class="half-width"></td>
+                <td class="half-width-company">VisionXPneumo</td>
+            </tr>
+        </table>
+    </footer>
     
 </body>
 </html>

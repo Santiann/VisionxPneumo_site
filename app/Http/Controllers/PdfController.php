@@ -2,13 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
 use Dompdf\Dompdf;
 use Dompdf\Options;
 use Illuminate\Support\Facades\DB;
+use Inertia\Inertia;
+use Illuminate\Support\Facades\Auth;
+
 
 class PdfController extends Controller
 {
-    public function generatePdf()
+    public function generatePdf(Request $request)
     {
         function imageToBase64($imagePath) 
         {
@@ -26,6 +30,35 @@ class PdfController extends Controller
         if (!$tempData) {
             return response()->json(['error' => 'Nenhum dado encontrado'], 404);
         }
+
+        $validatedData = $request->validate([
+            'nome' => 'nullable|string',
+            'sexo' => 'nullable|string',
+            'idade' => 'nullable|integer',
+            'telefone' => 'nullable|string',
+            'cpf' => 'nullable|string',
+            'dataNascimento' => 'nullable|date',
+        ]);
+
+        $isDataPacient = false;
+        
+        if (collect($validatedData)->filter()->isNotEmpty()) {
+            $patientName = $validatedData['nome'] ?? null;
+            $patientGender = $validatedData['sexo'] ?? null;
+            $patientAge = $validatedData['idade'] ?? null;
+            $patientPhone = $validatedData['telefone'] ?? null;
+            $patientCpf = $validatedData['cpf'] ?? null;
+            $patientBirthDate = $validatedData['dataNascimento'] ?? null;
+            $isDataPacient = true;
+        }
+
+
+        $user = Auth::user();
+
+        $userName = $user->name;       
+        $userCRM = $user->crm;
+        $userEnterprise = $user->enterprise;
+        
 
         // $imagePathOriginal = public_path('pdfs/img_test/imagem_original.jpg');
         //$imagePathCalor = public_path('pdfs/img_test/imagem_calor.png');
@@ -58,19 +91,11 @@ class PdfController extends Controller
         $phpFile2 = base_path('public/pdfs/pdf_b.php');
         $phpFile3 = base_path('public/pdfs/pdf_c.php');
 
-        ob_start();
-        include($phpFile1);
-        $html1 = ob_get_clean();
-
-        ob_start();
-        include($phpFile2);
-        $html2 = ob_get_clean();
-
-        ob_start();
-        include($phpFile3);
-        $html3 = ob_get_clean();
-
         $css = file_get_contents(base_path('public/pdfs/css/style_pdf.css'));
+
+        ob_start();
+        include(base_path('public/pdfs/pdf_c.php'));
+        $html3 = ob_get_clean();
 
         $combinedHtml = '
             <html>
@@ -78,12 +103,25 @@ class PdfController extends Controller
                     <meta charset="UTF-8">
                     <style>' . $css . '</style>
                 </head>
-                <body>
-                    ' . $html1 . '
-                    <div style="page-break-after: always;"></div>
-                    ' . $html2 . '
-                    <div style="page-break-after: always;"></div>
-                    ' . $html3 . '
+                <body>';
+
+        if ($isDataPacient) {
+            ob_start();
+            include($phpFile2);
+            $html2 = ob_get_clean();
+            $combinedHtml .= $html2;
+            $combinedHtml .= '<div style="page-break-after: always;"></div>';
+        } else {
+            ob_start();
+            include($phpFile1);
+            $html1 = ob_get_clean();
+            $combinedHtml .= $html1;
+            $combinedHtml .= '<div style="page-break-after: always;"></div>';
+        }
+
+        $combinedHtml .= $html3;
+
+        $combinedHtml .= '
                 </body>
             </html>';
 

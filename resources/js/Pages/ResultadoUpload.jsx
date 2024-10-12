@@ -15,9 +15,7 @@ const ResultadoUpload = ({image, result, debug}) => {
 
     let mapaCalor;
     let imgAnalise;
-
-    console.log(image);
-
+    
     image = 'data:image/png;base64,' + image;
     
     if (debug) {

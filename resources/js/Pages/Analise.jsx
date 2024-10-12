@@ -124,7 +124,7 @@ const Analise = ({ auth }) => {
             if (!response.ok) {
                 const errorData = await response.json();
                 console.log(errorData);
-                throw new Error('Não foi possível guardar as informações');
+                throw new Error('Não foi possível guardar as informações temporariamente.');
             }
 
         } catch (error) {
