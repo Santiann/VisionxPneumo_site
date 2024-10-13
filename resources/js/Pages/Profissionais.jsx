@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import AuthenticatedLayout from '@/Pages/AuthenticatedLayout';
 import { Head } from '@inertiajs/react';
 import axios from 'axios';
+import PhoneInput from 'react-phone-input-2';
+import 'react-phone-input-2/lib/style.css';
 
 const createProfissional = async (data) => {
     await axios.post('/profissionais', data);
@@ -15,35 +17,75 @@ const deleteProfissional = async (id) => {
     await axios.delete(`/profissionais/${id}`);
 };
 
-const Profissionais = ({ auth, profissionais }) => {
-    const [currentProfissional, setCurrentProfissional] = useState(null);
+const fetchProfissionais = async () => {
+    const response = await axios.get('/profissionais/list');
+    return response.data.profissionais;
+};
+
+const Profissionais = ({ auth }) => {
     const [form, setForm] = useState({ enterprise: '', name: '', crm: '', phone: '', email: '', password: '' });
+    const [modalForm, setModalForm] = useState({ enterprise: '', name: '', crm: '', phone: '', email: '', password: '' });
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [profissionais, setProfissionais] = useState([]);
+
+    useEffect(() => {
+        const loadProfissionais = async () => {
+            const profissionaisData = await fetchProfissionais();
+            setProfissionais(profissionaisData);
+        };
+        loadProfissionais();
+    }, []);
 
     const handleChange = (e) => {
         setForm({
             ...form,
-            [e.target.name]: e.target.value
+            [e.target.name]: e.target.value || '',
+        });
+    };
+
+    const handleModalChange = (e) => {
+        setModalForm({
+            ...modalForm,
+            [e.target.name]: e.target.value || '',
+        });
+    };
+
+    const handlePhoneChange = (value) => {
+        setForm({
+            ...form,
+            phone: value || '',
+        });
+    };
+
+    const handleModalPhoneChange = (value) => {
+        setModalForm({
+            ...modalForm,
+            phone: value || '',
         });
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (currentProfissional) {
-            await updateProfissional(currentProfissional.id, form);
+        if (isModalOpen) {
+            await updateProfissional(modalForm.id, modalForm);
+            setIsModalOpen(false);
         } else {
             await createProfissional(form);
         }
+        const updatedProfissionais = await fetchProfissionais(); // Atualiza a lista de profissionais
+        setProfissionais(updatedProfissionais);
         setForm({ enterprise: '', name: '', crm: '', phone: '', email: '', password: '' });
-        setCurrentProfissional(null);
     };
 
     const handleEdit = (profissional) => {
-        setForm(profissional);
-        setCurrentProfissional(profissional);
+        setModalForm(profissional);
+        setIsModalOpen(true);
     };
 
     const handleDelete = async (id) => {
         await deleteProfissional(id);
+        const updatedProfissionais = await fetchProfissionais(); // Atualiza a lista de profissionais
+        setProfissionais(updatedProfissionais);
     };
 
     return (
@@ -65,14 +107,17 @@ const Profissionais = ({ auth, profissionais }) => {
                             className="border p-2 sm:rounded"
                             required
                         />
-                        <input
-                            type="text"
+                        <PhoneInput
+                            type="tel"
                             name="phone"
                             value={form.phone}
-                            onChange={handleChange}
+                            onChange={handlePhoneChange}
                             placeholder="Telefone"
-                            className="border p-2 sm:rounded"
-                            required
+                            country={'br'}
+                            inputProps={{
+                                required: true,
+                                className: "border sm:rounded block w-full"
+                            }}
                         />
                         <input
                             type="email"
@@ -101,17 +146,89 @@ const Profissionais = ({ auth, profissionais }) => {
                     </button>
                 </form>
 
+                {isModalOpen && (
+                    <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center">
+                        <div className="bg-white p-6 rounded shadow-lg max-w-md w-full">
+                            <h2 className="text-xl font-bold mb-4">Editar Profissional</h2>
+                            <form onSubmit={handleSubmit}>
+                                <input
+                                    type="text"
+                                    name="name"
+                                    value={modalForm.name}
+                                    onChange={handleModalChange}
+                                    placeholder="Nome"
+                                    className="border p-2 sm:rounded w-full mb-4"
+                                    required
+                                />
+                                <PhoneInput
+                                    type="tel"
+                                    name="phone"
+                                    value={modalForm.phone}
+                                    onChange={handleModalPhoneChange}
+                                    placeholder="Telefone"
+                                    country={'br'}
+                                    inputProps={{
+                                        required: true,
+                                        className: 'border sm:rounded block w-full',
+                                    }}
+                                />
+                                <input
+                                    type="email"
+                                    name="email"
+                                    value={modalForm.email}
+                                    onChange={handleModalChange}
+                                    placeholder="Email"
+                                    className="border p-2 sm:rounded w-full mt-4 mb-4"
+                                    required
+                                />
+                                <input
+                                    type="password"
+                                    name="password"
+                                    value={modalForm.password}
+                                    onChange={handleModalChange}
+                                    placeholder="Senha"
+                                    className="border p-2 sm:rounded w-full mb-4"
+                                    required
+                                />
+                                <div className="flex justify-end">
+                                    <button
+                                        type="button"
+                                        onClick={() => setIsModalOpen(false)}
+                                        className="bg-gray-400 text-white px-4 py-2 rounded mr-2"
+                                    >
+                                        Cancelar
+                                    </button>
+                                    <button
+                                        type="submit"
+                                        className="bg-[#212c36] text-white px-4 py-2 rounded"
+                                    >
+                                        Salvar
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                )}
+
                 <table className="min-w-full divide-y divide-gray-200">
                     <thead className="bg-gray-200">
                         <tr>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nome</th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Telefone</th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ações</th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Nome
+                            </th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Telefone
+                            </th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Email
+                            </th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Ações
+                            </th>
                         </tr>
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200">
-                        {profissionais.map(profissional => (
+                        {profissionais.map((profissional) => (
                             <tr key={profissional.id}>
                                 <td className="px-6 py-4 whitespace-nowrap">{profissional.name}</td>
                                 <td className="px-6 py-4 whitespace-nowrap">{profissional.phone}</td>
@@ -119,13 +236,13 @@ const Profissionais = ({ auth, profissionais }) => {
                                 <td className="px-6 py-4 whitespace-nowrap">
                                     <button
                                         onClick={() => handleEdit(profissional)}
-                                        className="text-blue-500 hover:text-blue-700 mr-2"
+                                        className="bg-[#427297] text-white px-3 py-1 rounded mr-2"
                                     >
                                         Editar
                                     </button>
                                     <button
                                         onClick={() => handleDelete(profissional.id)}
-                                        className="text-red-500 hover:text-red-700"
+                                        className="bg-[#f22c2c] text-white px-3 py-1 rounded"
                                     >
                                         Deletar
                                     </button>
@@ -137,6 +254,6 @@ const Profissionais = ({ auth, profissionais }) => {
             </div>
         </AuthenticatedLayout>
     );
-}
+};
 
 export default Profissionais;

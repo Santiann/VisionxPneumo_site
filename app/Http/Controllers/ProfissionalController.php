@@ -24,12 +24,20 @@ class ProfissionalController extends Controller
         ]);
     }
 
+    public function list()
+    {
+        $profissionais = User::join('profissionais', 'users.id', '=', 'profissionais.user_id')
+            ->select('users.id', 'users.name', 'users.phone', 'users.email')
+            ->get();
+        
+        return response()->json(['profissionais' => $profissionais]);
+    }
 
     public function store(Request $request)
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'phone' => 'required|string|max:20|unique:users,phone', // Adicionando verificação única de telefone
+            'phone' => 'required|string|max:20', // Adicionando verificação única de telefone
             'email' => 'required|string|lowercase|email|max:255|unique:users,email',
             'password' => ['required', Rules\Password::defaults()],
         ]);
@@ -60,24 +68,22 @@ class ProfissionalController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'enterprise' => 'required',
             'name' => 'required',
-            'crm' => 'required',
             'phone' => 'required',
             'email' => 'required|email',
-            'password' => 'nullable|min:6',
+            'password' => 'required|min:6',
         ]);
 
-        $profissional = Profissional::findOrFail($id);
-        $profissional->update($request->all());
+        $user = User::findOrFail($id);
+        $user->update($request->all());
 
         return redirect()->route('profissionais.index');
     }
 
     public function destroy($id)
     {
-        $profissional = Profissional::findOrFail($id);
-        $profissional->delete();
+        $user = User::findOrFail($id);
+        $user->delete();
 
         return redirect()->route('profissionais.index');
     }

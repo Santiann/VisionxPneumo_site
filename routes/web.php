@@ -64,6 +64,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // Rotas para profissionais
     Route::get('/profissionais', [ProfissionalController::class, 'index'])->name('profissionais.index');
+    Route::get('/profissionais/list', [ProfissionalController::class, 'list'])->name('profissionais.list');
     Route::post('/profissionais', [ProfissionalController::class, 'store'])->name('profissionais.store');
     Route::put('/profissionais/{id}', [ProfissionalController::class, 'update'])->name('profissionais.update');
     Route::delete('/profissionais/{id}', [ProfissionalController::class, 'destroy'])->name('profissionais.destroy');

@@ -133,7 +133,6 @@ export default function Register() {
                         value={data.crm}
                         className={`mt-1 block w-full ${crmError ? 'border-red-500' : 'border-gray-300'}`}
                         autoComplete="crm"
-                        isFocused={true}
                         onBlur={validateCrm}
                         onChange={(e) => {
                             setData('crm', e.target.value);
@@ -157,6 +156,7 @@ export default function Register() {
                         value={data.name}
                         className="mt-1 block w-full"
                         autoComplete="name"
+                        readOnly={true}
                         onChange={(e) => setData('name', e.target.value)}
                         required
                     />
