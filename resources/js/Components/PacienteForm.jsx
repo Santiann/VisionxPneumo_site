@@ -1,7 +1,12 @@
 import React, { useState } from 'react';
 import InputMask from 'react-input-mask';
 
+const url = 'http://localhost:8000';
+
 function PacienteForm() {
+
+  const [erro, setErro] = useState(null)
+
   const [formData, setFormData] = useState({
     nome: '',
     sexo: '',
@@ -19,9 +24,37 @@ function PacienteForm() {
     }));
   };
 
-  const handleExport = (e) => {
+  const handleExport = async (e) => {
     e.preventDefault();
-    console.log('Dados exportados:', formData);
+    try{
+
+      const formDataToSend = new FormData();
+      Object.keys(formData).forEach(key => {
+        formDataToSend.append(key, formData[key]);
+      });
+
+      const response = await fetch(`${url}/pdf`,{
+        method: 'POST',
+        body: formDataToSend,
+        headers: {
+            'Accept': 'application/pdf',
+          },
+      });
+
+       if (!response.ok) {
+        throw new Error('Não foi possível exportar o PDF, Tente novamente.');
+      }
+
+      const blob = await response.blob(); 
+      const blobUrl = window.URL.createObjectURL(blob);
+
+      const newTab = window.open();
+      newTab.location.href = blobUrl;
+
+    } catch(error){
+        console.log(error)
+    }
+
   };
 
   return (
