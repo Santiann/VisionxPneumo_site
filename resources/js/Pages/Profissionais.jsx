@@ -14,8 +14,14 @@ const updateProfissional = async (id, data) => {
 };
 
 const deleteProfissional = async (id) => {
-    await axios.delete(`/profissionais/${id}`);
-};
+    try {
+      await axios.delete(`/profissionais/${id}`);
+      console.log(`Profissional com id ${id} deletado com sucesso.`);
+    } catch (error) {
+      console.error("Erro ao deletar profissional:", error);
+    }
+  };
+  
 
 const fetchProfissionais = async () => {
     const response = await axios.get('/profissionais/list');
@@ -27,6 +33,7 @@ const Profissionais = ({ auth }) => {
     const [modalForm, setModalForm] = useState({ enterprise: '', name: '', crm: '', phone: '', email: '', password: '' });
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [profissionais, setProfissionais] = useState([]);
+    const [errors, setErrors] = useState({});
 
     useEffect(() => {
         const loadProfissionais = async () => {
@@ -66,15 +73,25 @@ const Profissionais = ({ auth }) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (isModalOpen) {
-            await updateProfissional(modalForm.id, modalForm);
-            setIsModalOpen(false);
-        } else {
-            await createProfissional(form);
+        setErrors({}); // Limpa os erros antes de submeter
+
+        try {
+            if (isModalOpen) {
+                await updateProfissional(modalForm.id, modalForm);
+                setIsModalOpen(false);
+            } else {
+                await createProfissional(form);
+            }
+            const updatedProfissionais = await fetchProfissionais(); // Atualiza a lista de profissionais
+            setProfissionais(updatedProfissionais);
+            setForm({ enterprise: '', name: '', crm: '', phone: '', email: '', password: '' });
+        } catch (error) {
+            if (error.response && error.response.data.errors) {
+                setErrors(error.response.data.errors);
+            } else {
+                alert('Ocorreu um erro ao processar a sua requisição.');
+            }
         }
-        const updatedProfissionais = await fetchProfissionais(); // Atualiza a lista de profissionais
-        setProfissionais(updatedProfissionais);
-        setForm({ enterprise: '', name: '', crm: '', phone: '', email: '', password: '' });
     };
 
     const handleEdit = (profissional) => {
@@ -83,9 +100,15 @@ const Profissionais = ({ auth }) => {
     };
 
     const handleDelete = async (id) => {
-        await deleteProfissional(id);
-        const updatedProfissionais = await fetchProfissionais(); // Atualiza a lista de profissionais
-        setProfissionais(updatedProfissionais);
+        console.log(`Tentando deletar profissional com id: ${id}`);
+        try {
+            await deleteProfissional(id);
+            const updatedProfissionais = await fetchProfissionais(); // Atualiza a lista de profissionais
+            setProfissionais(updatedProfissionais);
+            setForm({ enterprise: '', name: '', crm: '', phone: '', email: '', password: '' });
+        } catch (error) {
+            console.error('Erro ao tentar deletar:', error);
+        }
     };
 
     return (
@@ -98,45 +121,57 @@ const Profissionais = ({ auth }) => {
             <div className="py-6">
                 <form onSubmit={handleSubmit} className="mb-6">
                     <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
-                        <input
-                            type="text"
-                            name="name"
-                            value={form.name}
-                            onChange={handleChange}
-                            placeholder="Nome"
-                            className="border p-2 sm:rounded"
-                            required
-                        />
-                        <PhoneInput
-                            type="tel"
-                            name="phone"
-                            value={form.phone}
-                            onChange={handlePhoneChange}
-                            placeholder="Telefone"
-                            country={'br'}
-                            inputProps={{
-                                required: true,
-                                className: "border sm:rounded block w-full"
-                            }}
-                        />
-                        <input
-                            type="email"
-                            name="email"
-                            value={form.email}
-                            onChange={handleChange}
-                            placeholder="Email"
-                            className="border p-2 sm:rounded"
-                            required
-                        />
-                        <input
-                            type="password"
-                            name="password"
-                            value={form.password}
-                            onChange={handleChange}
-                            placeholder="Senha"
-                            className="border p-2 sm:rounded"
-                            required
-                        />
+                        <div>
+                            <input
+                                type="text"
+                                name="name"
+                                value={form.name}
+                                onChange={handleChange}
+                                placeholder="Nome"
+                                className="border p-2 sm:rounded w-full"
+                                required
+                            />
+                            {errors.name && <p className="text-red-500 text-sm">{errors.name[0]}</p>}
+                        </div>
+                        <div>
+                            <PhoneInput
+                                type="tel"
+                                name="phone"
+                                value={form.phone}
+                                onChange={handlePhoneChange}
+                                placeholder="Telefone"
+                                country={'br'}
+                                inputProps={{
+                                    required: true,
+                                    className: "border sm:rounded block w-full"
+                                }}
+                            />
+                            {errors.phone && <p className="text-red-500 text-sm">{errors.phone[0]}</p>}
+                        </div>
+                        <div>
+                            <input
+                                type="email"
+                                name="email"
+                                value={form.email}
+                                onChange={handleChange}
+                                placeholder="Email"
+                                className="border p-2 sm:rounded w-full"
+                                required
+                            />
+                            {errors.email && <p className="text-red-500 text-sm">{errors.email[0]}</p>}
+                        </div>
+                        <div>
+                            <input
+                                type="password"
+                                name="password"
+                                value={form.password}
+                                onChange={handleChange}
+                                placeholder="Senha"
+                                className="border p-2 sm:rounded w-full"
+                                required
+                            />
+                            {errors.password && <p className="text-red-500 text-sm">{errors.password[0]}</p>}
+                        </div>
                     </div>
                     <button
                         type="submit"
@@ -151,45 +186,57 @@ const Profissionais = ({ auth }) => {
                         <div className="bg-white p-6 rounded shadow-lg max-w-md w-full">
                             <h2 className="text-xl font-bold mb-4">Editar Profissional</h2>
                             <form onSubmit={handleSubmit}>
-                                <input
-                                    type="text"
-                                    name="name"
-                                    value={modalForm.name}
-                                    onChange={handleModalChange}
-                                    placeholder="Nome"
-                                    className="border p-2 sm:rounded w-full mb-4"
-                                    required
-                                />
-                                <PhoneInput
-                                    type="tel"
-                                    name="phone"
-                                    value={modalForm.phone}
-                                    onChange={handleModalPhoneChange}
-                                    placeholder="Telefone"
-                                    country={'br'}
-                                    inputProps={{
-                                        required: true,
-                                        className: 'border sm:rounded block w-full',
-                                    }}
-                                />
-                                <input
-                                    type="email"
-                                    name="email"
-                                    value={modalForm.email}
-                                    onChange={handleModalChange}
-                                    placeholder="Email"
-                                    className="border p-2 sm:rounded w-full mt-4 mb-4"
-                                    required
-                                />
-                                <input
-                                    type="password"
-                                    name="password"
-                                    value={modalForm.password}
-                                    onChange={handleModalChange}
-                                    placeholder="Senha"
-                                    className="border p-2 sm:rounded w-full mb-4"
-                                    required
-                                />
+                                <div>
+                                    <input
+                                        type="text"
+                                        name="name"
+                                        value={modalForm.name}
+                                        onChange={handleModalChange}
+                                        placeholder="Nome"
+                                        className="border p-2 sm:rounded w-full mb-4"
+                                        required
+                                    />
+                                    {errors.name && <p className="text-red-500 text-sm">{errors.name[0]}</p>}
+                                </div>
+                                <div>
+                                    <PhoneInput
+                                        type="tel"
+                                        name="phone"
+                                        value={modalForm.phone}
+                                        onChange={handleModalPhoneChange}
+                                        placeholder="Telefone"
+                                        country={'br'}
+                                        inputProps={{
+                                            required: true,
+                                            className: 'border sm:rounded block w-full',
+                                        }}
+                                    />
+                                    {errors.phone && <p className="text-red-500 text-sm">{errors.phone[0]}</p>}
+                                </div>
+                                <div>
+                                    <input
+                                        type="email"
+                                        name="email"
+                                        value={modalForm.email}
+                                        onChange={handleModalChange}
+                                        placeholder="Email"
+                                        className="border p-2 sm:rounded w-full mt-4 mb-4"
+                                        required
+                                    />
+                                    {errors.email && <p className="text-red-500 text-sm">{errors.email[0]}</p>}
+                                </div>
+                                <div>
+                                    <input
+                                        type="password"
+                                        name="password"
+                                        value={modalForm.password}
+                                        onChange={handleModalChange}
+                                        placeholder="Senha"
+                                        className="border p-2 sm:rounded w-full mb-4"
+                                        required
+                                    />
+                                    {errors.password && <p className="text-red-500 text-sm">{errors.password[0]}</p>}
+                                </div>
                                 <div className="flex justify-end">
                                     <button
                                         type="button"

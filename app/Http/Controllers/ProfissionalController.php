@@ -29,7 +29,7 @@ class ProfissionalController extends Controller
         $profissionais = User::join('profissionais', 'users.id', '=', 'profissionais.user_id')
             ->select('users.id', 'users.name', 'users.phone', 'users.email')
             ->get();
-        
+
         return response()->json(['profissionais' => $profissionais]);
     }
 
@@ -59,7 +59,6 @@ class ProfissionalController extends Controller
 
             return redirect()->route('profissionais.index')->with('success', 'Funcionário criado com sucesso.');
         } catch (\Exception $e) {
-            dd($e->getMessage());
             return redirect()->back()->withErrors(['error' => 'Erro ao criar funcionário: ' . $e->getMessage()]);
         }
     }
@@ -74,17 +73,25 @@ class ProfissionalController extends Controller
             'password' => 'required|min:6',
         ]);
 
-        $user = User::findOrFail($id);
-        $user->update($request->all());
+        try {
+            $user = User::findOrFail($id);
+            $user->update($request->all());
 
-        return redirect()->route('profissionais.index');
+            return redirect()->route('profissionais.index')->with('success', 'Funcionário atualizado com sucesso.');
+        } catch (\Exception $e) {
+            return redirect()->back()->withErrors(['error' => 'Erro ao atualizar funcionário: ' . $e->getMessage()]);
+        }
     }
 
     public function destroy($id)
     {
-        $user = User::findOrFail($id);
-        $user->delete();
+        try {
+            $user = User::findOrFail($id);
+            $user->delete();
 
-        return redirect()->route('profissionais.index');
+            return redirect()->route('profissionais.index')->with('success', 'Funcionário deletado com sucesso.');
+        } catch (\Exception $e) {
+            return redirect()->back()->withErrors(['error' => 'Erro ao deletar funcionário: ' . $e->getMessage()]);
+        }
     }
 }
