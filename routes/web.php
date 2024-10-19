@@ -50,6 +50,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // Rotas para questionário
     Route::get('/questionario', [QuestionarioController::class, 'index'])->name('questionario.index');
+    Route::post('/questionario', [QuestionarioController::class, 'store'])->name('questionario.store');
+    
 
     // Rotas para suporte
     Route::get('/suporte', [SuporteController::class, 'index'])->name('suporte.index');
