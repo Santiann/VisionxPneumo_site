@@ -105,12 +105,18 @@ const Analise = ({ auth }) => {
 
 
     async function cadastrarBancoTemp(dados) {
+        const acuraciaArredondada = Math.round(dados.acuracia * 100) / 100;
         const formData = new FormData();
         formData.append('image_original', imageBinary)
         formData.append('image_heat', dados.result_img_h)
         formData.append('image_analysis', dados.result_img_identify)
         formData.append('is_pneumonia', dados.classification_img ? 1 : 0);
-        formData.append('accuracy', 'sem dados')
+        formData.append('accuracy', acuraciaArredondada);
+        formData.append('lobo_superior_direito', dados.lobos.lobo_ds ?? 0);
+        formData.append('lobo_medio_direito', dados.lobos.lobo_dm ?? 0);
+        formData.append('lobo_inferior_direito', dados.lobos.lobo_di ?? 0);
+        formData.append('lobo_superior_esquerdo', dados.lobos.lobo_es ?? 0);
+        formData.append('lobo_inferior_esquerdo', dados.lobos.lobo_ei ?? 0);
         try {
 
             const response = await fetch(`${url}/tempImg`, {

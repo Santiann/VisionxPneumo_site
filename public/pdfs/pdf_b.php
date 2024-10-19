@@ -54,17 +54,26 @@
             </tr>
         </table> 
 
-        <table>
+    <table style="width: 100%;">
         <tr>
-            <td class="full-width" style="page-break-inside: avoid;">
+            <td>
+                <ul>
+                    <li class="sub-title">Resultado</li>
+                    <li style="font-size: 24px; text-align: left;"><?php echo $resultPneumonia; ?> </li>
+                    <li style="text-align: left;">Acurácia da análise aproximada: <?php echo $accuracy; ?>%</li>
+                    <li style="text-align: left;">Total de sinais encontrados: <?php echo $totalLobes; ?></li>
+                </ul>
+            </td>
+
+            <td style="width: 50%; vertical-align: top;">
                 <ul>
                     <li class="sub-title">Sinais de pneumonia</li>
-                    <li>Total de sinais encontrados: ... </li>
-                    <br>
-                    <li class="sub-title">Resultado</li>
-                    <li style="font-size: 24px"><?php echo $resultPneumonia; ?> </li>
-                    <li>Acurácia da análise aproximada: ...</li>
-                    <br>
+                    <li class="li-border">Lobo superior direito: <?php echo $lobeTopRight; ?></li>
+                    <li class="li-border">Lobo médio direito: <?php echo $lobeMiddleRight; ?></li>
+                    <li class="li-border">Lobo inferior direito: <?php echo $lobeBottomRight; ?></li>
+                    <li class="li-border">Lobo superior esquerdo: <?php echo $lobeTopLeft; ?></li>
+                    <li class="li-border">Lobo inferior esquerdo: <?php echo $lobeBottomLeft; ?></li>
+                    <br>                 
                 </ul>
             </td>
         </tr>

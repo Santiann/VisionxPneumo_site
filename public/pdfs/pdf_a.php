@@ -48,15 +48,15 @@
             <td class="half-width">
                 <ul>
                     <li class="sub-title">Sinais de pneumonia</li>
-                    <li class="li-border">Lobo superior direito: ...</li>
-                    <li class="li-border">Lobo médio direito: ...</li>
-                    <li class="li-border">Lobo inferior direito: ...</li>
-                    <li class="li-border">Lobo superior esquerdo: ...</li>
-                    <li class="li-border">Lobo inferior esquero: ...</li>
+                    <li class="li-border">Lobo superior direito: <?php echo $lobeTopRight; ?></li>
+                    <li class="li-border">Lobo médio direito: <?php echo $lobeMiddleRight; ?></li>
+                    <li class="li-border">Lobo inferior direito: <?php echo $lobeBottomRight; ?></li>
+                    <li class="li-border">Lobo superior esquerdo: <?php echo $lobeTopLeft; ?></li>
+                    <li class="li-border">Lobo inferior esquero: <?php echo $lobeBottomLeft; ?></li>
                     <br>
                 </ul>
                 <hr>
-                <p style="text-align: left;">Total de sinais encontrados: ...</p>
+                <p style="text-align: left;">Total de sinais encontrados: <?php echo $totalLobes; ?></p>
             </td>
         </tr>
     </table>
@@ -67,7 +67,7 @@
                 <ul>
                     <li class="sub-title">Resultado</li>
                     <li style="font-size: 24px"><?php echo $resultPneumonia; ?></li>
-                    <li>Acurácia da análise aproximada: ...</li>
+                    <li>Acurácia da análise aproximada: <?php echo $accuracy; ?>%</li>
                 </ul>
             </td>
         </tr>

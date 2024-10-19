@@ -16,6 +16,11 @@ class TempImgController extends Controller
             'image_analysis' => 'required|string',
             'is_pneumonia' => 'required|in:0,1',
             'accuracy' => 'required|string',
+            'lobo_superior_direito' => 'required|integer|min:0',
+            'lobo_medio_direito' => 'required|integer|min:0',
+            'lobo_inferior_direito' => 'required|integer|min:0',
+            'lobo_superior_esquerdo' => 'required|integer|min:0',
+            'lobo_inferior_esquerdo' => 'required|integer|min:0',
         ]);
         
         DB::connection('sqlite')->table('temp_data_img')->insert([
@@ -24,7 +29,13 @@ class TempImgController extends Controller
             'image_analysis' => $request->input('image_analysis'),
             'is_pneumonia' => $request->input('is_pneumonia'),
             'accuracy' => $request->input('accuracy'),
+            'lobo_superior_direito' => $request->input('lobo_superior_direito'),
+            'lobo_medio_direito' => $request->input('lobo_medio_direito'),
+            'lobo_inferior_direito' => $request->input('lobo_inferior_direito'),
+            'lobo_superior_esquerdo' => $request->input('lobo_superior_esquerdo'),
+            'lobo_inferior_esquerdo' => $request->input('lobo_inferior_esquerdo'),
         ]);
+        
 
         return response()->json(['message' => 'Data stored successfully in SQLite']);
     }
@@ -32,7 +43,7 @@ class TempImgController extends Controller
     public function getTempData(){
         $tempData = DB::connection('sqlite')->table('temp_data_img')->first();
 
-       // DB::connection('sqlite')->table('temp_data_img')->delete();
+        //DB::connection('sqlite')->table('temp_data_img')->delete();
 
         if ($tempData) {
             return response()->json(['data' => $tempData], 200);
