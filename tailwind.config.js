@@ -16,7 +16,11 @@ export default {
                 sans: ['Figtree', ...defaultTheme.fontFamily.sans],
             },
             colors : {
-                primary: '#51B6FF'
+                primary: '#51B6FF',
+                corTitulo: '#111827',
+                corTexto: '#4B5563',
+                corBotao: '#0A2850',
+                fundoAzulClaro: '#D9E2EC'
             }
         },
     },
