@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Auth;
 
 class TempImgController extends Controller
 {
@@ -34,6 +35,7 @@ class TempImgController extends Controller
             'lobo_inferior_direito' => $request->input('lobo_inferior_direito'),
             'lobo_superior_esquerdo' => $request->input('lobo_superior_esquerdo'),
             'lobo_inferior_esquerdo' => $request->input('lobo_inferior_esquerdo'),
+            'user_id' => auth()->id(),
         ]);
         
 

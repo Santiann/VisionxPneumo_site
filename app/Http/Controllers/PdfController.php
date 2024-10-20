@@ -67,7 +67,7 @@ class PdfController extends Controller
         $lobeBottomRight = $tempDataImg->lobo_inferior_direito;
         $lobeTopLeft = $tempDataImg->lobo_superior_esquerdo;
         $lobeBottomLeft = $tempDataImg->lobo_inferior_esquerdo;
-        $totalLobes = $lobeTopRight + $lobeTopRight + $lobeBottomRight + $lobeTopLeft + $lobeBottomLeft;
+        $totalLobes = $lobeTopRight + $lobeMiddleRight + $lobeBottomRight + $lobeTopLeft + $lobeBottomLeft;
 
 
         $options = new Options();
