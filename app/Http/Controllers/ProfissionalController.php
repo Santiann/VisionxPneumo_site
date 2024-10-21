@@ -103,7 +103,6 @@ class ProfissionalController extends Controller
     public function verifica_medico()
     {
         if ($user = auth()->user()) {
-            dd('teste');
             $isMedico = !Profissional::where('user_id', $user->id)->exists();
             return response()->json(['isMedico' => $isMedico]);
         }
