@@ -15,9 +15,7 @@ const ResultadoUpload = ({image, result, debug}) => {
 
     let mapaCalor;
     let imgAnalise;
-
-    console.log(image);
-
+    
     image = 'data:image/png;base64,' + image;
     
     if (debug) {
@@ -30,7 +28,7 @@ const ResultadoUpload = ({image, result, debug}) => {
     
     const [scr, setScr] = useState(imgAnalise)
 
-    const resultadoMensagem = result.classification_img  == 1 ? 'Penumonia Detectada' : 'Pneumonia não Detectada';
+    const resultadoMensagem = result.classification_img  == 1 ? 'Pneumonia Detectada' : 'Pneumonia não Detectada';
 
     return (
         <div className='min-h-full w-100 flex flex-col bg-[#212c36] max-w-7xl m-auto xl:flex-row rounded border border-gray-500'>

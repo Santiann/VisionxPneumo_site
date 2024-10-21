@@ -1,51 +1,56 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 import AuthenticatedLayout from '@/Pages/AuthenticatedLayout';
 import { Head } from '@inertiajs/react';
 import axios from 'axios';
 
-const createProfissional = async (data) => {
-  await axios.post('/profissionais', data);
+const createPergunta = async (data) => {
+  await axios.post('/pergunta', data);
 };
 
-const updateProfissional = async (id, data) => {
-  await axios.put(`/profissionais/${id}`, data);
+const updatePergunta = async (id, data) => {
+  await axios.put(`/pergunta/${id}`, data);
 };
 
-const deleteProfissional = async (id) => {
-  await axios.delete(`/profissionais/${id}`);
+const deletePergunta = async (id) => {
+  await axios.delete(`/pergunta/${id}`);
 };
 
-const CadastroPerguntas = ({ auth, profissionais }) => {
-  const [currentProfissional, setCurrentProfissional] = useState(null);
-  const [form, setForm] = useState({ enterprise: '', name: '', crm: '', phone: '', email: '', password: '' });
+const CadastroPerguntas = ({ auth }) => {
+  const [form, setForm] = useState({
+    title: '',
+    size: '',
+    required: '',
+    description: '',
+  });
+  const [currentPergunta, setCurrentPergunta] = useState(null);
+  const [perguntas, setPerguntas] = useState([]);
 
   const handleChange = (e) => {
     setForm({
       ...form,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (currentProfissional) {
-      await updateProfissional(currentProfissional.id, form);
+    if (currentPergunta) {
+      await updatePergunta(currentPergunta.id, form);
     } else {
-      await createProfissional(form);
+      await createPergunta(form);
     }
-    setForm({ enterprise: '', name: '', crm: '', phone: '', email: '', password: '' });
-    setCurrentProfissional(null);
+    setForm({ title: '', size: '', required: '', description: '' });
+    setCurrentPergunta(null);
   };
 
-  const handleEdit = (profissional) => {
-    setForm(profissional);
-    setCurrentProfissional(profissional);
+  const handleEdit = (pergunta) => {
+    setForm(pergunta);
+    setCurrentPergunta(pergunta);
   };
 
   const handleDelete = async (id) => {
-    await deleteProfissional(id);
+    await deletePergunta(id);
   };
-
 
   return (
     <AuthenticatedLayout
@@ -58,8 +63,8 @@ const CadastroPerguntas = ({ auth, profissionais }) => {
           <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
             <input
               type="text"
-              name="name"
-              value={form.name}
+              name="title"
+              value={form.title}
               onChange={handleChange}
               placeholder="Título"
               className="border p-2 sm:rounded"
@@ -67,26 +72,26 @@ const CadastroPerguntas = ({ auth, profissionais }) => {
             />
             <input
               type="text"
-              name="phone"
-              value={form.phone}
+              name="size"
+              value={form.size}
               onChange={handleChange}
               placeholder="Tamanho"
               className="border p-2 sm:rounded"
               required
             />
             <input
-              type="email"
-              name="email"
-              value={form.email}
+              type="text"
+              name="required"
+              value={form.required}
               onChange={handleChange}
               placeholder="Obrigatório"
               className="border p-2 sm:rounded"
               required
             />
             <input
-              type="password"
-              name="password"
-              value={form.password}
+              type="text"
+              name="description"
+              value={form.description}
               onChange={handleChange}
               placeholder="Descrição"
               className="border p-2 sm:rounded"
@@ -111,20 +116,20 @@ const CadastroPerguntas = ({ auth, profissionais }) => {
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {profissionais.map(profissional => (
-              <tr key={profissional.id}>
-                <td className="px-6 py-4 whitespace-nowrap">{profissional.name}</td>
-                <td className="px-6 py-4 whitespace-nowrap">{profissional.phone}</td>
-                <td className="px-6 py-4 whitespace-nowrap">{profissional.email}</td>
+            {perguntas.map(pergunta => (
+              <tr key={pergunta.id}>
+                <td className="px-6 py-4 whitespace-nowrap">{pergunta.title}</td>
+                <td className="px-6 py-4 whitespace-nowrap">{pergunta.size}</td>
+                <td className="px-6 py-4 whitespace-nowrap">{pergunta.required}</td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <button
-                    onClick={() => handleEdit(profissional)}
+                    onClick={() => handleEdit(pergunta)}
                     className="text-blue-500 hover:text-blue-700 mr-2"
                   >
                     Editar
                   </button>
                   <button
-                    onClick={() => handleDelete(profissional.id)}
+                    onClick={() => handleDelete(pergunta.id)}
                     className="text-red-500 hover:text-red-700"
                   >
                     Deletar
@@ -135,10 +140,8 @@ const CadastroPerguntas = ({ auth, profissionais }) => {
           </tbody>
         </table>
       </div>
-
-
     </AuthenticatedLayout>
-  )
+  );
 }
 
-export default CadastroPerguntas
+export default CadastroPerguntas;

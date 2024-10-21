@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->text('titulo');
             $table->text('descricao');
+            $table->integer('tamanho');
             $table->integer('ordem');
             $table->timestamps();
         });

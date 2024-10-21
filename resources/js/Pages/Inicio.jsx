@@ -1,6 +1,6 @@
 import AuthenticatedLayout from '@/Pages/AuthenticatedLayout';
 import { Head } from '@inertiajs/react';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 export default function Inicio({ auth }) {
     const [currentSlide, setCurrentSlide] = useState(0);
@@ -11,31 +11,31 @@ export default function Inicio({ auth }) {
             title: 'Upload de Imagens',
             description: 'Envie as radiografias de tórax para análise com nosso sistema de IA.',
             buttonText: 'Enviar Imagem',
-            action: () => { /* ação para envio de imagem */ },
+            action: () => { window.location.href = '/analise'; },
         },
         {
             title: 'Análise de Imagens',
             description: 'Veja o diagnóstico detalhado fornecido pela Inteligência Artificial.',
             buttonText: 'Consultar Análise',
-            action: () => { /* ação para consulta de análise */ },
+            action: () => { window.location.href = '/analise'; },
         },
         {
             title: 'Suporte ao Usuário',
             description: 'Entre em contato com nossa equipe para suporte técnico e dúvidas sobre o sistema.',
             buttonText: 'Contatar Suporte',
-            action: () => { /* ação para suporte */ },
+            action: () => { window.location.href = '/suporte'; },
         },
         {
-            title: 'Cadastro de Funcionários',
-            description: 'Gerencie os perfis de funcionários e adicione novos membros ao sistema.',
-            buttonText: 'Adicionar Funcionário',
-            action: () => { /* ação para adicionar funcionário */ },
+            title: 'Preencha o Questionário',
+            description: 'Contribua para um diagnóstico mais completo preenchendo o questionário elaborado por você.',
+            buttonText: 'Preencher Questionário',
+            action: () => { window.location.href = '/questionario'; },
         },
         {
             title: 'Exportar Informações',
             description: 'Exporte diagnósticos e relatórios para PDF para consulta e arquivamento.',
             buttonText: 'Exportar para PDF',
-            action: () => { /* ação para exportar PDF */ },
+            action: () => { window.location.href = '/pdf'; },
         }
     ];
 

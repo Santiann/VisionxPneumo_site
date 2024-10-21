@@ -24,12 +24,20 @@ class ProfissionalController extends Controller
         ]);
     }
 
+    public function list()
+    {
+        $profissionais = User::join('profissionais', 'users.id', '=', 'profissionais.user_id')
+            ->select('users.id', 'users.name', 'users.phone', 'users.email')
+            ->get();
+
+        return response()->json(['profissionais' => $profissionais]);
+    }
 
     public function store(Request $request)
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'phone' => 'required|string|max:20|unique:users,phone', // Adicionando verificação única de telefone
+            'phone' => 'required|string|max:20',
             'email' => 'required|string|lowercase|email|max:255|unique:users,email',
             'password' => ['required', Rules\Password::defaults()],
         ]);
@@ -43,15 +51,12 @@ class ProfissionalController extends Controller
                 'password' => Hash::make($request->password),
             ]);
 
-            // Criar o profissional associado ao usuário
             Profissional::create([
                 'user_id' => $user->id,
-                // Adicionar outros campos do profissional, se houver
             ]);
 
             return redirect()->route('profissionais.index')->with('success', 'Funcionário criado com sucesso.');
         } catch (\Exception $e) {
-            dd($e->getMessage());
             return redirect()->back()->withErrors(['error' => 'Erro ao criar funcionário: ' . $e->getMessage()]);
         }
     }
@@ -60,25 +65,48 @@ class ProfissionalController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'enterprise' => 'required',
             'name' => 'required',
-            'crm' => 'required',
             'phone' => 'required',
             'email' => 'required|email',
-            'password' => 'nullable|min:6',
+            'password' => 'required|min:6',
         ]);
 
-        $profissional = Profissional::findOrFail($id);
-        $profissional->update($request->all());
+        try {
+            $user = User::findOrFail($id);
+            
+            $data = $request->except('password');
 
-        return redirect()->route('profissionais.index');
+            if ($request->filled('password')) {
+                $data['password'] = bcrypt($request->password);
+            }
+
+            $user->update($data);
+
+            return redirect()->route('profissionais.index')->with('success', 'Funcionário atualizado com sucesso.');
+        } catch (\Exception $e) {
+            return redirect()->back()->withErrors(['error' => 'Erro ao atualizar funcionário: ' . $e->getMessage()]);
+        }
     }
 
     public function destroy($id)
     {
-        $profissional = Profissional::findOrFail($id);
-        $profissional->delete();
+        try {
+            $user = User::findOrFail($id);
+            $user->delete();
 
-        return redirect()->route('profissionais.index');
+            return redirect()->route('profissionais.index')->with('success', 'Funcionário deletado com sucesso.');
+        } catch (\Exception $e) {
+            return redirect()->back()->withErrors(['error' => 'Erro ao deletar funcionário: ' . $e->getMessage()]);
+        }
+    }
+
+    public function verifica_medico()
+    {
+        if ($user = auth()->user()) {
+            $isMedico = !Profissional::where('user_id', $user->id)->exists();
+            return response()->json(['isMedico' => $isMedico]);
+        }
+
+        return response()->json(['isMedico' => false]);
     }
 }

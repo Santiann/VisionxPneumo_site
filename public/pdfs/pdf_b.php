@@ -6,7 +6,15 @@
     <title>PDF-02</title>
 </head>
 <body>
-
+<header>
+        <table>
+            <tr>
+                <td class="half-width-info">Gerador: <?php echo $userName; ?>  </td>
+                <td class="half-width-info">CRM: <?php echo $userCRM; ?> </td>
+                <td class="half-width-info">Local: <?php echo $userEnterprise; ?> </td>
+            </tr>
+        </table> 
+    </header>
     <table>
         <tr>
             <td class="full-width-title">Dados do paciente</td>
@@ -18,14 +26,14 @@
 
     <table>
         <tr>
-            <td class="half-width"><strong>Nome:</strong><br> ... </td>
-            <td class="half-width"><strong>Sexo:</strong><br> ... </td>
-            <td class="half-width"><strong>Idade:</strong><br> ... </td>
+            <td class="half-width"><strong>Nome:</strong><br> <?php echo $patientName; ?> </td>
+            <td class="half-width"><strong>Sexo:</strong><br> <?php echo $patientGender; ?> </td>
+            <td class="half-width"><strong>Idade:</strong><br> <?php echo $patientAge; ?> </td>
         </tr>
         <tr>
-            <td class="half-width"><strong>Telefone:</strong><br> ... /td>
-            <td class="half-width"><strong>CPF:</strong><br> ... </td>
-            <td class="half-width"><strong>Data de nascimento:</strong><br> ... </td>
+            <td class="half-width"><strong>Telefone:</strong><br> <?php echo $patientPhone; ?>
+            <td class="half-width"><strong>CPF:</strong><br> <?php echo $patientCpf; ?> </td>
+            <td class="half-width"><strong>Data de nascimento:</strong><br> <?php echo $patientBirthDate; ?> </td>
         </tr>
     </table> 
 
@@ -46,21 +54,40 @@
             </tr>
         </table> 
 
-        <table>
+    <table style="width: 100%;">
         <tr>
-            <td class="full-width" style="page-break-inside: avoid;">
+            <td>
+                <ul>
+                    <li class="sub-title">Resultado</li>
+                    <li style="font-size: 24px; text-align: left;"><?php echo $resultPneumonia; ?> </li>
+                    <li style="text-align: left;">Acurácia da análise aproximada: <?php echo $accuracy; ?>%</li>
+                    <li style="text-align: left;">Total de sinais encontrados: <?php echo $totalLobes; ?></li>
+                </ul>
+            </td>
+
+            <td style="width: 50%; vertical-align: top;">
                 <ul>
                     <li class="sub-title">Sinais de pneumonia</li>
-                    <li>Total de sinais encontrados: ... </li>
-                    <br>
-                    <li class="sub-title">Resultado</li>
-                    <li style="font-size: 24px">... </li>
-                    <li>Acurácia da análise aproximada: ...</li>
-                    <br>
+                    <li class="li-border">Lobo superior direito: <?php echo $lobeTopRight; ?></li>
+                    <li class="li-border">Lobo médio direito: <?php echo $lobeMiddleRight; ?></li>
+                    <li class="li-border">Lobo inferior direito: <?php echo $lobeBottomRight; ?></li>
+                    <li class="li-border">Lobo superior esquerdo: <?php echo $lobeTopLeft; ?></li>
+                    <li class="li-border">Lobo inferior esquerdo: <?php echo $lobeBottomLeft; ?></li>
+                    <br>                 
                 </ul>
             </td>
         </tr>
     </table>
+
+    <footer>
+        <table>
+            <tr>
+                <td class="half-width"><?php echo date('d/m/Y'); ?></td>
+                <td class="half-width"></td>
+                <td class="half-width-company">VisionXPneumo</td>
+            </tr>
+        </table>
+    </footer>
     
 </body>
 </html>
