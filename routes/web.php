@@ -49,8 +49,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
   // Rotas para analise
   Route::get('/analise', [AnaliseController::class, 'index'])->name('analise.index');
 
-  // Rotas para questionário
-  Route::get('/questionario', [QuestionarioController::class, 'index'])->name('questionario.index');
+    // Rotas para questionário
+    Route::get('/questionario', [QuestionarioController::class, 'index'])->name('questionario.index');
+    Route::post('/questionario', [QuestionarioController::class, 'store'])->name('questionario.store');
+    
 
   // Rotas para suporte
   Route::get('/suporte', [SuporteController::class, 'index'])->name('suporte.index');
