@@ -65,6 +65,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // Rotas para profissionais
     Route::get('/profissionais', [ProfissionalController::class, 'index'])->name('profissionais.index');
+    Route::get('/profissionais/verifica_medico', [ProfissionalController::class, 'verifica_medico'])->name('profissionais.verify');
     Route::get('/profissionais/list', [ProfissionalController::class, 'list'])->name('profissionais.list');
     Route::post('/profissionais', [ProfissionalController::class, 'store'])->name('profissionais.store');
     Route::put('/profissionais/{id}', [ProfissionalController::class, 'update'])->name('profissionais.update');
