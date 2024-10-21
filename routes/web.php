@@ -53,9 +53,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/questionario', [QuestionarioController::class, 'index'])->name('questionario.index');
     Route::post('/questionario', [QuestionarioController::class, 'store'])->name('questionario.store');
     
+    Route::post('/questionario', [QuestionarioController::class, 'store'])->name('questionario.store');
+    
 
-  // Rotas para suporte
-  Route::get('/suporte', [SuporteController::class, 'index'])->name('suporte.index');
+    // Rotas para suporte
+    Route::get('/suporte', [SuporteController::class, 'index'])->name('suporte.index');
+    Route::post('/suporte', [SuporteController::class, 'store'])->name('suporte.store');
+
+    // Rotas para perguntas
+    Route::get('/pergunta', [PerguntaController::class, 'index'])->name('pergunta.index');
 
   // Rotas para o banco temporário
   Route::post('/tempImg', [TempImgController::class, 'store'])->name('tempImg.store');
