@@ -37,7 +37,7 @@ class ProfissionalController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'phone' => 'required|string|max:20', // Adicionando verificação única de telefone
+            'phone' => 'required|string|max:20',
             'email' => 'required|string|lowercase|email|max:255|unique:users,email',
             'password' => ['required', Rules\Password::defaults()],
         ]);
@@ -51,10 +51,8 @@ class ProfissionalController extends Controller
                 'password' => Hash::make($request->password),
             ]);
 
-            // Criar o profissional associado ao usuário
             Profissional::create([
                 'user_id' => $user->id,
-                // Adicionar outros campos do profissional, se houver
             ]);
 
             return redirect()->route('profissionais.index')->with('success', 'Funcionário criado com sucesso.');

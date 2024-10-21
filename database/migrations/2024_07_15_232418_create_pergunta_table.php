@@ -13,7 +13,9 @@ return new class extends Migration
     {
         Schema::create('pergunta', function (Blueprint $table) {
             $table->id();
+            $table->text('titulo');
             $table->text('descricao');
+            $table->integer('tamanho');
             $table->integer('ordem');
             $table->timestamps();
         });
