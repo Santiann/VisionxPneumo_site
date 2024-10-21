@@ -10,18 +10,28 @@ const createProfissional = async (data) => {
 };
 
 const updateProfissional = async (id, data) => {
-    await axios.put(`/profissionais/${id}`, data);
+    try {
+        await axios.put(`/profissionais/${id}`, data, {
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            }
+        });
+    } catch (error) {
+        console.error("Erro ao atualizar profissional:", error);
+    }
 };
 
 const deleteProfissional = async (id) => {
     try {
-      await axios.delete(`/profissionais/${id}`);
-      console.log(`Profissional com id ${id} deletado com sucesso.`);
+        await axios.delete(`/profissionais/${id}`, {
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            }
+        });
     } catch (error) {
-      console.error("Erro ao deletar profissional:", error);
+        console.error("Erro ao deletar profissional:", error);
     }
-  };
-  
+};
 
 const fetchProfissionais = async () => {
     const response = await axios.get('/profissionais/list');
@@ -36,6 +46,9 @@ const Profissionais = ({ auth }) => {
     const [errors, setErrors] = useState({});
 
     useEffect(() => {
+        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+        axios.defaults.headers.common['X-CSRF-TOKEN'] = csrfToken;
+
         const loadProfissionais = async () => {
             const profissionaisData = await fetchProfissionais();
             setProfissionais(profissionaisData);
@@ -73,7 +86,7 @@ const Profissionais = ({ auth }) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setErrors({}); // Limpa os erros antes de submeter
+        setErrors({});
 
         try {
             if (isModalOpen) {
@@ -82,20 +95,23 @@ const Profissionais = ({ auth }) => {
             } else {
                 await createProfissional(form);
             }
-            const updatedProfissionais = await fetchProfissionais(); // Atualiza a lista de profissionais
+            const updatedProfissionais = await fetchProfissionais();
             setProfissionais(updatedProfissionais);
             setForm({ enterprise: '', name: '', crm: '', phone: '', email: '', password: '' });
         } catch (error) {
             if (error.response && error.response.data.errors) {
                 setErrors(error.response.data.errors);
             } else {
-                alert('Ocorreu um erro ao processar a sua requisição.');
+                alert(error);
             }
         }
     };
 
     const handleEdit = (profissional) => {
-        setModalForm(profissional);
+        setModalForm({
+            ...profissional,
+            password: '' // Evita undefined para o campo password
+        });
         setIsModalOpen(true);
     };
 
@@ -103,7 +119,7 @@ const Profissionais = ({ auth }) => {
         console.log(`Tentando deletar profissional com id: ${id}`);
         try {
             await deleteProfissional(id);
-            const updatedProfissionais = await fetchProfissionais(); // Atualiza a lista de profissionais
+            const updatedProfissionais = await fetchProfissionais();
             setProfissionais(updatedProfissionais);
             setForm({ enterprise: '', name: '', crm: '', phone: '', email: '', password: '' });
         } catch (error) {
@@ -229,11 +245,10 @@ const Profissionais = ({ auth }) => {
                                     <input
                                         type="password"
                                         name="password"
-                                        value={modalForm.password}
+                                        value={modalForm.password || ''}
                                         onChange={handleModalChange}
                                         placeholder="Senha"
                                         className="border p-2 sm:rounded w-full mb-4"
-                                        required
                                     />
                                     {errors.password && <p className="text-red-500 text-sm">{errors.password[0]}</p>}
                                 </div>

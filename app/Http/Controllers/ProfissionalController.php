@@ -73,7 +73,14 @@ class ProfissionalController extends Controller
 
         try {
             $user = User::findOrFail($id);
-            $user->update($request->all());
+            
+            $data = $request->except('password');
+
+            if ($request->filled('password')) {
+                $data['password'] = bcrypt($request->password);
+            }
+
+            $user->update($data);
 
             return redirect()->route('profissionais.index')->with('success', 'Funcionário atualizado com sucesso.');
         } catch (\Exception $e) {
