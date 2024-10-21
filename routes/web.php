@@ -60,7 +60,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
   Route::get('/tempImg', [TempImgController::class, 'getTempData'])->name('tempImg.get');
   Route::delete('/tempImg', [TempImgController::class, 'deleteTempData'])->name('tempImg.delete');
 
-  Route::group(['middleware' => 'check.profissional'], function () {
+  // Route::group(['middleware' => 'check.profissional'], function () {
     // Rotas para perguntas
     Route::get('/pergunta', [PerguntaController::class, 'index'])->name('pergunta.index');
     Route::get('/pergunta/list', [PerguntaController::class, 'list'])->name('pergunta.list');
@@ -75,7 +75,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/profissionais', [ProfissionalController::class, 'store'])->name('profissionais.store');
     Route::put('/profissionais/{id}', [ProfissionalController::class, 'update'])->name('profissionais.update');
     Route::delete('/profissionais/{id}', [ProfissionalController::class, 'destroy'])->name('profissionais.destroy');
-  });
+  // });
 });
 
 Route::middleware('auth')->group(function () {
