@@ -102,16 +102,13 @@ const Profissionais = ({ auth }) => {
             if (error.response && error.response.data.errors) {
                 setErrors(error.response.data.errors);
             } else {
-                alert(error);
+                alert('Ocorreu um erro ao processar a sua requisição.');
             }
         }
     };
 
     const handleEdit = (profissional) => {
-        setModalForm({
-            ...profissional,
-            password: '' // Evita undefined para o campo password
-        });
+        setModalForm(profissional);
         setIsModalOpen(true);
     };
 
@@ -249,6 +246,7 @@ const Profissionais = ({ auth }) => {
                                         onChange={handleModalChange}
                                         placeholder="Senha"
                                         className="border p-2 sm:rounded w-full mb-4"
+                                        required
                                     />
                                     {errors.password && <p className="text-red-500 text-sm">{errors.password[0]}</p>}
                                 </div>
