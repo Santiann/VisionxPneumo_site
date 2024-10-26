@@ -35,20 +35,18 @@ class ProfissionalController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'phone' => 'required|string|max:20',
-            'email' => 'required|string|lowercase|email|max:255|unique:users,email',
-            'password' => ['required', Rules\Password::defaults()],
-        ]);
-
         try {
-            // Criar o usuário
+            $validatedData = $request->validate([
+                'name' => 'required|string|max:255',
+                'phone' => 'required|string|max:15',
+                'email' => 'required|email|unique:users,email',
+                'password' => 'required|string|min:8',
+            ]);
             $user = User::create([
-                'name' => $request->name,
-                'phone' => $request->phone,
-                'email' => $request->email,
-                'password' => Hash::make($request->password),
+                'name' => $validatedData['name'],
+                'phone' => $validatedData['phone'],
+                'email' => $validatedData['email'],
+                'password' => Hash::make($validatedData['password']),
             ]);
 
             Profissional::create([
@@ -61,7 +59,6 @@ class ProfissionalController extends Controller
         }
     }
 
-
     public function update(Request $request, $id)
     {
         $request->validate([
@@ -70,10 +67,10 @@ class ProfissionalController extends Controller
             'email' => 'required|email',
             'password' => 'required|min:6',
         ]);
-
+        
         try {
             $user = User::findOrFail($id);
-            
+
             $data = $request->except('password');
 
             if ($request->filled('password')) {

@@ -21,11 +21,17 @@ const updateProfissional = async (id, data) => {
             }
         });
     } catch (error) {
-        console.error("Erro ao atualizar profissional:", error);
+        // console.error("Erro ao atualizar profissional:", error);
     }
 };
 
+
 const deleteProfissional = async (id) => {
+    if (!id) {
+        console.error("ID do profissional não fornecido.");
+        return; // Sai da função se o ID não existir
+    }
+
     try {
         await axios.delete(`/profissionais/${id}`, {
             headers: {
@@ -33,7 +39,7 @@ const deleteProfissional = async (id) => {
             }
         });
     } catch (error) {
-        console.error("Erro ao deletar profissional:", error);
+        // console.error("Erro ao deletar profissional:", error);
     }
 };
 
@@ -48,6 +54,7 @@ const Profissionais = ({ auth }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [profissionais, setProfissionais] = useState([]);
     const [errors, setErrors] = useState({});
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     useEffect(() => {
         const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
@@ -91,11 +98,17 @@ const Profissionais = ({ auth }) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setErrors({});
+        if (isSubmitting) return;
+        setIsSubmitting(true);
 
         try {
             if (isModalOpen) {
-                await updateProfissional(modalForm.id, modalForm);
-                setIsModalOpen(false);
+                if (modalForm.id) {
+                    await updateProfissional(modalForm.id, modalForm);
+                    setIsModalOpen(false);
+                } else {
+                    alert('ID do profissional não encontrado. Não é possível atualizar.');
+                }
             } else {
                 await createProfissional(form);
             }
@@ -105,11 +118,16 @@ const Profissionais = ({ auth }) => {
         } catch (error) {
             if (error.response && error.response.data.errors) {
                 setErrors(error.response.data.errors);
+            } else if (error.response && error.response.status === 405) {
+                alert('Método não permitido. Verifique a configuração do endpoint.');
             } else {
                 alert('Ocorreu um erro ao processar a sua requisição.');
             }
+        } finally {
+            setIsSubmitting(false); 
         }
     };
+
 
     const handleEdit = (profissional) => {
         setModalForm(profissional);
@@ -117,9 +135,12 @@ const Profissionais = ({ auth }) => {
     };
 
     const handleDelete = async (id) => {
-        console.log(`Tentando deletar profissional com id: ${id}`);
         try {
-            await deleteProfissional(id);
+            if (id) {
+                await deleteProfissional(id);
+            } else {
+                alert('ID do profissional não encontrado. Não é possível deletar.');
+            }
             const updatedProfissionais = await fetchProfissionais();
             setProfissionais(updatedProfissionais);
             setForm({ enterprise: '', name: '', crm: '', phone: '', email: '', password: '' });

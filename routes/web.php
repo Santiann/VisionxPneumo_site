@@ -49,19 +49,19 @@ Route::middleware(['auth', 'verified'])->group(function () {
   // Rotas para analise
   Route::get('/analise', [AnaliseController::class, 'index'])->name('analise.index');
 
-    // Rotas para questionário
-    Route::get('/questionario', [QuestionarioController::class, 'index'])->name('questionario.index');
-    Route::post('/questionario', [QuestionarioController::class, 'store'])->name('questionario.store');
-    
-    Route::post('/questionario', [QuestionarioController::class, 'store'])->name('questionario.store');
-    
+  // Rotas para questionário
+  Route::get('/questionario', [QuestionarioController::class, 'index'])->name('questionario.index');
+  Route::post('/questionario', [QuestionarioController::class, 'store'])->name('questionario.store');
 
-    // Rotas para suporte
-    Route::get('/suporte', [SuporteController::class, 'index'])->name('suporte.index');
-    Route::post('/suporte', [SuporteController::class, 'store'])->name('suporte.store');
+  Route::post('/questionario', [QuestionarioController::class, 'store'])->name('questionario.store');
 
-    // Rotas para perguntas
-    Route::get('/pergunta', [PerguntaController::class, 'index'])->name('pergunta.index');
+
+  // Rotas para suporte
+  Route::get('/suporte', [SuporteController::class, 'index'])->name('suporte.index');
+  Route::post('/suporte', [SuporteController::class, 'store'])->name('suporte.store');
+
+  // Rotas para perguntas
+  Route::get('/pergunta', [PerguntaController::class, 'index'])->name('pergunta.index');
 
   // Rotas para o banco temporário
   Route::post('/tempImg', [TempImgController::class, 'store'])->name('tempImg.store');
@@ -69,20 +69,20 @@ Route::middleware(['auth', 'verified'])->group(function () {
   Route::delete('/tempImg', [TempImgController::class, 'deleteTempData'])->name('tempImg.delete');
 
   // Route::group(['middleware' => 'check.profissional'], function () {
-    // Rotas para perguntas
-    Route::get('/pergunta', [PerguntaController::class, 'index'])->name('pergunta.index');
-    Route::get('/pergunta/list', [PerguntaController::class, 'list'])->name('pergunta.list');
-    Route::post('/pergunta', [PerguntaController::class, 'store'])->name('pergunta.store');
-    Route::put('/pergunta/{id}', [PerguntaController::class, 'update'])->name('pergunta.update');
-    Route::delete('/pergunta/{id}', [PerguntaController::class, 'destroy'])->name('pergunta.destroy');
+  // Rotas para perguntas
+  Route::get('/pergunta', [PerguntaController::class, 'index'])->name('pergunta.index');
+  Route::get('/pergunta/list', [PerguntaController::class, 'list'])->name('pergunta.list');
+  Route::post('/pergunta', [PerguntaController::class, 'store'])->name('pergunta.store');
+  Route::put('/pergunta/{id}', [PerguntaController::class, 'update'])->name('pergunta.update');
+  Route::delete('/pergunta/{id}', [PerguntaController::class, 'destroy'])->name('pergunta.destroy');
 
-    // Rotas para profissionais
-    Route::get('/profissionais', [ProfissionalController::class, 'index'])->name('profissionais.index');
-    Route::get('/profissionais/verifica_medico', [ProfissionalController::class, 'verifica_medico'])->name('profissionais.verify');
-    Route::get('/profissionais/list', [ProfissionalController::class, 'list'])->name('profissionais.list');
-    Route::post('/profissionais', [ProfissionalController::class, 'store'])->name('profissionais.store');
-    Route::put('/profissionais/{id}', [ProfissionalController::class, 'update'])->name('profissionais.update');
-    Route::delete('/profissionais/{id}', [ProfissionalController::class, 'destroy'])->name('profissionais.destroy');
+  // Rotas para profissionais
+  Route::get('/profissionais', [ProfissionalController::class, 'index'])->name('profissionais.index');
+  Route::get('/profissionais/verifica_medico', [ProfissionalController::class, 'verifica_medico'])->name('profissionais.verify');
+  Route::get('/profissionais/list', [ProfissionalController::class, 'list'])->name('profissionais.list');
+  Route::post('/profissionais', [ProfissionalController::class, 'store'])->name('profissionais.store');
+  Route::put('/profissionais/{id}', [ProfissionalController::class, 'update'])->name('profissionais.update');
+  Route::delete('/profissionais/{id}', [ProfissionalController::class, 'destroy'])->name('profissionais.destroy');
   // });
 });
 
