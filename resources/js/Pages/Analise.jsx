@@ -12,7 +12,7 @@ import imgAnalise from '../../img/img_analise.png'
 const Analise = ({ auth }) => {
 
     const debug = false;
-    const url = 'http://localhost:8000';
+    const url = 'http://localhost:8080';
 
     const resultDebug = {
         classification_img: true,
@@ -71,7 +71,7 @@ const Analise = ({ auth }) => {
                     return;
                 }
 
-                const response = await fetch('http://localhost:8000/uploadImage', {
+                const response = await fetch('http://localhost:8080/uploadImage', {
                     method: 'POST',
                     body: JSON.stringify({
                         adjust_image_quality: 1,

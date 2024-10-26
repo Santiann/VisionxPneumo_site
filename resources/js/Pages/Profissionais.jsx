@@ -6,7 +6,11 @@ import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/style.css';
 
 const createProfissional = async (data) => {
-    await axios.post('/profissionais', data);
+    await axios.post('/profissionais', data, {
+        headers: {
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        }
+    });
 };
 
 const updateProfissional = async (id, data) => {
