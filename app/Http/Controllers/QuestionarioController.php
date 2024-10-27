@@ -6,13 +6,14 @@ use App\Models\Pergunta;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Log;
-
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class QuestionarioController extends Controller
 {
     public function index()
     {
-        $perguntas = Pergunta::select('ordem', 'descricao', 'titulo')
+        $perguntas = Pergunta::select('id','ordem', 'descricao', 'titulo')
             ->orderBy('ordem', 'asc')
             ->get();
 
@@ -23,8 +24,33 @@ class QuestionarioController extends Controller
     }
     public function store(Request $request)
     {
-        Log::info($request->all());
+        $request->validate([
+            'perguntasRespostas' => ['required', 'array', 'min:1'],
+            'perguntasRespostas.*' => ['string', 'min:1'],
+            'observacoes' => ['nullable', 'string', 'max:255'],
+        ]);
 
-        return response()->json(['message' => 'Dados recebidos com sucesso!'], 200);
+        $userId = auth()->id();
+
+        DB::connection('sqlite')->table('temp_responses')->where('user_id', $userId)->delete(); //apaga as respostas do médico primeiro para não ficar duplicado
+
+        $responsesData = [];
+        $observations = $request->input('observacoes');
+        $firstObservationStored = false;
+
+        foreach ($request->input('perguntasRespostas') as $questionId => $answer) {
+            $responsesData[] = [
+                'question_id' => $questionId,
+                'answer' => $answer,
+                'observations' => !$firstObservationStored ? $observations : null, 
+                'user_id' => $userId,
+            ];
+
+            if (!$firstObservationStored) {
+                $firstObservationStored = true;
+            }
+        }
+    
+        DB::connection('sqlite')->table('temp_responses')->insert($responsesData);   
     }
 }

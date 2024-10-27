@@ -16,5 +16,6 @@ class DeleteTempDataOnLogout
 
         // Excluir os dados temporários do usuário na tabela temp_data_img
         DB::connection('sqlite')->table('temp_data_img')->where('user_id', $userId)->delete();
+        DB::connection('sqlite')->table('temp_responses')->where('user_id', $userId)->delete();
     }
 }

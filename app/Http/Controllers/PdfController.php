@@ -8,7 +8,7 @@ use Dompdf\Options;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Auth;
-
+use App\Models\Pergunta;
 
 class PdfController extends Controller
 {
@@ -25,10 +25,29 @@ class PdfController extends Controller
             return base64_encode($imageData);
         }
 
+        $user = Auth::user();
+
         $tempDataImg = DB::connection('sqlite')->table('temp_data_img')->first();
 
         if (!$tempDataImg) {
             return response()->json(['error' => 'Nenhum dado encontrado'], 404);
+        }
+
+        $tempResponses =  DB::connection('sqlite')->table('temp_responses')->where('user_id', $user->id)->get();
+
+         $quationario = [];
+         $observacao = $tempResponses->first()->observations;
+
+        foreach ($tempResponses as $response) {
+            $question = Pergunta::select('id', 'titulo')->where('id', $response->question_id)->first();
+    
+            if ($question) {
+                $quationario[] = [
+                    'id' => $question->id,
+                    'titulo' => $question->titulo,
+                    'resposta' => $response->answer,
+                ];
+            }
         }
 
         $validatedData = $request->validate([
@@ -52,7 +71,6 @@ class PdfController extends Controller
             $isDataPacient = true;
         }
 
-        $user = Auth::user();
         $userName = $user->name;       
         $userCRM = $user->crm;
         $userEnterprise = $user->enterprise;        
@@ -126,16 +144,3 @@ class PdfController extends Controller
         ]);
     }
 }
-
-      // $imagePathOriginal = public_path('pdfs/img_test/imagem_original.jpg');
-        //$imagePathCalor = public_path('pdfs/img_test/imagem_calor.png');
-        //$imagePathSinais = public_path('pdfs/img_test/imagem_sinais.png');
-
-        //$base64ImageOriginal = imageToBase64($tempDataImg->image_original);
-        //$base64ImageCalor = imageToBase64($imagePathCalor);
-        //$base64ImageSinais = imageToBase64( $imagePathSinais);
-
-        // Definindo URLs das imagens em Base64
-        // $imgSrcOriginal = $base64ImageOriginal !== false ? 'data:image/jpeg;base64,' . $base64ImageOriginal : '';
-        //$imgSrcCalor = $base64ImageCalor !== false ? 'data:image/png;base64,' . $base64ImageCalor : '';
-         //$imgSrcSinais = $base64ImageSinais !== false ? 'data:image/png;base64,' . $base64ImageSinais : '';

@@ -15,6 +15,7 @@ class VerifyCsrfToken extends Middleware
         'verifyCrm',
         'uploadImage',
         'tempImg',
-        'pdf'
+        'pdf',
+        'questionario'
     ];
 }

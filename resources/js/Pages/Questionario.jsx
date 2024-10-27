@@ -1,14 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import AuthenticatedLayout from '@/Pages/AuthenticatedLayout';
 import { Head, useForm } from '@inertiajs/react';
+import AlertError from '@/Components/Utils/AlertError';
 
 const Questionario = ({ auth, perguntas }) => {
   const [tooltipIndex, setTooltipIndex] = useState(null); // Altera para gerenciar o índice da pergunta com tooltip
+  const [erro, setErro] = useState(false);
 
   const { data, setData, post, errors } = useForm({
     perguntasRespostas: {},
     observacoes: ''
   });
+
+  const textFields = document.querySelectorAll('.text-field')
 
   const calcularLarguraInput = (pergunta) => {
     return `${pergunta.length}ch`;
@@ -36,7 +40,15 @@ const Questionario = ({ auth, perguntas }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    post(route('questionario.store'));
+    try{
+      post(route('questionario.store')); 
+      setData('');
+      textFields.forEach(textField => {
+        textField.value = '';
+      })
+    } catch(error){
+      setErro(error)
+    }
   };
 
   return (
@@ -51,8 +63,10 @@ const Questionario = ({ auth, perguntas }) => {
         <hr className="border-corTexto border-1"></hr>
       </section>
 
+      {erro && <AlertError message={erro.message} />}
+
       <section >
-        <form method="POST" action="/questionario">
+        <form method="POST" onSubmit={handleSubmit}>
           <ol className="flex flex-wrap">
 
             {perguntas.map((item, index) => (
@@ -75,7 +89,7 @@ const Questionario = ({ auth, perguntas }) => {
 
                 <textarea
                   id={`pergunta-${item.id}`}
-                  className="h-12 resize-none"
+                  className="h-12 resize-none text-field"
                   onChange={(e) => handleInputChange(item.id, e.target.value)}></textarea>
 
               </li>
@@ -86,7 +100,7 @@ const Questionario = ({ auth, perguntas }) => {
           <div className="flex flex-col mt-8 text-corTexto mx-2">
             <label className="font-semibold">Observações</label>
             <textarea id="autoReSize"
-              className="h-fit min-h-24 text-black"
+              className="h-fit min-h-24 text-field text-black"
               onChange={(e) => setData('observacoes', e.target.value)}></textarea>
           </div>
 
