@@ -82,6 +82,9 @@ const Header = ({ user }) => {
                         Análise de Raio-X
                     </ResponsiveNavLink>
                     <ResponsiveNavLink href={route('questionario.index')} active={route().current('questionario.index')}>
+                        Questionário
+                    </ResponsiveNavLink>
+                    <ResponsiveNavLink href={route('suporte.index')} active={route().current('suporte.index')}>
                         Suporte
                     </ResponsiveNavLink>
                     <ResponsiveNavLink href={route('suporte.index')} active={route().current('suporte.index')}>

@@ -18,6 +18,12 @@ return new class extends Migration
             $table->binary('image_analysis');
             $table->boolean('is_pneumonia'); 
             $table->string('accuracy'); 
+            $table->unsignedBigInteger('user_id')->after('id');
+            $table->integer('lobo_superior_direito')->nullable();
+            $table->integer('lobo_medio_direito')->nullable();
+            $table->integer('lobo_inferior_direito')->nullable();
+            $table->integer('lobo_superior_esquerdo')->nullable();
+            $table->integer('lobo_inferior_esquerdo')->nullable();
         });
     }
 

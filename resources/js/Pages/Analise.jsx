@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import { Inertia } from '@inertiajs/inertia';
 import AuthenticatedLayout from '@/Pages/AuthenticatedLayout';
 import { Head } from '@inertiajs/react';
 import ResultadoUpload from './ResultadoUpload';
@@ -71,7 +70,7 @@ const Analise = ({ auth }) => {
                     return;
                 }
 
-                const response = await fetch('http://localhost:8080/uploadImage', {
+                const response = await fetch(`${url}/uploadImage`, {
                     method: 'POST',
                     body: JSON.stringify({
                         adjust_image_quality: 1,

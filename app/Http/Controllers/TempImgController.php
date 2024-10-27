@@ -43,7 +43,9 @@ class TempImgController extends Controller
     }
 
     public function getTempData(){
-        $tempData = DB::connection('sqlite')->table('temp_data_img')->first();
+        $userId = auth()->id();
+
+        $tempData = DB::connection('sqlite')->table('temp_data_img')->where('user_id', $userId)->first();
 
         //DB::connection('sqlite')->table('temp_data_img')->delete();
 
