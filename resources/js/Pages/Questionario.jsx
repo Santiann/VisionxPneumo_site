@@ -1,35 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import AuthenticatedLayout from '@/Pages/AuthenticatedLayout';
 import { Head, useForm } from '@inertiajs/react';
 import AlertError from '@/Components/Utils/AlertError';
 
 const Questionario = ({ auth, perguntas }) => {
-  const [tooltipIndex, setTooltipIndex] = useState(null); // Altera para gerenciar o índice da pergunta com tooltip
-  const [erro, setErro] = useState(false);
-
-  const { data, setData, post, errors } = useForm({
+  const { data, setData, post } = useForm({
     perguntasRespostas: {},
     observacoes: ''
   });
-
-  const textFields = document.querySelectorAll('.text-field')
-
-  const calcularLarguraInput = (pergunta) => {
-    return `${pergunta.length}ch`;
-  };
-
-  useEffect(() => {
-    const txArea = document.getElementById('autoReSize');
-    if (txArea) {
-      txArea.style.height = 'auto';
-      txArea.style.height = `${txArea.scrollHeight}px`; // Ajusta a altura  do textarea conforme conteúdo
-
-      txArea.addEventListener('input', () => {
-        txArea.style.height = 'auto';
-        txArea.style.height = `${txArea.scrollHeight}px`;
-      });
-    }
-  }, []);
 
   const handleInputChange = (id, value) => {
     setData('perguntasRespostas', {
@@ -58,78 +36,43 @@ const Questionario = ({ auth, perguntas }) => {
     >
       <Head title="Questionário de Sintomas" />
 
-      <section>
-        <h2 className="text-corTitulo text-3xl font-semibold">Questionário de Sintomas</h2>
-        <hr className="border-corTexto border-1"></hr>
-      </section>
+      <section className="bg-fundoAzulClaro min-h-screen flex items-center justify-center px-6 py-6">
+        <div className="w-full max-w-7xl text-left">
+          <h1 className="text-corTitulo text-3xl font-bold mb-6">Questionário de Sintomas</h1>
+          <div className="bg-white rounded shadow-lg p-8">
+            <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+              <ol className="flex flex-col gap-4">
+                {perguntas.map((item) => (
+                  <li key={item.id} className="flex flex-col">
+                    <label htmlFor={`pergunta-${item.id}`} className="text-gray-800 font-semibold">
+                      {item.order} . {item.title}
+                    </label>
+                    <input
+                      id={`pergunta-${item.id}`}
+                      className="border rounded p-2 resize-none h-12 min-h-[48px]"
+                      onChange={(e) => handleInputChange(item.id, e.target.value)}
+                    ></input>
+                  </li>
+                ))}
+              </ol>
 
-      {erro && <AlertError message={erro.message} />}
-
-      <section >
-        <form method="POST" onSubmit={handleSubmit}>
-          <ol className="flex flex-wrap">
-
-            {perguntas.map((item, index) => (
-              <li key={item.id} className="flex flex-col mx-2 flex-grow mt-4" style={{ Width: calcularLarguraInput(item.titulo) }}>
-
-                <label htmlFor={`pergunta-${item.id}`} className="text-corTexto text-wrap list-decimal list-outside font-semibold"
-                  onMouseEnter={() => setTooltipIndex(index)}
-                  onMouseLeave={() => setTooltipIndex(null)}
-                >
-                  {item.ordem}. {item.titulo}
-                </label>
-
-                <div className="relative">
-                  {tooltipIndex === index && (
-                    <div className="tooltip-box">
-                      {item.descricao}
-                    </div>
-                  )}
-                </div>
-
+              <div className="flex flex-col mt-6">
+                <label className="font-semibold">Observações</label>
                 <textarea
-                  id={`pergunta-${item.id}`}
-                  className="h-12 resize-none text-field"
-                  onChange={(e) => handleInputChange(item.id, e.target.value)}></textarea>
+                  className="border rounded-md p-2 min-h-24 text-black resize-none"
+                  onChange={(e) => setData('observacoes', e.target.value)}
+                ></textarea>
+              </div>
 
-              </li>
-
-            ))}
-
-          </ol>
-          <div className="flex flex-col mt-8 text-corTexto mx-2">
-            <label className="font-semibold">Observações</label>
-            <textarea id="autoReSize"
-              className="h-fit min-h-24 text-field text-black"
-              onChange={(e) => setData('observacoes', e.target.value)}></textarea>
+              <div className="flex justify-end mt-6">
+                <button type="submit" className="bg-[#212c36] text-white px-4 py-2 rounded-md hover:bg-[#1a1f26] transition duration-200">
+                  Salvar
+                </button>
+              </div>
+            </form>
           </div>
-
-          <div className="flex items-center justify-center">
-            <button type="submit" className="flex gap-2 mt-4 bg-gray-800 text-white font-medium py-4 px-4 rounded-full shadow-md hover:bg-gray-700 hover:shadow-lg transition duration-300">
-              Salvar Questionário<svg className="h-6 size-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" /></svg>
-            </button>
-          </div>
-
-        </form>
+        </div>
       </section>
-
-      <style jsx>{`
-        .tooltip-box {
-          position: absolute; 
-          top: 100%;
-          left: 0;
-          background-color: rgba(31, 41, 55, 0.9);
-          color: white;
-          padding: 8px;
-          border-radius: 4px;
-          margin-top: 4px;
-          z-index: 1000;
-          width: auto;
-          min-width: 150px;
-          max-width: 300px;
-        }
-      `}</style>
-
     </AuthenticatedLayout>
   );
 };

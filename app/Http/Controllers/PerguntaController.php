@@ -14,7 +14,7 @@ class PerguntaController extends Controller
         $perguntas = Pergunta::all();
 
         return Inertia::render('CadastroPerguntas', [
-            'profissionais' => $perguntas,
+            'perguntas' => $perguntas,
         ]);
     }
 
@@ -28,30 +28,33 @@ class PerguntaController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'titulo' => 'required|string|max:255',
-            'descricao' => 'required|string|max:20',
-            'ordem' => 'required',
+            'title' => 'required|string|unique:pergunta|max:255',
+            'description' => 'required|string|max:255', // Ajuste no limite de caracteres
+            'size' => 'required',
+            'order' => 'required|integer',
         ]);
-
         try {
             Pergunta::create([
-                'titulo' => $request->name,
-                'descricao' => $request->phone,
-                'ordem' => $request->email,
+                'title' => $request->input('title'),
+                'description' => $request->input('description'),
+                'size' => $request->input('size'),
+                'order' => $request->input('order'),
             ]);
 
-            return redirect()->route('pergunta.index')->with('success', 'Pergunta criada com sucesso.');
+            return response()->json(['message' => 'Pergunta criada com sucesso.'], 201);
         } catch (\Exception $e) {
-            return redirect()->back()->withErrors(['error' => 'Erro ao criar a pergunta ' . $e->getMessage()]);
+            return response()->json(['error' => 'Erro ao criar a pergunta: ' . $e->getMessage()], 500);
         }
     }
+
 
     public function update(Request $request, $id)
     {
         $request->validate([
-            'titulo' => 'required|string|max:255',
-            'descricao' => 'required|string|max:20',
-            'ordem' => 'required',
+            'title' => 'required|string|max:255',
+            'description' => 'required|string|max:20',
+            'order' => 'required',
+            'size' => 'required',
         ]);
 
         try {

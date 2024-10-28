@@ -13,8 +13,8 @@ class QuestionarioController extends Controller
 {
     public function index()
     {
-        $perguntas = Pergunta::select('id','ordem', 'descricao', 'titulo')
-            ->orderBy('ordem', 'asc')
+        $perguntas = Pergunta::select('id', 'order', 'description', 'title')
+            ->orderBy('order', 'asc')
             ->get();
 
         // Renderiza o front-end com os dados das perguntas

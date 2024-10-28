@@ -27,11 +27,6 @@ const updateProfissional = async (id, data) => {
 
 
 const deleteProfissional = async (id) => {
-    if (!id) {
-        console.error("ID do profissional não fornecido.");
-        return; // Sai da função se o ID não existir
-    }
-
     try {
         await axios.delete(`/profissionais/${id}`, {
             headers: {
@@ -124,7 +119,7 @@ const Profissionais = ({ auth }) => {
                 alert('Ocorreu um erro ao processar a sua requisição.');
             }
         } finally {
-            setIsSubmitting(false); 
+            setIsSubmitting(false);
         }
     };
 
@@ -155,7 +150,7 @@ const Profissionais = ({ auth }) => {
             header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">Profissionais de Saúde</h2>}
         >
             <Head title="Profissionais de Saúde" />
-
+            <h1 className='font-semibold text-3xl text-gray-800'>Cadastro de Funcionários</h1>
             <div className="py-6">
                 <form onSubmit={handleSubmit} className="mb-6">
                     <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
