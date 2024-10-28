@@ -36,8 +36,8 @@ const Questionario = ({ auth, perguntas }) => {
     >
       <Head title="Questionário de Sintomas" />
 
-      <section className="bg-fundoAzulClaro min-h-screen flex items-center justify-center px-6 py-6">
-        <div className="w-full max-w-7xl text-left">
+      <section className="bg-fundoAzulClaro rounded flex justify-center px-6 py-6">
+        <div className="w-full text-left">
           <h1 className="text-corTitulo text-3xl font-bold mb-6">Questionário de Sintomas</h1>
           <div className="bg-white rounded shadow-lg p-8">
             <form onSubmit={handleSubmit} className="flex flex-col gap-4">

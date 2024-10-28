@@ -90,7 +90,7 @@ const Suporte = ({ auth }) => {
       <Head title="Suporte" />
       <section className="w-full mx-auto flex flex-col bg-fundoAzulClaro rounded">
         <div className='ml-6 mt-6 flex selection: gap-4'>
-          <h1 className='font-semibold text-3xl text-gray-800'>Fale com nossa equipe</h1>
+          <h1 className='text-corTitulo text-3xl font-bold'>Fale com nossa equipe</h1>
         </div>
         <section className='lg:flex justify-between'>
           <EmailForm email={email} setEmail={setEmail} handleEmailSubmit={handleEmailSubmit} />
