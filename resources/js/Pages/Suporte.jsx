@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import AuthenticatedLayout from '@/Pages/AuthenticatedLayout';
 import { Head } from '@inertiajs/react';
+import { Transition } from '@headlessui/react';
 
 const FAQ = ({ perguntasFrequentes, visibleQuestion, toggleVisibility }) => (
   <div className='bg-white w-auto p-6 rounded m-6'>
@@ -16,15 +17,28 @@ const FAQ = ({ perguntasFrequentes, visibleQuestion, toggleVisibility }) => (
   </div>
 );
 
-const EmailForm = ({ handleEmailSubmit }) => (
+const EmailForm = ({ handleEmailSubmit, processing, successMessage }) => (
   <div id="formEmailEl" className='bg-white lg:w-6/12 mb-4 rounded p-6 m-6'>
     <h3 className='font-semibold mb-4 text-xl text-gray-800'>Por e-mail</h3>
     <form onSubmit={handleEmailSubmit} className='flex flex-col gap-2 h-auto w-full'>
-      <input className='sm:rounded' type='text' name='title' placeholder='Título' required />
+      <input className='sm:rounded' type='text' name='title' placeholder='Título do Email' required />
       <textarea id='autoReSize1' className='sm:rounded min-h-36' name='message'
         placeholder='Detalhe seu problema, para que possamos te ajudar.' required></textarea>
-      <button type='Submit' className='w-28 mt-4 bg-[#212c36] text-white px-4 py-2 rounded-md hover:bg-[#1a1f26] transition duration-200'>Enviar</button>
+      <button type='submit' className='w-28 mt-4 bg-[#212c36] text-white px-4 py-2 rounded-md hover:bg-[#1a1f26] transition duration-200' disabled={processing}>
+        {processing ? 'Enviando...' : 'Enviar'}
+      </button>
     </form>
+    <Transition
+      show={successMessage}
+      enter="transition ease-in-out"
+      enterFrom="opacity-0"
+      enterTo="opacity-100"
+      leave="transition ease-in-out"
+      leaveFrom="opacity-100"
+      leaveTo="opacity-0"
+    >
+      <p className="text-sm text-green-600 mt-2">E-mail enviado com sucesso!</p>
+    </Transition>
   </div>
 );
 
@@ -51,6 +65,8 @@ const WhatsAppForm = ({ handleWhatsAppSubmit }) => (
 const Suporte = ({ auth }) => {
   const [visibleQuestion, setQuestionToVisible] = useState(null);
   const [phone, setPhone] = useState(auth.user.phone);
+  const [processing, setProcessing] = useState(false);
+  const [successMessage, setSuccessMessage] = useState(false);
 
   const perguntasFrequentes = [
     {
@@ -73,6 +89,7 @@ const Suporte = ({ auth }) => {
 
   const handleEmailSubmit = async (e) => {
     e.preventDefault();
+    setProcessing(true);
 
     const data = {
       title: e.target.title.value,
@@ -89,13 +106,18 @@ const Suporte = ({ auth }) => {
       });
 
       if (response.ok) {
-        alert('E-mail enviado com sucesso!');
+        setSuccessMessage(true);
+        setTimeout(() => {
+          setSuccessMessage(false);
+        }, 3000);
       } else {
         alert('Falha ao enviar e-mail.');
       }
     } catch (error) {
       console.error('Erro ao enviar e-mail:', error);
       alert('Erro ao enviar e-mail.');
+    } finally {
+      setProcessing(false);
     }
   };
 
@@ -118,7 +140,7 @@ const Suporte = ({ auth }) => {
           <h1 className='text-corTitulo text-3xl font-bold'>Fale com nossa equipe</h1>
         </div>
         <section className='lg:flex justify-between'>
-          <EmailForm handleEmailSubmit={handleEmailSubmit} />
+          <EmailForm handleEmailSubmit={handleEmailSubmit} processing={processing} successMessage={successMessage} />
           <WhatsAppForm phone={phone} setPhone={setPhone} handleWhatsAppSubmit={handleWhatsAppSubmit} />
         </section>
         <FAQ perguntasFrequentes={perguntasFrequentes} visibleQuestion={visibleQuestion} toggleVisibility={toggleVisibility} />
