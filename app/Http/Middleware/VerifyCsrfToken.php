@@ -16,6 +16,8 @@ class VerifyCsrfToken extends Middleware
         'uploadImage',
         'tempImg',
         'pdf',
-        'questionario'
+        'questionario',
+        'sendEmail',
+        '/suporte/sendEmail',
     ];
 }

@@ -56,6 +56,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
   // Rotas para suporte
   Route::get('/suporte', [SuporteController::class, 'index'])->name('suporte.index');
   Route::post('/suporte', [SuporteController::class, 'store'])->name('suporte.store');
+  Route::post('/suporte/sendEmail', [SuporteController::class, 'sendEmail']);
 
   // Rotas para perguntas
   Route::get('/pergunta', [PerguntaController::class, 'index'])->name('pergunta.index');
