@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import AuthenticatedLayout from '@/Pages/AuthenticatedLayout';
 import { Head } from '@inertiajs/react';
 import { Transition } from '@headlessui/react';
@@ -17,13 +17,28 @@ const FAQ = ({ perguntasFrequentes, visibleQuestion, toggleVisibility }) => (
   </div>
 );
 
-const EmailForm = ({ handleEmailSubmit, processing, successMessage }) => (
+const EmailForm = ({ handleEmailSubmit, processing, successMessage, emailTitle, setEmailTitle, emailMessage, setEmailMessage }) => (
   <div id="formEmailEl" className='bg-white lg:w-6/12 mb-4 rounded p-6 m-6'>
     <h3 className='font-semibold mb-4 text-xl text-gray-800'>Por e-mail</h3>
     <form onSubmit={handleEmailSubmit} className='flex flex-col gap-2 h-auto w-full'>
-      <input className='sm:rounded' type='text' name='title' placeholder='Título do Email' required />
-      <textarea id='autoReSize1' className='sm:rounded min-h-36' name='message'
-        placeholder='Detalhe seu problema, para que possamos te ajudar.' required></textarea>
+      <input
+        className='sm:rounded'
+        type='text'
+        name='title'
+        placeholder='Título do Email'
+        value={emailTitle}
+        onChange={(e) => setEmailTitle(e.target.value)}
+        required
+      />
+      <textarea
+        id='autoReSize1'
+        className='sm:rounded min-h-36'
+        name='message'
+        placeholder='Detalhe seu problema, para que possamos te ajudar.'
+        value={emailMessage}
+        onChange={(e) => setEmailMessage(e.target.value)}
+        required
+      ></textarea>
       <button type='submit' className='w-28 mt-4 bg-[#212c36] text-white px-4 py-2 rounded-md hover:bg-[#1a1f26] transition duration-200' disabled={processing}>
         {processing ? 'Enviando...' : 'Enviar'}
       </button>
@@ -42,31 +57,45 @@ const EmailForm = ({ handleEmailSubmit, processing, successMessage }) => (
   </div>
 );
 
-const WhatsAppForm = ({ handleWhatsAppSubmit }) => (
+const WhatsAppForm = ({ handleWhatsAppSubmit, whatsTitle, setWhatsTitle, whatsMessage, setWhatsMessage }) => (
   <div id="formPhoneEl" className='bg-white lg:w-6/12 h-auto mb-4 rounded p-6 m-6'>
     <h2 className='font-semibold mb-4 text-xl text-gray-800'>Pelo WhatsApp</h2>
     <form onSubmit={handleWhatsAppSubmit} className='flex flex-col gap-2 h-auto w-full'>
-      <input className='sm:rounded' type='text' name='whatsTitle' placeholder='Título da mensagem' required />
+      <input
+        className='sm:rounded'
+        type='text'
+        name='whatsTitle'
+        placeholder='Título da mensagem'
+        value={whatsTitle}
+        onChange={(e) => setWhatsTitle(e.target.value)}
+        required
+      />
       <textarea
         id='autoReSize2'
         className='sm:rounded min-h-36'
         name='whatsMessage'
         placeholder='Detalhe seu problema, para que possamos te ajudar.'
+        value={whatsMessage}
+        onChange={(e) => setWhatsMessage(e.target.value)}
         required
       ></textarea>
-      <button type='Submit' className='w-28 mt-4 bg-[#212c36] text-white px-4 py-2 rounded-md hover:bg-[#1a1f26] transition duration-200'>
+      <button type='submit' className='w-28 mt-4 bg-[#212c36] text-white px-4 py-2 rounded-md hover:bg-[#1a1f26] transition duration-200'>
         Enviar
       </button>
     </form>
   </div>
 );
 
-
 const Suporte = ({ auth }) => {
   const [visibleQuestion, setQuestionToVisible] = useState(null);
   const [phone, setPhone] = useState(auth.user.phone);
   const [processing, setProcessing] = useState(false);
   const [successMessage, setSuccessMessage] = useState(false);
+
+  const [emailTitle, setEmailTitle] = useState('');
+  const [emailMessage, setEmailMessage] = useState('');
+  const [whatsTitle, setWhatsTitle] = useState('');
+  const [whatsMessage, setWhatsMessage] = useState('');
 
   const perguntasFrequentes = [
     {
@@ -92,8 +121,8 @@ const Suporte = ({ auth }) => {
     setProcessing(true);
 
     const data = {
-      title: e.target.title.value,
-      message: e.target.message.value,
+      title: emailTitle,
+      message: emailMessage,
     };
 
     try {
@@ -107,6 +136,8 @@ const Suporte = ({ auth }) => {
 
       if (response.ok) {
         setSuccessMessage(true);
+        setEmailTitle('');
+        setEmailMessage('');
         setTimeout(() => {
           setSuccessMessage(false);
         }, 3000);
@@ -124,12 +155,12 @@ const Suporte = ({ auth }) => {
   const handleWhatsAppSubmit = (e) => {
     e.preventDefault();
 
-    const title = e.target.whatsTitle.value;
-    const message = e.target.whatsMessage.value;
-
-    const whatsappUrl = `https://wa.me/41995477764?text=${encodeURIComponent(title)}%0A${encodeURIComponent(message)}`;
+    const whatsappUrl = `https://wa.me/41995477764?text=${encodeURIComponent(whatsTitle)}%0A${encodeURIComponent(whatsMessage)}`;
 
     window.open(whatsappUrl, '_blank');
+
+    setWhatsTitle('');
+    setWhatsMessage('');
   };
 
   return (
@@ -140,8 +171,24 @@ const Suporte = ({ auth }) => {
           <h1 className='text-corTitulo text-3xl font-bold'>Fale com nossa equipe</h1>
         </div>
         <section className='lg:flex justify-between'>
-          <EmailForm handleEmailSubmit={handleEmailSubmit} processing={processing} successMessage={successMessage} />
-          <WhatsAppForm phone={phone} setPhone={setPhone} handleWhatsAppSubmit={handleWhatsAppSubmit} />
+          <EmailForm
+            handleEmailSubmit={handleEmailSubmit}
+            processing={processing}
+            successMessage={successMessage}
+            emailTitle={emailTitle}
+            setEmailTitle={setEmailTitle}
+            emailMessage={emailMessage}
+            setEmailMessage={setEmailMessage}
+          />
+          <WhatsAppForm
+            phone={phone}
+            setPhone={setPhone}
+            handleWhatsAppSubmit={handleWhatsAppSubmit}
+            whatsTitle={whatsTitle}
+            setWhatsTitle={setWhatsTitle}
+            whatsMessage={whatsMessage}
+            setWhatsMessage={setWhatsMessage}
+          />
         </section>
         <FAQ perguntasFrequentes={perguntasFrequentes} visibleQuestion={visibleQuestion} toggleVisibility={toggleVisibility} />
       </section>
