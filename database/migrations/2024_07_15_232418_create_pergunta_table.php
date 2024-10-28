@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('pergunta', function (Blueprint $table) {
             $table->id();
+            $table->string('enterprise')->nullable();
             $table->string('title')->unique(); 
             $table->text('description');
             $table->integer('size');

@@ -17,6 +17,7 @@ class Profissional extends Model
      * @var array<int, string>
      */
     protected $fillable = [
+        'enterprise',
         'user_id',
     ];
 }

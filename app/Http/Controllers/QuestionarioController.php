@@ -14,6 +14,7 @@ class QuestionarioController extends Controller
     public function index()
     {
         $perguntas = Pergunta::select('id', 'order', 'description', 'title')
+            ->where('enterprise', auth()->user()->enterprise)
             ->orderBy('order', 'asc')
             ->get();
 

@@ -17,6 +17,7 @@ class Pergunta extends Model
      * @var array<int, string>
      */
     protected $fillable = [
+        'enterprise',
         'title',
         'description',
         'size',

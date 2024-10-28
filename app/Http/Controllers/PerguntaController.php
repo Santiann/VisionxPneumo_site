@@ -11,7 +11,8 @@ class PerguntaController extends Controller
 
     public function index()
     {
-        $perguntas = Pergunta::all();
+        $empresa = auth()->user()->enterprise;
+        $perguntas = Pergunta::where('enterprise', $empresa)->get();
 
         return Inertia::render('CadastroPerguntas', [
             'perguntas' => $perguntas,
@@ -20,7 +21,8 @@ class PerguntaController extends Controller
 
     public function list()
     {
-        $perguntas = Pergunta::all();
+        $empresa = auth()->user()->enterprise;
+        $perguntas = Pergunta::where('enterprise', $empresa)->get();
 
         return response()->json(['perguntas' => $perguntas]);
     }
@@ -29,12 +31,13 @@ class PerguntaController extends Controller
     {
         $request->validate([
             'title' => 'required|string|unique:pergunta|max:255',
-            'description' => 'required|string|max:255', // Ajuste no limite de caracteres
+            'description' => 'required|string|max:255',
             'size' => 'required',
             'order' => 'required|integer',
         ]);
         try {
             Pergunta::create([
+                'enterprise' => auth()->user()->enterprise,
                 'title' => $request->input('title'),
                 'description' => $request->input('description'),
                 'size' => $request->input('size'),

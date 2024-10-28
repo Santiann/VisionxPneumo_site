@@ -13,9 +13,12 @@ class ProfissionalController extends Controller
 {
     public function index()
     {
+        $empresa = auth()->user()->enterprise;
+
         // Buscando os profissionais com a relação ao usuário
         $profissionais = User::join('profissionais', 'users.id', '=', 'profissionais.user_id')
             ->select('users.id', 'users.name', 'users.phone', 'users.email')
+            ->where('profissionais.enterprise', $empresa)
             ->get();
 
         // Renderiza a página com os dados dos profissionais
@@ -26,8 +29,11 @@ class ProfissionalController extends Controller
 
     public function list()
     {
+        $empresa = auth()->user()->enterprise;
+
         $profissionais = User::join('profissionais', 'users.id', '=', 'profissionais.user_id')
             ->select('users.id', 'users.name', 'users.phone', 'users.email')
+            ->where('profissionais.enterprise', $empresa)
             ->get();
 
         return response()->json(['profissionais' => $profissionais]);
@@ -42,7 +48,9 @@ class ProfissionalController extends Controller
                 'email' => 'required|email|unique:users,email',
                 'password' => 'required|string|min:8',
             ]);
+
             $user = User::create([
+                'enterprise' => auth()->user()->enterprise,
                 'name' => $validatedData['name'],
                 'phone' => $validatedData['phone'],
                 'email' => $validatedData['email'],
@@ -50,6 +58,7 @@ class ProfissionalController extends Controller
             ]);
 
             Profissional::create([
+                'enterprise' => $user->enterprise,
                 'user_id' => $user->id,
             ]);
 
@@ -67,7 +76,7 @@ class ProfissionalController extends Controller
             'email' => 'required|email',
             'password' => 'required|min:6',
         ]);
-        
+
         try {
             $user = User::findOrFail($id);
 
