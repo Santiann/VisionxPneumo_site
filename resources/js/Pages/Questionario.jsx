@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import AuthenticatedLayout from '@/Pages/AuthenticatedLayout';
 import { Head, useForm } from '@inertiajs/react';
 import AlertError from '@/Components/Utils/AlertError';
@@ -8,6 +8,9 @@ const Questionario = ({ auth, perguntas }) => {
     perguntasRespostas: {},
     observacoes: ''
   });
+
+  const [erro, setErro] = useState(false);
+  const textFields = document.querySelectorAll('.textField');
 
   const handleInputChange = (id, value) => {
     setData('perguntasRespostas', {
@@ -36,6 +39,8 @@ const Questionario = ({ auth, perguntas }) => {
     >
       <Head title="Questionário de Sintomas" />
 
+      {erro && <AlertError/>}
+
       <section className="bg-fundoAzulClaro rounded flex justify-center px-6 py-6">
         <div className="w-full text-left">
           <h1 className="text-corTitulo text-3xl font-bold mb-6">Questionário de Sintomas</h1>
@@ -49,7 +54,7 @@ const Questionario = ({ auth, perguntas }) => {
                     </label>
                     <input
                       id={`pergunta-${item.id}`}
-                      className="border rounded p-2 resize-none h-12 min-h-[48px]"
+                      className="border rounded p-2 resize-none h-12 min-h-[48px] textField"
                       onChange={(e) => handleInputChange(item.id, e.target.value)}
                     ></input>
                   </li>
@@ -59,7 +64,7 @@ const Questionario = ({ auth, perguntas }) => {
               <div className="flex flex-col mt-6">
                 <label className="font-semibold">Observações</label>
                 <textarea
-                  className="border rounded-md p-2 min-h-24 text-black resize-none"
+                  className="border rounded-md p-2 min-h-24 text-black resize-none textField"
                   onChange={(e) => setData('observacoes', e.target.value)}
                 ></textarea>
               </div>
