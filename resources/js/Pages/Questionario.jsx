@@ -39,7 +39,7 @@ const Questionario = ({ auth, perguntas }) => {
     >
       <Head title="Questionário de Sintomas" />
 
-      {erro && <AlertError/>}
+      {erro && <AlertError message={erro.message} />}
 
       <section className="bg-fundoAzulClaro rounded flex justify-center px-6 py-6">
         <div className="w-full text-left">
