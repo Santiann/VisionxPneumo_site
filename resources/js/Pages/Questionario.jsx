@@ -28,7 +28,7 @@ const Questionario = ({ auth, perguntas }) => {
         textField.value = '';
       })
     } catch(error){
-      setErro(error)
+      setErro('Ocorreu um erro ao salvar o questionário ', error)
     }
   };
 
