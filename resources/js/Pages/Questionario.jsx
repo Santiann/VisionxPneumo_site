@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import AuthenticatedLayout from '@/Pages/AuthenticatedLayout';
 import { Head, useForm } from '@inertiajs/react';
-import AlertError from '@/Components/Utils/AlertError';
+import Alert from '@/Components/Utils/Alert';
 
 const Questionario = ({ auth, perguntas }) => {
   const { data, setData, post } = useForm({
@@ -10,6 +10,7 @@ const Questionario = ({ auth, perguntas }) => {
   });
 
   const [erro, setErro] = useState(false);
+  const [sucess, setSucess] = useState(false);
   const textFields = document.querySelectorAll('.textField');
 
   const handleInputChange = (id, value) => {
@@ -26,6 +27,7 @@ const Questionario = ({ auth, perguntas }) => {
       textFields.forEach(textField => {
         textField.value = '';
       })
+      setSucess('Questionário salvo com sucesso')
     } catch(error){
       setErro('Ocorreu um erro ao salvar o questionário ', error)
     }
@@ -38,7 +40,8 @@ const Questionario = ({ auth, perguntas }) => {
     >
       <Head title="Questionário de Sintomas" />
 
-      {erro && <AlertError message={erro.message} />}
+      {erro && <Alert message={erro.message} type={'error'} />}
+      {sucess && <Alert message={sucess} type={'sucess'} />}
 
       <section className="bg-fundoAzulClaro rounded flex justify-center px-6 py-6">
         <div className="w-full text-left">

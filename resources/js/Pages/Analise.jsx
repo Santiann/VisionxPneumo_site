@@ -3,7 +3,7 @@ import AuthenticatedLayout from '@/Pages/AuthenticatedLayout';
 import { Head } from '@inertiajs/react';
 import ResultadoUpload from './ResultadoUpload';
 import Upload from './Upload';
-import AlertError from '@/Components/Utils/AlertError';
+import Alert from '@/Components/Utils/Alert';
 import Loading from '@/Components/Utils/Loading';
 import mapaCalor from '../../img/mapa_calor.png'
 import imgAnalise from '../../img/img_analise.png'
@@ -144,7 +144,7 @@ const Analise = ({ auth }) => {
 
             <Head title="Análise de Raio-X" />
 
-            {erro && <AlertError message={erro.message} />}
+            {erro && <Alert message={erro.message} type='error' />}
 
             {!loadingTempData && (
                 isUploaded ? (

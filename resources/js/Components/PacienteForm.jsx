@@ -17,6 +17,7 @@ function PacienteForm() {
   });
 
   const handleChange = (e) => {
+    setErro(null);
     const { name, value } = e.target;
     setFormData((prevData) => ({
       ...prevData,
@@ -41,18 +42,20 @@ function PacienteForm() {
           },
       });
 
-       if (!response.ok) {
-        throw new Error('Não foi possível exportar o PDF, Tente novamente. ', response.json());
-      }
+      //  if (!response.ok) {
+      //   throw new Error('Não foi possível exportar o PDF, Tente novamente. ');
+      // }
 
       const blob = await response.blob(); 
       const blobUrl = window.URL.createObjectURL(blob);
 
       const newTab = window.open();
       newTab.location.href = blobUrl;
+      setErro(false)
 
     } catch(error){
-        console.log(error)
+        console.log(erro)
+        setErro(true)
     }
 
   };
@@ -141,7 +144,7 @@ function PacienteForm() {
           />
         </div>
 
-        <div className="flex justify-center">
+        <div className="flex justify-center ">
           <button 
             type="button" 
             onClick={handleExport} 
@@ -149,7 +152,10 @@ function PacienteForm() {
           >
             Exportar
           </button>
+
         </div>
+          
+          {erro && <p className='text-red-400 text-center mt-2'>Não foi possível exportar o PDF, Tente novamente.</p>  }
       </form>
     </div>
   );
