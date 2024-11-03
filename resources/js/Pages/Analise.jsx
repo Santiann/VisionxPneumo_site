@@ -26,7 +26,7 @@ const Analise = ({ auth }) => {
     const [erro, setErro] = useState(null)
     const [loading, setLoading] = useState(false)
     const [loadingTempData, setLoadingTempData] = useState(true);
-    
+
     useEffect(() => {
         const fetchTempData = async () => {
             setLoadingTempData(true);
@@ -47,7 +47,7 @@ const Analise = ({ auth }) => {
                 setErro('Erro ao buscar dados do banco temporário');
                 setUploaded(false);
             } finally {
-                setLoadingTempData(false); 
+                setLoadingTempData(false);
             }
         }
 
@@ -58,7 +58,7 @@ const Analise = ({ auth }) => {
         const uploadImage = async () => {
             if (!imageBinary) return;
 
-            setLoading(true); 
+            setLoading(true);
             setErro(null);
 
             try {
@@ -146,12 +146,12 @@ const Analise = ({ auth }) => {
 
             {erro && <AlertError message={erro.message} />}
 
-            {loadingTempData ? (
-               ''
-            ) : isUploaded ? (
-                <ResultadoUpload image={image} result={result} debug={debug} />
-            ) : (
-                <Upload setUploaded={setUploaded} setImage={setImage} setImageBinary={setImageBinary} />
+            {!loadingTempData && (
+                isUploaded ? (
+                    <ResultadoUpload image={image} result={result} debug={debug} />
+                ) : (
+                    <Upload setUploaded={setUploaded} setImage={setImage} setImageBinary={setImageBinary} />
+                )
             )}
 
             {loading && <Loading />}

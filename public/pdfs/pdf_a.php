@@ -14,7 +14,7 @@
             <tr>
                 <td class="half-width-info">Gerador: <?php echo $userName; ?>  </td>
                 <td class="half-width-info">CRM: <?php echo $userCRM; ?> </td>
-                <td class="half-width-info">Local: <?php echo $userEnterprise; ?> </td>
+                <td class="half-width-info">Empresa: <?php echo $userEnterprise; ?> </td>
             </tr>
         </table> 
     </header>

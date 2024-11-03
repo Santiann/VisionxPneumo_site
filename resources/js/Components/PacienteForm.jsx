@@ -42,7 +42,7 @@ function PacienteForm() {
       });
 
        if (!response.ok) {
-        throw new Error('Não foi possível exportar o PDF, Tente novamente.');
+        throw new Error('Não foi possível exportar o PDF, Tente novamente. ', response.json());
       }
 
       const blob = await response.blob(); 

@@ -26,8 +26,7 @@ class QuestionarioController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'perguntasRespostas' => ['required', 'array', 'min:1'],
-            'perguntasRespostas.*' => ['string', 'min:1'],
+            'perguntasRespostas' => ['nullable', 'array'],
             'observacoes' => ['nullable', 'string', 'max:255'],
         ]);
 
@@ -37,21 +36,30 @@ class QuestionarioController extends Controller
 
         $responsesData = [];
         $observations = $request->input('observacoes');
+        $responses = $request->input('perguntasRespostas');
         $firstObservationStored = false;
 
-        foreach ($request->input('perguntasRespostas') as $questionId => $answer) {
+        if (empty($responses)) {
             $responsesData[] = [
-                'question_id' => $questionId,
-                'answer' => $answer,
-                'observations' => !$firstObservationStored ? $observations : null, 
+                'question_id' => 0,
+                'answer' => '',
+                'observations' => $observations,
                 'user_id' => $userId,
             ];
-
-            if (!$firstObservationStored) {
-                $firstObservationStored = true;
+        } else {
+            foreach ($request->input('perguntasRespostas') as $questionId => $answer) {
+                $responsesData[] = [
+                    'question_id' => $questionId,
+                    'answer' => $answer,
+                    'observations' => !$firstObservationStored ? $observations : null, 
+                    'user_id' => $userId,
+                ];               
+                    $firstObservationStored = true;
             }
         }
     
-        DB::connection('sqlite')->table('temp_responses')->insert($responsesData);   
+        if (!empty($responsesData || $observations)) {
+            DB::connection('sqlite')->table('temp_responses')->insert($responsesData);
+        }   
     }
 }

@@ -11,7 +11,7 @@
         <tr>
             <td class="half-width-info">Gerador: <?php echo $userName; ?>  </td>
             <td class="half-width-info">CRM: <?php echo $userCRM; ?> </td>
-            <td class="half-width-info">Local: <?php echo $userEnterprise; ?> </td>
+            <td class="half-width-info">Empresa: <?php echo $userEnterprise; ?> </td>
         </tr>
     </table> 
 </header>
@@ -25,7 +25,7 @@
 <br>
 
 <ol>
-    <?php foreach ($quationario as $item): ?>
+    <?php foreach ($questionario as $item): ?>
         <li class="li-strong"><?php echo htmlspecialchars($item['titulo']); ?></li>
         <p>Resposta: <?php echo htmlspecialchars($item['resposta']); ?></p>
         <br>

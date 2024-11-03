@@ -35,7 +35,7 @@ const ResultadoUpload = ({image, result, debug}) => {
             <div className=' flex flex-col xl:flex-[3] flex-1'>
                 <div className='flex flex-row justify-between items-center'>
                     <h1 className='text-gray-100 p-6 font-semibold text-2xl'>{resultadoMensagem}</h1>
-                    <button onClick={() => setModal(true)} className='bg-red-500 hover:bg-red-600 outline outline-2 outline-red-500 hover:outline-red-600 outline-offset-2 rounded-sm py-1 px-2 m-5 transition font-medium text-gray-100 text-center'>Exportar Resultados</button>
+                    <button onClick={() => setModal(true)} className='bg-[#5296ca] hover:bg-primary outline outline-2 outline-gray-100 hover:outline-primary outline-offset-2 rounded-sm py-1 px-2 m-5 transition font-medium text-white text-center'>Exportar Resultados</button>
                 </div>
                 <div className={`h-full relative overflow-hidden ${zoom ? 'cursor-zoom-in' : ''}`} >
                     <Image scr={scr} zoom={zoom} constraste={constraste} brilho={brilho} invert={invert} />

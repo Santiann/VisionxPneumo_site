@@ -23,7 +23,6 @@ const Questionario = ({ auth, perguntas }) => {
     e.preventDefault();
     try{
       post(route('questionario.store')); 
-      setData('');
       textFields.forEach(textField => {
         textField.value = '';
       })
