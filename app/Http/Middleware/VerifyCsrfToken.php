@@ -19,5 +19,6 @@ class VerifyCsrfToken extends Middleware
         'questionario',
         'sendEmail',
         '/suporte/sendEmail',
+        '/pdf/sendEmail',
     ];
 }

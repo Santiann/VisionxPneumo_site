@@ -42,6 +42,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
   Route::get('/pdf', [PdfController::class, 'generatePdf']);
   Route::post('/pdf', [PdfController::class, 'generatePdf']);
+  Route::post('/pdf/sendEmail', [PdfController::class, 'sendEmail']);
 
   // Rotas para inicio
   Route::get('/inicio', [InicioController::class, 'index'])->name('inicio.index');

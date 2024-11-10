@@ -6,6 +6,7 @@ const url = 'http://localhost:8080';
 function PacienteForm() {
 
   const [erro, setErro] = useState(null)
+  const [sucess, setSucess] = useState(null)
 
   const [formData, setFormData] = useState({
     nome: '',
@@ -51,14 +52,37 @@ function PacienteForm() {
 
       const newTab = window.open();
       newTab.location.href = blobUrl;
-      setErro(false)
+      setErro(false);
+
+      sendEmailPDf(blob);
 
     } catch(error){
         console.log(erro)
-        setErro(true)
+        setErro("Não foi possível exportar o PDF, Tente novamente");
     }
 
   };
+
+  const sendEmailPDf = async(blob) => {
+
+    const formData = new FormData();
+    formData.append("title", "Relatório da Análise de Pneumonia");
+    formData.append("message", "Relatório da Análise de Pneumonia");
+    formData.append("pdf", new File([blob], "relatorio.pdf", { type: "application/pdf" }));
+
+    const response = await fetch(`${url}/pdf/sendEmail`, {
+        method: 'POST',
+        body: formData, 
+    });
+
+      if (response.ok) {
+       setSucess("E-mail enviado com sucesso!");
+    } else {
+        console.log("Erro ao enviar e-mail", await response.json());
+        if(!erro)
+        setErro("Erro ao enviar e-mail")
+    }
+  }
 
   return (
     <div className="m-6 p-6 bg-gray-50 shadow-md rounded-md">
@@ -155,7 +179,9 @@ function PacienteForm() {
 
         </div>
           
-          {erro && <p className='text-red-400 text-center mt-2'>Não foi possível exportar o PDF, Tente novamente.</p>  }
+          {erro && <p className='text-red-400 text-center mt-2'>{erro}</p>  }
+
+          {sucess && <p className='text-green-800 text-center mt-2'>{sucess}</p>  }
       </form>
     </div>
   );

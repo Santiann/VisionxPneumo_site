@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 use App\Models\Pergunta;
+use App\Mail\PdfEmail;
+use Illuminate\Support\Facades\Mail;
 
 class PdfController extends Controller
 {
@@ -32,11 +34,11 @@ class PdfController extends Controller
 
             foreach ($tempResponses as $response) {
                 if ($response->question_id > 0) {
-                    $question = Pergunta::select('id', 'titulo')->find($response->question_id);
+                    $question = Pergunta::select('id', 'title')->find($response->question_id);
                     if ($question) {
                         $questionario[] = [
                             'id' => $question->id,
-                            'titulo' => $question->titulo,
+                            'titulo' => $question->title,
                             'resposta' => $response->answer,
                         ];
                     }
@@ -68,7 +70,7 @@ class PdfController extends Controller
             $imgSrcCalor = 'data:image/jpeg;base64,' . $tempDataImg->image_heat;
             $imgSrcSinais = 'data:image/jpeg;base64,' . $tempDataImg->image_analysis;
             $resultPneumonia = $tempDataImg->is_pneumonia ? 'Pneumonia Detectada' : 'Nenhuma Pneumonia Detectada';
-            $accuracy = round($tempDataImg->accuracy);
+            $accuracy = $tempDataImg->accuracy;
             $lobeTopRight = $tempDataImg->lobo_superior_direito ?? 0;
             $lobeMiddleRight = $tempDataImg->lobo_medio_direito ?? 0;
             $lobeBottomRight = $tempDataImg->lobo_inferior_direito ?? 0;
@@ -98,7 +100,7 @@ class PdfController extends Controller
                 $combinedHtml .= $html1 . '<div style="page-break-after: always;"></div>';
             }
 
-            if ($observacao) {
+            if (($observacao && !$questionario) || $questionario) {
                 ob_start();
                 include(base_path('public/pdfs/pdf_c.php'));
                 $html3 = ob_get_clean();
@@ -115,6 +117,32 @@ class PdfController extends Controller
         } catch (\Exception $e) {
             Log::error("Erro ao gerar o PDF: {$e->getMessage()}");
             return response()->json(['error' => 'Ocorreu um erro ao gerar o PDF. Tente novamente mais tarde.'], 500);
+        }
+    }
+
+    public function sendEmail(Request $request)
+    { 
+        $data = $request->validate([
+            'title' => 'required|string',
+            'message' => 'required|string',
+            'pdf' => 'file|mimes:pdf|max:2048',
+        ]);
+        try {
+            $pdfPath = null;
+            if ($request->hasFile('pdf')) {
+                $pdfPath = $request->file('pdf')->store('temp_pdfs');
+            }
+
+            Mail::to(config('mail.from.address'))->send(new PdfEmail($data['title'], $data['message'], storage_path("app/$pdfPath")));
+
+            return response()->json(['status' => 'success']);
+
+        } catch (\Exception $e) {
+            return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
+        } finally{
+            if ($pdfPath) {
+                \Storage::delete($pdfPath);
+            }
         }
     }
 }
