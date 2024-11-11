@@ -23,7 +23,7 @@ class TempImgController extends Controller
             'lobo_superior_esquerdo' => 'required|integer|min:0',
             'lobo_inferior_esquerdo' => 'required|integer|min:0',
         ]);
-        
+
         DB::connection('sqlite')->table('temp_data_img')->insert([
             'image_original' => $request->input('image_original'),
             'image_heat' => $request->input('image_heat'),
@@ -37,12 +37,13 @@ class TempImgController extends Controller
             'lobo_inferior_esquerdo' => $request->input('lobo_inferior_esquerdo'),
             'user_id' => auth()->id(),
         ]);
-        
+
 
         return response()->json(['message' => 'Data stored successfully in SQLite']);
     }
 
-    public function getTempData(){
+    public function getTempData()
+    {
         $userId = auth()->id();
 
         $tempData = DB::connection('sqlite')->table('temp_data_img')->where('user_id', $userId)->first();
@@ -56,8 +57,12 @@ class TempImgController extends Controller
         }
     }
 
-    public function deleteTempData(){
-        DB::connection('sqlite')->table('temp_data_img')->delete();
+    public function deleteTempData()
+    {
+        $userId = auth()->id();
+
+        DB::connection('sqlite')->table('temp_data_img')->where('user_id', $userId)->delete();
+
         return response()->json(['message' => 'Nenhum dado encontrado'], 200);
     }
 }
