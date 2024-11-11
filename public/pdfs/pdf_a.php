@@ -52,7 +52,7 @@
                     <li class="li-border">Lobo médio direito: <?php echo $lobeMiddleRight; ?></li>
                     <li class="li-border">Lobo inferior direito: <?php echo $lobeBottomRight; ?></li>
                     <li class="li-border">Lobo superior esquerdo: <?php echo $lobeTopLeft; ?></li>
-                    <li class="li-border">Lobo inferior esquero: <?php echo $lobeBottomLeft; ?></li>
+                    <li class="li-border">Lobo inferior esquerdo: <?php echo $lobeBottomLeft; ?></li>
                     <br>
                 </ul>
                 <hr>

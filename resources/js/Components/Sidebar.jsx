@@ -71,9 +71,9 @@ const Sidebar = () => {
     }, []);
 
     return (
-        <aside className="fixed top-14 transition-transform -translate-x-full sm:translate-x-0 left-0 z-40 h-screen w-52 pt-3 bg-[#212c36] border-r border-[#4da3d6] " aria-label="Sidebar">
-            <div className="h-full px-3 pb-4 overflow-y-auto">             
-                <ul className="space-y-2 font-medium text-[#edf2f7]">                  
+        <aside className="fixed top-14 transition-transform -translate-x-full sm:translate-x-0 left-0 z-40 h-screen w-52 pt-3 bg-[#212c36] border-r border-[#4da3d6]" aria-label="Sidebar">
+            <div className="h-full px-3 pb-4 overflow-y-auto flex flex-col justify-between">
+                <ul className="space-y-2 font-medium text-[#edf2f7]">
                     <NavOption nome="Início" icon={HomeIcon} size="text-base" link={'inicio.index'} />
                     <NavOption nome="Análise de Raio-X" icon={LungIcon} size="text-base" link={'analise.index'} />
                     <NavOption nome="Questionário" icon={questionnaireIcon} size="text-base" link={'questionario.index'} />
@@ -81,7 +81,9 @@ const Sidebar = () => {
                     {isMedico && <NavOption nome="Funcionários" icon={employeeIcon} size="text-base" link={'profissionais.index'} />}
                     {isMedico && <NavOption nome="Perguntas" icon={questionIcon} size="text-base" link={'pergunta.index'} />}
                 </ul>
+                <div className="mt-auto mb-24">
                     <BotaoNovoPaciente />
+                </div>
             </div>
         </aside>
     )
