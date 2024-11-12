@@ -54,42 +54,42 @@ class PdfController extends Controller
                 'dataNascimento' => 'nullable|date',
             ]);
 
-            
-            $patientName = $validatedData['nome'] ?? null;
-            $patientGender = $validatedData['sexo'] ?? null;
-            $patientAge = $validatedData['idade'] ?? null;
-            $patientPhone = $validatedData['telefone'] ?? null;
-            $patientCpf = $validatedData['cpf'] ?? null;
+
+            // $patientName = $validatedData['nome'] ?? null;
+            // $patientGender = $validatedData['sexo'] ?? null;
+            // $patientAge = $validatedData['idade'] ?? null;
+            // $patientPhone = $validatedData['telefone'] ?? null;
+            // $patientCpf = $validatedData['cpf'] ?? null;
             $patientBirthDate = $validatedData['dataNascimento'] ?? null;
             if ($patientBirthDate) {
                 $patientBirthDate = (new \DateTime($patientBirthDate))->format('d/m/Y');
             }
 
-            $userName = $user->name;
-            $userCRM = $user->crm;
-            $userEnterprise = $user->enterprise;
-            
-            $imgSrcOriginal = 'data:image/jpeg;base64,' . $tempDataImg->image_original;
-            $imgSrcCalor = 'data:image/jpeg;base64,' . $tempDataImg->image_heat;
-            $imgSrcSinais = 'data:image/jpeg;base64,' . $tempDataImg->image_analysis;
-            $resultPneumonia = $tempDataImg->is_pneumonia ? 'Pneumonia detectada' : 'Pneumonia não detectada';
-            $accuracy = round($tempDataImg->accuracy);
-            $lobeTopRight = $tempDataImg->lobo_superior_direito ?? 0;
-            $lobeMiddleRight = $tempDataImg->lobo_medio_direito ?? 0;
-            $lobeBottomRight = $tempDataImg->lobo_inferior_direito ?? 0;
-            $lobeTopLeft = $tempDataImg->lobo_superior_esquerdo ?? 0;
-            $lobeBottomLeft = $tempDataImg->lobo_inferior_esquerdo ?? 0;
-            $totalLobes = $lobeTopRight + $lobeMiddleRight + $lobeBottomRight + $lobeTopLeft + $lobeBottomLeft;
-            
+            // $userName = $user->name;
+            // $userCRM = $user->crm;
+            // $userEnterprise = $user->enterprise;
+
+            // $imgSrcOriginal = 'data:image/jpeg;base64,' . $tempDataImg->image_original;
+            // $imgSrcCalor = 'data:image/jpeg;base64,' . $tempDataImg->image_heat;
+            // $imgSrcSinais = 'data:image/jpeg;base64,' . $tempDataImg->image_analysis;
+            // $resultPneumonia = $tempDataImg->is_pneumonia ? 'Pneumonia detectada' : 'Pneumonia não detectada';
+            // $accuracy = round($tempDataImg->accuracy);
+            // $lobeTopRight = $tempDataImg->lobo_superior_direito ?? 0;
+            // $lobeMiddleRight = $tempDataImg->lobo_medio_direito ?? 0;
+            // $lobeBottomRight = $tempDataImg->lobo_inferior_direito ?? 0;
+            // $lobeTopLeft = $tempDataImg->lobo_superior_esquerdo ?? 0;
+            // $lobeBottomLeft = $tempDataImg->lobo_inferior_esquerdo ?? 0;
+            // $totalLobes = $lobeTopRight + $lobeMiddleRight + $lobeBottomRight + $lobeTopLeft + $lobeBottomLeft;
+
             $options = new Options();
             $options->set('isHtml5ParserEnabled', true);
             $options->set('defaultFont', 'Arial');
-            
+
             $dompdf = new Dompdf($options);
             $css = file_get_contents(base_path('public/pdfs/css/style_pdf.css'));
-            
+
             $combinedHtml = '<html><head><meta charset="UTF-8"><style>' . $css . '</style></head><body>';
-            
+
             $isDataPacient = collect($validatedData)->filter()->isNotEmpty();
             if ($isDataPacient) {
                 ob_start();
@@ -108,7 +108,7 @@ class PdfController extends Controller
                 include(base_path('public/pdfs/pdf_c.php'));
                 $html3 = ob_get_clean();
                 $combinedHtml .= $html3 . '</body></html>';
-            }       
+            }
 
             $dompdf->loadHtml($combinedHtml);
             $dompdf->setPaper('A4', 'portrait');
@@ -124,7 +124,7 @@ class PdfController extends Controller
     }
 
     public function sendEmail(Request $request)
-    { 
+    {
         $data = $request->validate([
             'title' => 'required|string',
             'message' => 'required|string',
@@ -136,13 +136,13 @@ class PdfController extends Controller
                 $pdfPath = $request->file('pdf')->store('temp_pdfs');
             }
 
-            Mail::to(config('mail.from.address'))->send(new PdfEmail($data['title'], $data['message'], storage_path("app/$pdfPath")));
+            $mail = auth()->user()->email;
+            Mail::to($mail)->send(new PdfEmail($data['title'], $data['message'], storage_path("app/$pdfPath")));
 
             return response()->json(['status' => 'success']);
-
         } catch (\Exception $e) {
             return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
-        } finally{
+        } finally {
             if ($pdfPath) {
                 \Storage::delete($pdfPath);
             }

@@ -21,7 +21,8 @@ class SuporteController extends Controller
             'message' => 'required|string',
         ]);
         try {
-            Mail::to(config('mail.from.address'))->send(new SupportEmail($data['title'], $data['message']));
+            $mail = auth()->user()->email;
+            Mail::to($mail)->send(new SupportEmail($data['title'], $data['message']));
             return response()->json(['status' => 'success']);
         } catch (\Exception $e) {
             return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
