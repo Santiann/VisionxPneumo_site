@@ -36,7 +36,7 @@ const Upload = ({setImage, setImageBinary}) => {
             setError("O arquivo deve ser uma imagem PNG, JPEG ou JPG.");
             return;
         }
-        setErro(null);
+        setError(null);
         processFile(file);
     }
 

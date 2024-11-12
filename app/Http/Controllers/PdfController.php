@@ -61,6 +61,9 @@ class PdfController extends Controller
             $patientPhone = $validatedData['telefone'] ?? null;
             $patientCpf = $validatedData['cpf'] ?? null;
             $patientBirthDate = $validatedData['dataNascimento'] ?? null;
+            if ($patientBirthDate) {
+                $patientBirthDate = (new \DateTime($patientBirthDate))->format('d/m/Y');
+            }
 
             $userName = $user->name;
             $userCRM = $user->crm;
@@ -69,7 +72,7 @@ class PdfController extends Controller
             $imgSrcOriginal = 'data:image/jpeg;base64,' . $tempDataImg->image_original;
             $imgSrcCalor = 'data:image/jpeg;base64,' . $tempDataImg->image_heat;
             $imgSrcSinais = 'data:image/jpeg;base64,' . $tempDataImg->image_analysis;
-            $resultPneumonia = $tempDataImg->is_pneumonia ? 'Pneumonia Detectada' : 'Nenhuma Pneumonia Detectada';
+            $resultPneumonia = $tempDataImg->is_pneumonia ? 'Pneumonia detectada' : 'Pneumonia não detectada';
             $accuracy = round($tempDataImg->accuracy);
             $lobeTopRight = $tempDataImg->lobo_superior_direito ?? 0;
             $lobeMiddleRight = $tempDataImg->lobo_medio_direito ?? 0;

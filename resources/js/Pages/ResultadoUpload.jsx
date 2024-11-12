@@ -28,14 +28,14 @@ const ResultadoUpload = ({image, result, debug}) => {
     
     const [scr, setScr] = useState(imgAnalise)
 
-    const resultadoMensagem = result.classification_img  == 1 ? 'Pneumonia Detectada' : 'Pneumonia não Detectada';
+    const resultadoMensagem = result.classification_img  == 1 ? 'Pneumonia detectada' : 'Pneumonia não detectada';
 
     return (
         <div className='min-h-full w-100 flex flex-col bg-[#212c36] max-w-7xl m-auto xl:flex-row rounded border border-gray-500'>
             <div className=' flex flex-col xl:flex-[3] flex-1'>
                 <div className='flex flex-row justify-between items-center'>
                     <h1 className='text-gray-100 p-6 font-semibold text-2xl'>{resultadoMensagem}</h1>
-                    <button onClick={() => setModal(true)} className='bg-[#5296ca] hover:bg-primary outline outline-2 outline-gray-100 hover:outline-primary outline-offset-2 rounded-sm py-1 px-2 m-5 transition font-medium text-white text-center'>Exportar Resultados</button>
+                    <button onClick={() => setModal(true)} className='bg-[#4DA3D6] hover:bg-primary outline outline-2 outline-gray-100 hover:outline-primary outline-offset-2 rounded-sm py-2 px-3 m-5 transition  text-white text-center font-medium'>Exportar Resultados</button>
                 </div>
                 <div className={`h-full relative overflow-hidden ${zoom ? 'cursor-zoom-in' : ''}`} >
                     <Image scr={scr} zoom={zoom} constraste={constraste} brilho={brilho} invert={invert} />
