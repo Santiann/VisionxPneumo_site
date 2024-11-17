@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import AuthenticatedLayout from '@/Pages/AuthenticatedLayout';
 import { Head, useForm } from '@inertiajs/react';
 import Alert from '@/Components/Utils/Alert';
 
-const Questionario = ({ auth, perguntas }) => {
+const Questionario = ({ auth, questionario, observacoes }) => {
   const { data, setData, post } = useForm({
     perguntasRespostas: {},
     observacoes: ''
@@ -11,7 +11,28 @@ const Questionario = ({ auth, perguntas }) => {
 
   const [erro, setErro] = useState(false);
   const [sucess, setSucess] = useState(false);
-  const textFields = document.querySelectorAll('.textField');
+
+  useEffect(() => {
+    const respostas = {};
+    questionario.forEach((item) => {
+      if (item.resposta) {
+        respostas[item.id] = item.resposta;
+      }
+    });
+    setData(prevData => ({
+      ...prevData,
+      perguntasRespostas: respostas
+    }));
+  }, [questionario]);
+  
+  useEffect(() => {
+    if (observacoes) {
+      setData(prevData => ({
+        ...prevData,
+        observacoes: observacoes
+      }));
+    }
+  }, [observacoes]);
 
   const handleInputChange = (id, value) => {
     setData('perguntasRespostas', {
@@ -24,9 +45,6 @@ const Questionario = ({ auth, perguntas }) => {
     e.preventDefault();
     try{
       post(route('questionario.store')); 
-      textFields.forEach(textField => {
-        textField.value = '';
-      })
       setSucess('Questionário salvo com sucesso')
     } catch(error){
       setErro('Ocorreu um erro ao salvar o questionário ', error)
@@ -49,14 +67,15 @@ const Questionario = ({ auth, perguntas }) => {
           <div className="bg-white rounded shadow-lg p-8">
             <form onSubmit={handleSubmit} className="flex flex-col gap-4">
               <ol className="flex flex-col gap-4">
-                {perguntas.map((item) => (
+                {questionario.map((item) => (
                   <li key={item.id} className="flex flex-col">
                     <label htmlFor={`pergunta-${item.id}`} className="text-gray-800 font-semibold">
-                      {item.order} . {item.title}
+                      {item.ordem} . {item.titulo}
                     </label>
                     <input
                       id={`pergunta-${item.id}`}
                       className="border rounded p-2 resize-none h-12 min-h-[48px] textField"
+                      value={data.perguntasRespostas[item.id] || ""}
                       onChange={(e) => handleInputChange(item.id, e.target.value)}
                     ></input>
                   </li>
@@ -67,6 +86,7 @@ const Questionario = ({ auth, perguntas }) => {
                 <label className="font-semibold">Observações</label>
                 <textarea
                   className="border rounded-md p-2 min-h-24 text-black resize-none textField"
+                  value={data.observacoes || ''}
                   onChange={(e) => setData('observacoes', e.target.value)}
                 ></textarea>
               </div>

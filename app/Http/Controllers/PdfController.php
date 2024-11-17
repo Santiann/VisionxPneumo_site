@@ -55,31 +55,31 @@ class PdfController extends Controller
             ]);
 
 
-            // $patientName = $validatedData['nome'] ?? null;
-            // $patientGender = $validatedData['sexo'] ?? null;
-            // $patientAge = $validatedData['idade'] ?? null;
-            // $patientPhone = $validatedData['telefone'] ?? null;
-            // $patientCpf = $validatedData['cpf'] ?? null;
+            $patientName = $validatedData['nome'] ?? null;
+            $patientGender = $validatedData['sexo'] ?? null;
+            $patientAge = $validatedData['idade'] ?? null;
+            $patientPhone = $validatedData['telefone'] ?? null;
+            $patientCpf = $validatedData['cpf'] ?? null;
             $patientBirthDate = $validatedData['dataNascimento'] ?? null;
             if ($patientBirthDate) {
                 $patientBirthDate = (new \DateTime($patientBirthDate))->format('d/m/Y');
             }
 
-            // $userName = $user->name;
-            // $userCRM = $user->crm;
-            // $userEnterprise = $user->enterprise;
+            $userName = $user->name;
+            $userCRM = $user->crm;
+            $userEnterprise = $user->enterprise;
 
-            // $imgSrcOriginal = 'data:image/jpeg;base64,' . $tempDataImg->image_original;
-            // $imgSrcCalor = 'data:image/jpeg;base64,' . $tempDataImg->image_heat;
-            // $imgSrcSinais = 'data:image/jpeg;base64,' . $tempDataImg->image_analysis;
-            // $resultPneumonia = $tempDataImg->is_pneumonia ? 'Pneumonia detectada' : 'Pneumonia não detectada';
-            // $accuracy = round($tempDataImg->accuracy);
-            // $lobeTopRight = $tempDataImg->lobo_superior_direito ?? 0;
-            // $lobeMiddleRight = $tempDataImg->lobo_medio_direito ?? 0;
-            // $lobeBottomRight = $tempDataImg->lobo_inferior_direito ?? 0;
-            // $lobeTopLeft = $tempDataImg->lobo_superior_esquerdo ?? 0;
-            // $lobeBottomLeft = $tempDataImg->lobo_inferior_esquerdo ?? 0;
-            // $totalLobes = $lobeTopRight + $lobeMiddleRight + $lobeBottomRight + $lobeTopLeft + $lobeBottomLeft;
+            $imgSrcOriginal = 'data:image/jpeg;base64,' . $tempDataImg->image_original;
+            $imgSrcCalor = 'data:image/jpeg;base64,' . $tempDataImg->image_heat;
+            $imgSrcSinais = 'data:image/jpeg;base64,' . $tempDataImg->image_analysis;
+            $resultPneumonia = $tempDataImg->is_pneumonia ? 'Pneumonia detectada' : 'Pneumonia não detectada';
+            $accuracy = round($tempDataImg->accuracy);
+            $lobeTopRight = $tempDataImg->lobo_superior_direito ?? 0;
+            $lobeMiddleRight = $tempDataImg->lobo_medio_direito ?? 0;
+            $lobeBottomRight = $tempDataImg->lobo_inferior_direito ?? 0;
+            $lobeTopLeft = $tempDataImg->lobo_superior_esquerdo ?? 0;
+            $lobeBottomLeft = $tempDataImg->lobo_inferior_esquerdo ?? 0;
+            $totalLobes = $lobeTopRight + $lobeMiddleRight + $lobeBottomRight + $lobeTopLeft + $lobeBottomLeft;
 
             $options = new Options();
             $options->set('isHtml5ParserEnabled', true);

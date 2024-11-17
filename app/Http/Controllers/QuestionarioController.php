@@ -13,14 +13,37 @@ class QuestionarioController extends Controller
 {
     public function index()
     {
+        $user = Auth::user();
+
         $perguntas = Pergunta::select('id', 'order', 'description', 'title')
-            ->where('enterprise', auth()->user()->enterprise)
-            ->orderBy('order', 'asc')
+        ->where('enterprise', auth()->user()->enterprise)
+        ->orderBy('order', 'asc')
+        ->get();
+
+        // Obtém as respostas temporárias do banco
+        $tempResponses = DB::connection('sqlite')
+            ->table('temp_responses')
+            ->where('user_id', $user->id)
             ->get();
+
+        $questionario = [];    
+        $observacoes =$tempResponses[0]->observations;
+
+        foreach ($perguntas as $pergunta) {
+            $resposta = $tempResponses->firstWhere('question_id', $pergunta->id);
+            
+            $questionario[] = [
+                'id' => $pergunta->id,
+                'titulo' => $pergunta->title,
+                'ordem' => $pergunta->order,
+                'resposta' => $resposta ? $resposta->answer : null,
+            ];
+        }
 
         // Renderiza o front-end com os dados das perguntas
         return Inertia::render('Questionario', [
-            'perguntas' => $perguntas,
+            'questionario' =>  $questionario,
+            'observacoes' =>  $observacoes
         ]);
     }
     public function store(Request $request)
@@ -39,15 +62,21 @@ class QuestionarioController extends Controller
         $responses = $request->input('perguntasRespostas');
         $firstObservationStored = false;
 
-        if (empty($responses)) {
+        $responses = array_filter($responses, function($value) {
+            return !is_null($value) && $value !== '';
+        });
+
+        if (empty($responses) && !empty($observations)) {
             $responsesData[] = [
                 'question_id' => 0,
                 'answer' => '',
                 'observations' => $observations,
                 'user_id' => $userId,
             ];
-        } else {
-            foreach ($request->input('perguntasRespostas') as $questionId => $answer) {
+        }
+
+        foreach ($request->input('perguntasRespostas') as $questionId => $answer) {
+            if (!empty($answer)) {
                 $responsesData[] = [
                     'question_id' => $questionId,
                     'answer' => $answer,
@@ -57,7 +86,7 @@ class QuestionarioController extends Controller
                     $firstObservationStored = true;
             }
         }
-    
+        
         if (!empty($responsesData || $observations)) {
             DB::connection('sqlite')->table('temp_responses')->insert($responsesData);
         }   
