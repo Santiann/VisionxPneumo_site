@@ -26,6 +26,7 @@ const Analise = ({ auth }) => {
     const [erro, setErro] = useState(null)
     const [loading, setLoading] = useState(false)
     const [loadingTempData, setLoadingTempData] = useState(true);
+    const [resposesExist, setResponsesExists] = useState(null);
 
     useEffect(() => {
         const fetchTempData = async () => {
@@ -41,6 +42,7 @@ const Analise = ({ auth }) => {
                     }
                     setResult(resultTemp);
                     setImage(data.data.image_original);
+                    setResponsesExists(data.response_exists);
                     setUploaded(true);
                 }
             } catch (error) {
@@ -148,7 +150,7 @@ const Analise = ({ auth }) => {
 
             {!loadingTempData && (
                 isUploaded ? (
-                    <ResultadoUpload image={image} result={result} debug={debug} />
+                    <ResultadoUpload image={image} result={result} debug={debug} responsesExist={resposesExist}/>
                 ) : (
                     <Upload setUploaded={setUploaded} setImage={setImage} setImageBinary={setImageBinary} />
                 )

@@ -5,13 +5,14 @@ import TipoImagem from '@/Components/TipoImagem';
 import Modal from '@/Components/Utils/Modal';
 import PacienteForm from '@/Components/PacienteForm';
 import mapaCalor from '../../img/mapa_calor.png'
+import Swal from 'sweetalert2';
 
-const ResultadoUpload = ({image, result, debug}) => {
+const ResultadoUpload = ({image, result, debug, responsesExist}) => {
     const [constraste, setContraste] = useState(100);
     const [brilho, setBrilho] = useState(100);
     const [invert, setInvert] = useState(0);
     const [zoom, setZoom] = useState(false);
-    const [modal, setModal] = useState(false)
+    const [modalPacienteForm, setModalPacienteForm] = useState(false)
 
     let mapaCalor;
     let imgAnalise;
@@ -30,12 +31,34 @@ const ResultadoUpload = ({image, result, debug}) => {
 
     const resultadoMensagem = result.classification_img  == 1 ? 'Pneumonia detectada' : 'Pneumonia não detectada';
 
+    function handleModal(){
+        console.log(responsesExist)
+        if (!responsesExist) {
+            Swal.fire({
+                text: 'Deseja preencher o questionário de sintomas?',
+                icon: 'info',
+                showCancelButton: true,
+                confirmButtonText: 'Sim', 
+                cancelButtonText: 'Não',
+                confirmButtonColor: '#4da3d6',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = '/questionario';
+                } else {
+                    setModalPacienteForm(true);
+                }
+            });        
+        } else {
+            setModalPacienteForm(true);
+        }
+    }
+
     return (
         <div className='min-h-full w-100 flex flex-col bg-[#212c36] max-w-7xl m-auto xl:flex-row rounded border border-gray-500'>
             <div className=' flex flex-col xl:flex-[3] flex-1'>
                 <div className='flex flex-row justify-between items-center'>
                     <h1 className='text-gray-100 p-6 font-semibold text-2xl'>{resultadoMensagem}</h1>
-                    <button onClick={() => setModal(true)} className='bg-[#4DA3D6] hover:bg-primary outline outline-2 outline-gray-100 hover:outline-primary outline-offset-2 rounded-sm py-2 px-3 m-5 transition  text-white text-center font-medium'>Exportar Resultados</button>
+                    <button onClick={() => handleModal()} className='bg-[#4DA3D6] hover:bg-primary outline outline-2 outline-gray-100 hover:outline-primary outline-offset-2 rounded-sm py-2 px-3 m-5 transition  text-white text-center font-medium'>Exportar Resultados</button>
                 </div>
                 <div className={`h-full relative overflow-hidden ${zoom ? 'cursor-zoom-in' : ''}`} >
                     <Image scr={scr} zoom={zoom} constraste={constraste} brilho={brilho} invert={invert} />
@@ -86,7 +109,7 @@ const ResultadoUpload = ({image, result, debug}) => {
                 </div>
             </div>
 
-            <Modal show={modal} onClose={() => setModal(false)}>
+            <Modal show={modalPacienteForm} onClose={() => setModalPacienteForm(false)}>
                 <PacienteForm />
             </Modal>
 

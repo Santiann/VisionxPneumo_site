@@ -46,12 +46,18 @@ class TempImgController extends Controller
     {
         $userId = auth()->id();
 
-        $tempData = DB::connection('sqlite')->table('temp_data_img')->where('user_id', $userId)->first();
+        $tempData = DB::connection('sqlite')
+        ->table('temp_data_img')
+        ->where('user_id', $userId)
+        ->first();
 
-        //DB::connection('sqlite')->table('temp_data_img')->delete();
+         $tempResponseExist = DB::connection('sqlite')
+        ->table('temp_responses')
+        ->where('user_id', $userId)
+        ->exists();
 
         if ($tempData) {
-            return response()->json(['data' => $tempData], 200);
+            return response()->json(['data' => $tempData, 'response_exists' => $tempResponseExist], 200);
         } else {
             return response()->json(['message' => 'Nenhum dado encontrado'], 404);
         }
@@ -62,6 +68,7 @@ class TempImgController extends Controller
         $userId = auth()->id();
 
         DB::connection('sqlite')->table('temp_data_img')->where('user_id', $userId)->delete();
+        DB::connection('sqlite')->table('temp_responses')->where('user_id', $userId)->delete();
 
         return response()->json(['message' => 'Nenhum dado encontrado'], 200);
     }
