@@ -16,9 +16,9 @@ class QuestionarioController extends Controller
         $user = Auth::user();
 
         $perguntas = Pergunta::select('id', 'order', 'description', 'title')
-        ->where('enterprise', auth()->user()->enterprise)
-        ->orderBy('order', 'asc')
-        ->get();
+            ->where('enterprise', auth()->user()->enterprise)
+            ->orderBy('order', 'asc')
+            ->get();
 
         // Obtém as respostas temporárias do banco
         $tempResponses = DB::connection('sqlite')
@@ -26,12 +26,14 @@ class QuestionarioController extends Controller
             ->where('user_id', $user->id)
             ->get();
 
-        $questionario = [];    
-        $observacoes =$tempResponses[0]->observations;
+        $questionario = [];
+
+        if (!empty($tempResponses[0]))
+            $observacoes = $tempResponses[0]->observations;
 
         foreach ($perguntas as $pergunta) {
             $resposta = $tempResponses->firstWhere('question_id', $pergunta->id);
-            
+
             $questionario[] = [
                 'id' => $pergunta->id,
                 'titulo' => $pergunta->title,
@@ -43,7 +45,7 @@ class QuestionarioController extends Controller
         // Renderiza o front-end com os dados das perguntas
         return Inertia::render('Questionario', [
             'questionario' =>  $questionario,
-            'observacoes' =>  $observacoes
+            'observacoes' =>  $observacoes ?? ''
         ]);
     }
     public function store(Request $request)
@@ -62,7 +64,7 @@ class QuestionarioController extends Controller
         $responses = $request->input('perguntasRespostas');
         $firstObservationStored = false;
 
-        $responses = array_filter($responses, function($value) {
+        $responses = array_filter($responses, function ($value) {
             return !is_null($value) && $value !== '';
         });
 
@@ -80,15 +82,15 @@ class QuestionarioController extends Controller
                 $responsesData[] = [
                     'question_id' => $questionId,
                     'answer' => $answer,
-                    'observations' => !$firstObservationStored ? $observations : null, 
+                    'observations' => !$firstObservationStored ? $observations : null,
                     'user_id' => $userId,
-                ];               
-                    $firstObservationStored = true;
+                ];
+                $firstObservationStored = true;
             }
         }
-        
+
         if (!empty($responsesData || $observations)) {
             DB::connection('sqlite')->table('temp_responses')->insert($responsesData);
-        }   
+        }
     }
 }

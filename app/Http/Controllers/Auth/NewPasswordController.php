@@ -38,6 +38,12 @@ class NewPasswordController extends Controller
             'token' => 'required',
             'email' => 'required|email',
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
+        ], [
+            'token.required' => 'O token é obrigatório.',
+            'email.required' => 'O e-mail é obrigatório.',
+            'email.email' => 'Por favor, insira um endereço de e-mail válido.',
+            'password.required' => 'A senha é obrigatória.',
+            'password.confirmed' => 'As senhas não coincidem.',
         ]);
 
         // Here we will attempt to reset the user's password. If it is successful we
