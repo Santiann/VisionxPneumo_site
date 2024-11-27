@@ -45,7 +45,7 @@ const Questionario = ({ auth, questionario, observacoes }) => {
     e.preventDefault();
     try{
       post(route('questionario.store')); 
-      setSucess('Questionário salvo com sucesso')
+      setSucess(' Questionário salvo com sucesso!')
     } catch(error){
       setErro('Ocorreu um erro ao salvar o questionário ', error)
     }
