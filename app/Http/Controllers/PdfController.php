@@ -73,7 +73,7 @@ class PdfController extends Controller
             $imgSrcCalor = 'data:image/jpeg;base64,' . $tempDataImg->image_heat;
             $imgSrcSinais = 'data:image/jpeg;base64,' . $tempDataImg->image_analysis;
             $resultPneumonia = $tempDataImg->is_pneumonia ? 'Pneumonia detectada' : 'Pneumonia não detectada';
-            $accuracy = round($tempDataImg->accuracy);
+            $accuracy = $tempDataImg->accuracy;
             $lobeTopRight = $tempDataImg->lobo_superior_direito ?? 0;
             $lobeMiddleRight = $tempDataImg->lobo_medio_direito ?? 0;
             $lobeBottomRight = $tempDataImg->lobo_inferior_direito ?? 0;
