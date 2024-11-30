@@ -50,6 +50,9 @@ const CadastroPerguntas = ({ auth }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    axios.defaults.headers.common['X-CSRF-TOKEN'] = csrfToken;
+
     const loadPerguntas = async () => {
       const perguntasData = await fetchPerguntas();
       setPerguntas(perguntasData);
