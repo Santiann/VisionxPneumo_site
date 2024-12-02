@@ -15,7 +15,7 @@ class QuestionarioController extends Controller
     {
         $user = Auth::user();
 
-        $perguntas = Pergunta::select('id', 'order', 'description', 'title')
+        $perguntas = Pergunta::select('id', 'order', 'description', 'size', 'title')
             ->where('enterprise', auth()->user()->enterprise)
             ->orderBy('order', 'asc')
             ->get();
@@ -38,6 +38,7 @@ class QuestionarioController extends Controller
                 'id' => $pergunta->id,
                 'titulo' => $pergunta->title,
                 'ordem' => $pergunta->order,
+                'size' => $pergunta->size,
                 'resposta' => $resposta ? $resposta->answer : null,
             ];
         }

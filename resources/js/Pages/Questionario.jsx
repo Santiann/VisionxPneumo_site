@@ -77,6 +77,7 @@ const Questionario = ({ auth, questionario, observacoes }) => {
                       className="border rounded p-2 resize-none h-12 min-h-[48px] textField"
                       value={data.perguntasRespostas[item.id] || ""}
                       onChange={(e) => handleInputChange(item.id, e.target.value)}
+                      maxLength={item.size}
                     ></input>
                   </li>
                 ))}
